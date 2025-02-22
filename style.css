@@ -30,3 +30,7 @@ p {
     font-size: 14px;
     color: gray;
 }
+.worker-img {
+    width: 200px; /* Изменяй размер, если нужно */
+    margin-bottom: 20px; /* Отступ от текста */
+}
