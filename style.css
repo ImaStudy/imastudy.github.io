@@ -9,10 +9,11 @@ body {
     align-items: center;
     height: 100vh;
     text-align: center;
+    position: relative;
 }
 
 h1 {
-    color: black;
+    color: green;
 }
 
 p {
@@ -20,9 +21,12 @@ p {
     color: #333;
 }
 
+/* Делаем футер фиксированным внизу */
 .footer {
     position: absolute;
     bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: 14px;
     color: gray;
 }
