@@ -56,10 +56,10 @@ p {
 
     .mobile-warning {
         font-size: 14px;
-        color: gray;
+        color: gray; /* Изменим цвет на серый, чтобы отличался от футера */
         text-align: center;
-        margin-top: auto;
-        margin-bottom: 20px;
+        margin-top: auto; /* Это гарантирует, что сообщение будет внизу */
+        margin-bottom: 10px; /* Отступ между сообщением и футером */
     }
 
     .footer {
@@ -69,4 +69,9 @@ p {
         margin-top: auto; /* Это гарантирует, что футер будет внизу */
         margin-bottom: 20px; /* Отступ снизу */
     }
+}
+
+/* Сообщение не будет отображаться в версии для ПК */
+.mobile-warning {
+    display: none;
 }
