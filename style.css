@@ -41,33 +41,36 @@ p {
     }
 }
 
-@media (max-width: 767px) { /* Для телефонов */
+@media (max-width: 767px) { /* Для мобильных устройств */
     body {
-        padding-top: 50px; /* Отступ сверху */
+        padding-top: 50px;
         display: flex;
         flex-direction: column;
-        height: 100vh; /* Высота страницы равна высоте экрана */
-        margin: 0; /* Убираем внешние отступы */
+        height: 100vh;
+        margin: 0;
     }
 
     .content {
-        flex-grow: 1; /* Все элементы, кроме футера, растягиваются */
+        flex-grow: 1;
     }
 
     .mobile-warning {
         font-size: 14px;
-        color: gray; /* Изменим цвет на серый, чтобы отличался от футера */
+        color: gray;
         text-align: center;
-        margin-top: auto; /* Это гарантирует, что сообщение будет внизу */
-        margin-bottom: 10px; /* Отступ между сообщением и футером */
+        margin-top: auto;
+        margin-bottom: 10px;
+        background-color: lightyellow; /* Временный фон для выделения */
+        border: 1px solid red; /* Временная рамка для выделения */
+        padding: 10px;
     }
 
     .footer {
         font-size: 14px;
         color: gray;
         text-align: center;
-        margin-top: auto; /* Это гарантирует, что футер будет внизу */
-        margin-bottom: 20px; /* Отступ снизу */
+        margin-top: auto;
+        margin-bottom: 20px;
     }
 }
 
@@ -75,3 +78,4 @@ p {
 .mobile-warning {
     display: none;
 }
+
