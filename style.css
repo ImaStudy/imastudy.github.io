@@ -54,19 +54,19 @@ p {
         flex-grow: 1; /* Все элементы, кроме футера, растягиваются */
     }
 
+    .mobile-warning {
+        font-size: 14px;
+        color: gray;
+        text-align: center;
+        margin-top: auto;
+        margin-bottom: 20px;
+    }
+
     .footer {
         font-size: 14px;
         color: gray;
         text-align: center;
         margin-top: auto; /* Это гарантирует, что футер будет внизу */
         margin-bottom: 20px; /* Отступ снизу */
-    }
-
-    .mobile-warning {
-        font-size: 14px;
-        color: gray;
-        text-align: center;
-        margin-top: auto; /* Это гарантирует, что сообщение будет внизу */
-        margin-bottom: 20px; /* Отступ между сообщением и футером */
     }
 }
