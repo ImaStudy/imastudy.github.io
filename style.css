@@ -44,13 +44,22 @@ p {
 @media (max-width: 767px) { /* Для телефонов */
     body {
         padding-top: 50px; /* Отступ сверху */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Чтобы футер был внизу */
+        height: 100vh; /* Задаём высоту в 100% экрана */
+        margin: 0; /* Убираем внешние отступы */
     }
 
-.footer {
-        position: relative; /* Убираем фиксированное положение */
-        margin-top: 20px; /* Добавляем отступ сверху, чтобы футер был чуть выше */
+    .footer {
         font-size: 14px;
         color: gray;
         text-align: center;
+        margin-bottom: 20px; /* Отступ снизу */
+    }
+
+    /* Остальные элементы */
+    .content {
+        flex-grow: 1; /* Эти элементы растягиваются, занимая всё доступное пространство */
     }
 }
