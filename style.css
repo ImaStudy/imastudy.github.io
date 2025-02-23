@@ -45,16 +45,12 @@ p {
     body {
         padding-top: 50px; /* Отступ сверху */
     }
-}
 
 .footer {
-        position: fixed; /* Фиксированное положение */
-        bottom: 20px; /* Отступ от нижнего края экрана */
-        left: 50%;
-        transform: translateX(-50%);
+        position: relative; /* Убираем фиксированное положение */
+        margin-top: 20px; /* Добавляем отступ сверху, чтобы футер был чуть выше */
         font-size: 14px;
         color: gray;
-        z-index: 10; /* Чтобы футер был поверх других элементов */
-        padding-bottom: 20px; /* Дополнительный отступ снизу, если нужно */
+        text-align: center;
     }
 }
