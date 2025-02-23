@@ -75,8 +75,16 @@ p {
     }
 }
 
-@media (min-width: 768px) { 
+@media (max-width: 767px) { /* Для мобильных устройств */
     .mobile-warning {
-        display: none; /* Скрываем элемент для ПК */
+        display: block; /* Показываем элемент для мобильных устройств */
+        font-size: 14px;
+        color: gray;
+        text-align: center;
+        background-color: lightyellow; /* Временный фон для выделения */
+        border: 1px solid red; /* Временная рамка для выделения */
+        padding: 10px;
+        margin-top: 20px; /* Отступ сверху, чтобы не слипался с остальным текстом */
+        margin-bottom: 50px; /* Отступ снизу, чтобы не слипался с футером */
     }
 }
