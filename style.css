@@ -75,8 +75,8 @@ p {
     }
 }
 
-/* Сообщение не будет отображаться в версии для ПК */
-.mobile-warning {
-    display: none;
+@media (min-width: 768px) { 
+    .mobile-warning {
+        display: none; /* Скрываем элемент для ПК */
+    }
 }
-
