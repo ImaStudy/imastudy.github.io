@@ -55,6 +55,7 @@ p {
     }
 
     .mobile-warning {
+        display: block; /* Показываем элемент для мобильных устройств */
         font-size: 14px;
         color: gray;
         text-align: center;
