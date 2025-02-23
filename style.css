@@ -40,3 +40,9 @@ p {
         justify-content: center; /* Центрируем по вертикали на ПК */
     }
 }
+
+@media (max-width: 767px) { /* Для телефонов */
+    body {
+        padding-top: 50px; /* Отступ сверху */
+    }
+}
