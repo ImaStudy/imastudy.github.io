@@ -42,7 +42,6 @@ p {
 }
 
 @media (max-width: 767px) { /* Для телефонов */
-    @media (max-width: 767px) { /* Для мобильных устройств */
     body {
         padding-top: 50px; /* Отступ сверху */
         display: flex;
