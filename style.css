@@ -46,20 +46,20 @@ p {
         padding-top: 50px; /* Отступ сверху */
         display: flex;
         flex-direction: column;
-        justify-content: space-between; /* Чтобы футер был внизу */
+        justify-content: flex-start; /* Текст вверху */
         height: 100vh; /* Задаём высоту в 100% экрана */
         margin: 0; /* Убираем внешние отступы */
+    }
+
+    .content {
+        flex-grow: 1; /* Контент будет растягиваться, если нужно */
     }
 
     .footer {
         font-size: 14px;
         color: gray;
         text-align: center;
-        margin-bottom: 20px; /* Отступ снизу */
-    }
-
-    /* Остальные элементы */
-    .content {
-        flex-grow: 1; /* Эти элементы растягиваются, занимая всё доступное пространство */
+        margin-top: auto; /* Это гарантирует, что футер будет внизу */
+        margin-bottom: 20px; /* Отступ снизу, чтобы футер не прилипал */
     }
 }
