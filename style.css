@@ -61,4 +61,12 @@ p {
         margin-top: auto; /* Это гарантирует, что футер будет внизу */
         margin-bottom: 20px; /* Отступ снизу */
     }
+
+    .mobile-warning {
+        font-size: 14px;
+        color: gray;
+        text-align: center;
+        margin-top: auto; /* Это гарантирует, что сообщение будет внизу */
+        margin-bottom: 20px; /* Отступ между сообщением и футером */
+    }
 }
