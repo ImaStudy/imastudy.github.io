@@ -19,6 +19,9 @@
             margin-top: 10px;
             margin-bottom: 20px; /* Добавляем отступ снизу, чтобы не перекрывать футер */
         }
+        .footer {
+            margin-top: 30px; /* Добавляем дополнительный отступ футера */
+        }
     </style>
 </head>
 <body>
@@ -49,8 +52,10 @@
         drawButton.addEventListener("click", () => {
             if (canvas.style.display === "none" || canvas.style.display === "") {
                 canvas.style.display = "block";
+                document.querySelector(".footer").style.marginTop = "450px"; // Поднимаем футер вниз при открытии холста
             } else {
                 canvas.style.display = "none";
+                document.querySelector(".footer").style.marginTop = "30px"; // Возвращаем футер обратно
             }
         });
 
@@ -70,3 +75,4 @@
     </script>
 </body>
 </html>
+
