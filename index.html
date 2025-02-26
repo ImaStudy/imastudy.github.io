@@ -72,16 +72,19 @@
         let strokeStyle = "black";
 
         drawButton.addEventListener("click", () => {
-            if (canvas.style.display === "none" || canvas.style.display === "") {
-                canvas.style.display = "block";
-                document.body.style.height = "auto";
-                document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
-                document.body.style.minHeight = "120vh";
-            } else {
-                canvas.style.display = "none";
-                document.body.style.height = "auto";
-            }
-        });
+    const toolButtons = document.querySelector(".tool-buttons");
+
+    if (canvas.style.display === "none" || canvas.style.display === "") {
+        canvas.style.display = "block";
+        toolButtons.style.display = "block";
+
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
+    } else {
+        canvas.style.display = "none";
+        toolButtons.style.display = "none";
+    }
+});
 
         penButton.addEventListener("click", () => {
             erasing = false;
