@@ -94,5 +94,5 @@ p {
 }
 
 .tool-buttons {
-    display: none;
+    display: none !important;
 }
