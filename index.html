@@ -70,14 +70,15 @@
         let erasing = false;
         let lineWidth = 3;
         let strokeStyle = "black";
+        let initialScrollPosition = 0;
 
         drawButton.addEventListener("click", () => {
             if (canvas.style.display === "none" || canvas.style.display === "") {
+                initialScrollPosition = window.scrollY;
                 canvas.style.display = "block";
-                document.documentElement.style.overflow = "hidden";
             } else {
                 canvas.style.display = "none";
-                document.documentElement.style.overflow = "auto";
+                window.scrollTo(0, initialScrollPosition);
             }
         });
 
