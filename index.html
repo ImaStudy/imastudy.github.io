@@ -72,13 +72,7 @@
         let strokeStyle = "black";
 
         drawButton.addEventListener("click", () => {
-            if (canvas.style.display === "none" || canvas.style.display === "") {
-                canvas.style.display = "block";
-            } else {
-                canvas.style.display = "none";
-                document.body.scrollTop = 0;
-                document.documentElement.scrollTop = 0;
-            }
+            canvas.style.display = canvas.style.display === "none" ? "block" : "none";
         });
 
         penButton.addEventListener("click", () => {
