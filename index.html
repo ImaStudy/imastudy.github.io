@@ -17,11 +17,12 @@
             display: flex;
             justify-content: center;
             margin-top: 10px;
-            margin-bottom: 20px; /* Добавляем отступ снизу, чтобы не перекрывать футер */
+            margin-bottom: 50px; /* Увеличиваем отступ снизу */
         }
         .footer {
             text-align: center;
-            padding: 10px;
+            padding: 20px;
+            margin-top: 50px; /* Увеличиваем отступ сверху */
         }
     </style>
 </head>
@@ -54,7 +55,7 @@
             if (canvas.style.display === "none" || canvas.style.display === "") {
                 canvas.style.display = "block";
                 document.body.style.height = "auto";
-                document.body.style.minHeight = "100vh";
+                document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
             } else {
                 canvas.style.display = "none";
                 document.body.style.height = "auto";
