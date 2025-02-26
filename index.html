@@ -11,6 +11,12 @@
             border: 2px solid black;
             background-color: white;
             margin-top: 10px;
+            max-width: 100%;
+        }
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -21,12 +27,15 @@
     <p>Скоро здесь будет крутой сайт!</p>
     <p><strong>Обновление:</strong> проверка ещё идет полным ходом</p>
 
-   <div class="mobile-warning">
-    Вы просматриваете версию для мобильных устройств
-</div>
+    <button id="drawButton">Рисовать</button>
 
-    button id="drawButton">Рисовать</button> <!-- Вот добавленная кнопка -->
-<canvas id="drawingCanvas" width="500" height="400"></canvas>
+    <div class="mobile-warning">
+        Вы просматриваете версию для мобильных устройств
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="drawingCanvas" width="500" height="400"></canvas>
+    </div>
 
     <p class="footer">Created by K. Chuito</p>
 
@@ -56,4 +65,5 @@
     </script>
 </body>
 </html>
+
 
