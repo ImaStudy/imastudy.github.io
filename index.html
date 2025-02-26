@@ -19,12 +19,12 @@
             flex-direction: column;
             align-items: center;
             margin-top: 10px;
-            margin-bottom: 50px; /* Увеличиваем отступ снизу */
+            margin-bottom: 50px;
         }
         .footer {
             text-align: center;
             padding: 20px;
-            margin-top: 50px; /* Увеличиваем отступ сверху */
+            margin-top: 50px;
         }
         .tool-buttons {
             margin-top: 10px;
@@ -74,11 +74,10 @@
         drawButton.addEventListener("click", () => {
             if (canvas.style.display === "none" || canvas.style.display === "") {
                 canvas.style.display = "block";
-                document.body.style.height = "auto";
-                document.body.style.minHeight = "120vh";
+                document.documentElement.style.overflow = "hidden";
             } else {
                 canvas.style.display = "none";
-                document.body.style.height = "auto";
+                document.documentElement.style.overflow = "auto";
             }
         });
 
