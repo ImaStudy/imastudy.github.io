@@ -20,7 +20,8 @@
             margin-bottom: 20px; /* Добавляем отступ снизу, чтобы не перекрывать футер */
         }
         .footer {
-            margin-top: 30px; /* Добавляем дополнительный отступ футера */
+            text-align: center;
+            padding: 10px;
         }
     </style>
 </head>
@@ -52,10 +53,11 @@
         drawButton.addEventListener("click", () => {
             if (canvas.style.display === "none" || canvas.style.display === "") {
                 canvas.style.display = "block";
-                document.querySelector(".footer").style.marginTop = "450px"; // Поднимаем футер вниз при открытии холста
+                document.body.style.height = "auto";
+                document.body.style.minHeight = "100vh";
             } else {
                 canvas.style.display = "none";
-                document.querySelector(".footer").style.marginTop = "30px"; // Возвращаем футер обратно
+                document.body.style.height = "auto";
             }
         });
 
@@ -75,4 +77,3 @@
     </script>
 </body>
 </html>
-
