@@ -92,3 +92,7 @@ p {
         margin-bottom: 50px; /* Отступ снизу, чтобы не слипался с футером */
     }
 }
+
+.tool-buttons {
+    display: none;
+}
