@@ -16,6 +16,8 @@
         .canvas-container {
             display: flex;
             justify-content: center;
+            flex-direction: column;
+            align-items: center;
             margin-top: 10px;
             margin-bottom: 50px; /* Увеличиваем отступ снизу */
         }
@@ -23,6 +25,15 @@
             text-align: center;
             padding: 20px;
             margin-top: 50px; /* Увеличиваем отступ сверху */
+        }
+        .tool-buttons {
+            margin-top: 10px;
+        }
+        .tool-buttons button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -41,6 +52,10 @@
     
     <div class="canvas-container">
         <canvas id="drawingCanvas" width="500" height="400"></canvas>
+        <div class="tool-buttons">
+            <button id="penButton">Перо</button>
+            <button id="eraserButton">Ластик</button>
+        </div>
     </div>
 
     <p class="footer">Created by K. Chuito</p>
@@ -49,17 +64,34 @@
         const canvas = document.getElementById("drawingCanvas");
         const ctx = canvas.getContext("2d");
         const drawButton = document.getElementById("drawButton");
+        const penButton = document.getElementById("penButton");
+        const eraserButton = document.getElementById("eraserButton");
         let drawing = false;
+        let erasing = false;
+        let lineWidth = 3;
+        let strokeStyle = "black";
 
         drawButton.addEventListener("click", () => {
             if (canvas.style.display === "none" || canvas.style.display === "") {
                 canvas.style.display = "block";
                 document.body.style.height = "auto";
-                document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
+                document.body.style.minHeight = "120vh";
             } else {
                 canvas.style.display = "none";
                 document.body.style.height = "auto";
             }
+        });
+
+        penButton.addEventListener("click", () => {
+            erasing = false;
+            strokeStyle = "black";
+            lineWidth = 3;
+        });
+
+        eraserButton.addEventListener("click", () => {
+            erasing = true;
+            strokeStyle = "white";
+            lineWidth = 10;
         });
 
         canvas.addEventListener("mousedown", () => drawing = true);
@@ -72,8 +104,13 @@
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
-            ctx.fillStyle = "black";
-            ctx.fillRect(x, y, 2, 2);
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = "round";
+            ctx.strokeStyle = strokeStyle;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + 0.1, y + 0.1);
+            ctx.stroke();
         }
     </script>
 </body>
