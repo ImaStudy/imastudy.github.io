@@ -67,12 +67,14 @@ p {
     }
 
     .footer {
-        font-size: 14px;
-        color: gray;
-        text-align: center;
-        margin-top: auto;
-        margin-bottom: 20px;
-    }
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: gray;
+}
+
 }
 
 .mobile-warning {
