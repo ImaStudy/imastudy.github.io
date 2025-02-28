@@ -76,7 +76,7 @@
 
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
-        toolButtons.style.removeProperty("display");
+       toolButtons.setAttribute("style", "display: block;");
 
         document.body.style.height = "auto";
         document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
