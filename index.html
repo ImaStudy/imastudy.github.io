@@ -71,18 +71,15 @@ let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
-let lastX, lastY;
+let lastX = 0, lastY = 0;
 
-// Устанавливаем размер холста правильно
+// Устанавливаем размер холста так, чтобы он не перекрывал футер
 function setCanvasSize() {
-    canvas.width = document.documentElement.clientWidth * 0.95; // 95% ширины экрана
-    canvas.height = window.innerHeight * 0.6; // 60% высоты экрана, чтобы не пересекался с футером
+    canvas.width = canvas.parentElement.clientWidth; // Ширина = 100% контейнера
+    canvas.height = window.innerHeight * 0.7; // Высота 70% экрана
 }
 setCanvasSize();
 window.addEventListener("resize", setCanvasSize);
-
-// Блокируем прокрутку во время рисования на мобильных
-document.body.style.overflow = "hidden";
 
 // Обработчики кнопок
 drawButton.addEventListener("click", () => {
@@ -110,27 +107,29 @@ eraserButton.addEventListener("click", () => {
 });
 
 // Обработчики для мыши
-canvas.addEventListener("mousedown", (event) => startDrawing(event));
+canvas.addEventListener("mousedown", (event) => startDrawing(event.pageX, event.pageY));
 canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mouseleave", stopDrawing);
-canvas.addEventListener("mousemove", (event) => draw(event));
+canvas.addEventListener("mousemove", (event) => draw(event.pageX, event.pageY));
 
 // Обработчики для сенсорных экранов
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault();
-    startDrawing(event.touches[0]);
+    const touch = event.touches[0];
+    startDrawing(touch.pageX, touch.pageY);
 });
 canvas.addEventListener("touchend", stopDrawing);
 canvas.addEventListener("touchmove", (event) => {
     event.preventDefault();
-    draw(event.touches[0]);
+    const touch = event.touches[0];
+    draw(touch.pageX, touch.pageY);
 });
 
 // Функции рисования
-function startDrawing(event) {
+function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
-    lastX = event.clientX - rect.left;
-    lastY = event.clientY - rect.top;
+    lastX = x - rect.left;
+    lastY = y - rect.top;
     drawing = true;
 }
 
@@ -138,11 +137,11 @@ function stopDrawing() {
     drawing = false;
 }
 
-function draw(event) {
+function draw(x, y) {
     if (!drawing) return;
     const rect = canvas.getBoundingClientRect();
-    const newX = event.clientX - rect.left;
-    const newY = event.clientY - rect.top;
+    const newX = x - rect.left;
+    const newY = y - rect.top;
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
