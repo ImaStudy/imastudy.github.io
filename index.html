@@ -73,6 +73,17 @@ let lineWidth = 3;
 let strokeStyle = "black";
 let lastX, lastY;
 
+// Устанавливаем размер холста по ширине экрана и 70% высоты
+function setCanvasSize() {
+    canvas.width = window.innerWidth; 
+    canvas.height = window.innerHeight * 0.7;
+}
+setCanvasSize();
+window.addEventListener("resize", setCanvasSize); // Если размер экрана изменится
+
+// Блокируем прокрутку при рисовании
+document.body.style.overflow = "hidden";
+
 // Обработчики кнопок
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
@@ -80,11 +91,11 @@ drawButton.addEventListener("click", () => {
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
         toolButtons.style.display = "flex";
-        document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
+        document.body.style.minHeight = "120vh";
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
-        document.body.style.minHeight = "100vh"; // Возвращаем высоту
+        document.body.style.minHeight = "100vh";
     }
 });
 
@@ -110,13 +121,13 @@ canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.client
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
-    startDrawing(touch.clientX, touch.clientY);
+    startDrawing(touch.pageX, touch.pageY); // Используем pageX/pageY для корректности
 });
 canvas.addEventListener("touchend", stopDrawing);
 canvas.addEventListener("touchmove", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
-    draw(touch.clientX, touch.clientY);
+    draw(touch.pageX, touch.pageY);
 });
 
 // Функции рисования
