@@ -23,7 +23,7 @@ p {
 
 /* Делаем футер фиксированным внизу */
 .footer {
-    position: absolute;
+    position: fixed
     bottom: 10px;
     font-size: 14px;
     color: gray;
