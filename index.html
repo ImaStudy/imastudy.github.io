@@ -62,16 +62,17 @@
 
     <script>
     const canvas = document.getElementById("drawingCanvas");
-    const ctx = canvas.getContext("2d");
-    const drawButton = document.getElementById("drawButton");
-    const penButton = document.getElementById("penButton");
-    const eraserButton = document.getElementById("eraserButton");
-    let drawing = false;
-    let erasing = false;
-    let lineWidth = 3;
-    let strokeStyle = "black";
+const ctx = canvas.getContext("2d");
+const drawButton = document.getElementById("drawButton");
+const penButton = document.getElementById("penButton");
+const eraserButton = document.getElementById("eraserButton");
 
-    drawButton.addEventListener("click", () => {
+let drawing = false;
+let erasing = false;
+let lineWidth = 3;
+let strokeStyle = "black";
+
+drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
 
     // Если холст скрыт, показываем его и кнопки
@@ -90,38 +91,72 @@
     }
 });
 
-    penButton.addEventListener("click", () => {
-        erasing = false;
-        strokeStyle = "black";
-        lineWidth = 3;
-    });
+penButton.addEventListener("click", () => {
+    erasing = false;
+    strokeStyle = "black";
+    lineWidth = 3;
+});
 
-    eraserButton.addEventListener("click", () => {
-        erasing = true;
-        strokeStyle = "white";
-        lineWidth = 10;
-    });
+eraserButton.addEventListener("click", () => {
+    erasing = true;
+    strokeStyle = "white";
+    lineWidth = 10;
+});
 
-    canvas.addEventListener("mousedown", () => drawing = true);
-    canvas.addEventListener("mouseup", () => drawing = false);
-    canvas.addEventListener("mouseleave", () => drawing = false);
-    canvas.addEventListener("mousemove", draw);
+// Обработчики для мыши
+canvas.addEventListener("mousedown", () => drawing = true);
+canvas.addEventListener("mouseup", () => drawing = false);
+canvas.addEventListener("mouseleave", () => drawing = false);
+canvas.addEventListener("mousemove", draw);
 
-    function draw(event) {
-        if (!drawing) return;
-        const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        ctx.fillStyle = "black";
-        ctx.fillRect(x, y, 2, 2);
-        ctx.lineWidth = lineWidth;
-        ctx.lineCap = "round";
-        ctx.strokeStyle = strokeStyle;
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + 0.1, y + 0.1);
-        ctx.stroke();
-    }
+// Обработчики для сенсорных экранов
+canvas.addEventListener("touchstart", startDrawing);
+canvas.addEventListener("touchend", stopDrawing);
+canvas.addEventListener("touchmove", drawTouch);
+
+// Функции для сенсорных экранов
+function startDrawing(event) {
+    event.preventDefault(); // Чтобы предотвратить прокрутку и зум на мобильных
+    drawing = true;
+}
+
+function stopDrawing() {
+    drawing = false;
+}
+
+function drawTouch(event) {
+    if (!drawing) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const touch = event.touches[0]; // Получаем первое касание
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = strokeStyle;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + 0.1, y + 0.1);
+    ctx.stroke();
+}
+
+function draw(event) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = strokeStyle;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + 0.1, y + 0.1);
+    ctx.stroke();
+}
 </script>
 </body>
 </html>
