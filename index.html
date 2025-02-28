@@ -123,8 +123,8 @@ canvas.addEventListener("touchmove", (event) => {
 // Функции рисования
 function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
-    lastX = x - rect.left;
-    lastY = y - rect.top;
+    lastX = (x - rect.left) * (canvas.width / rect.width);
+    lastY = (y - rect.top) * (canvas.height / rect.height);
     drawing = true;
 }
 
@@ -135,8 +135,8 @@ function stopDrawing() {
 function draw(x, y) {
     if (!drawing) return;
     const rect = canvas.getBoundingClientRect();
-    const newX = x - rect.left;
-    const newY = y - rect.top;
+    const newX = (x - rect.left) * (canvas.width / rect.width);
+    const newY = (y - rect.top) * (canvas.height / rect.height);
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
