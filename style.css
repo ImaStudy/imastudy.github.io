@@ -23,23 +23,15 @@ p {
 
 /* Делаем футер фиксированным внизу */
 .footer {
-    position: fixed
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     bottom: 10px;
     font-size: 14px;
     color: gray;
     text-align: center;
     margin-top: 20px; /* Отступ сверху, чтобы футер не прилипал */
     width: 100%; /* Задаём ширину 100% */
-}
-
-@media (max-width: 767px) {
-    .footer {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100%;
-    }
 }
 
 .worker-img {
