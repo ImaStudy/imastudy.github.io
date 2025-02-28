@@ -21,17 +21,27 @@ p {
     color: #333;
 }
 
-.content {
-    flex-grow: 1; /* Позволяет контенту занимать оставшееся место */
-}
-
 /* Делаем футер фиксированным внизу */
 .footer {
     font-size: 14px;
     color: gray;
     text-align: center;
-    margin-top: 20px; /* Отступ сверху, чтобы футер не был слишком прижат */
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
 }
+@media (max-width: 767px) { /* Для мобильных устройств */
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+    }
+}
+
 .worker-img {
     width: 150px; /* Изменяй размер, если нужно */
     margin-bottom: 20px; /* Отступ от текста */
