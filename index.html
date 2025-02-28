@@ -79,11 +79,14 @@
         canvas.style.display = "block"; // Показываем холст
         toolButtons.style.display = "flex"; // Показываем кнопки
 
-        document.body.style.height = "auto";
-        document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
+        document.body.style.height = "auto"; // Сброс высоты
+        document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы для мобильных
     } else {
         canvas.style.display = "none"; // Скрываем холст
         toolButtons.style.display = "none"; // Скрываем кнопки
+
+        document.body.style.height = "auto"; // Сброс высоты
+        document.body.style.minHeight = "100vh"; // Сбрасываем минимальную высоту страницы
     }
 });
 
