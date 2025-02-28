@@ -72,19 +72,20 @@
     let strokeStyle = "black";
 
     drawButton.addEventListener("click", () => {
-        const toolButtons = document.querySelector(".tool-buttons");
+    const toolButtons = document.querySelector(".tool-buttons");
 
-        if (canvas.style.display === "none" || canvas.style.display === "") {
-            canvas.style.display = "block";
-            toolButtons.style.display = "flex"; // Показываем кнопки
+    // Если холст скрыт, показываем его и кнопки
+    if (canvas.style.display === "none" || canvas.style.display === "") {
+        canvas.style.display = "block"; // Показываем холст
+        toolButtons.style.display = "flex"; // Показываем кнопки
 
-            document.body.style.height = "auto";
-            document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
-        } else {
-            canvas.style.display = "none";
-            toolButtons.style.display = "none"; // Скрываем кнопки
-        }
-    });
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
+    } else {
+        canvas.style.display = "none"; // Скрываем холст
+        toolButtons.style.display = "none"; // Скрываем кнопки
+    }
+});
 
     penButton.addEventListener("click", () => {
         erasing = false;
