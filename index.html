@@ -73,28 +73,18 @@ let lineWidth = 3;
 let strokeStyle = "black";
 let lastX, lastY;
 
-// Функция установки правильного размера холста
-function resizeCanvas() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas(); // Вызываем при загрузке
-
+// Обработчики кнопок
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
 
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
         toolButtons.style.display = "flex";
-        document.body.style.height = "auto";
-        document.body.style.minHeight = "120vh";
-        resizeCanvas(); // Обновляем размер холста
+        document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
-        document.body.style.height = "auto";
-        document.body.style.minHeight = "100vh";
+        document.body.style.minHeight = "100vh"; // Возвращаем высоту
     }
 });
 
@@ -132,8 +122,8 @@ canvas.addEventListener("touchmove", (event) => {
 // Функции рисования
 function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
-    lastX = (x - rect.left) * (canvas.width / rect.width);
-    lastY = (y - rect.top) * (canvas.height / rect.height);
+    lastX = x - rect.left;
+    lastY = y - rect.top;
     drawing = true;
 }
 
@@ -144,8 +134,8 @@ function stopDrawing() {
 function draw(x, y) {
     if (!drawing) return;
     const rect = canvas.getBoundingClientRect();
-    const newX = (x - rect.left) * (canvas.width / rect.width);
-    const newY = (y - rect.top) * (canvas.height / rect.height);
+    const newX = x - rect.left;
+    const newY = y - rect.top;
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
