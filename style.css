@@ -23,14 +23,14 @@ p {
 
 /* Делаем футер фиксированным внизу */
 .footer {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 14px;
     color: gray;
+    text-align: center;
+    margin-top: 20px; /* Отступ сверху, чтобы футер не прилипал */
+    position: relative;
+    width: 100%; /* Задаём ширину 100% */
 }
-@media (max-width: 767px) { /* Для мобильных устройств */
+@media (max-width: 767px) {
     .footer {
         position: fixed;
         bottom: 0;
