@@ -104,6 +104,23 @@ html, body {
     }
 }
 
+#drawingCanvas {
+    border: 2px solid black;  /* Граница для холста */
+    background-color: white;
+    width: 100%;               /* Холст будет растягиваться на всю ширину экрана */
+    height: 400px;             /* Высота холста */
+    box-sizing: border-box;    /* Учитываем границы в общей ширине */
+}
+
+/* Для мобильных устройств */
+@media (max-width: 767px) {
+    #drawingCanvas {
+        width: calc(100% - 40px); /* Уменьшаем ширину на 40px, чтобы добавить отступы с боков */
+        margin: 0 20px;  /* Добавляем отступы по бокам (по 20px слева и справа) */
+    }
+}
+
+
 /* Скрываем кнопки по умолчанию */
 .tool-buttons {
     display: none;
