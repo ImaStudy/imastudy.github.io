@@ -10,6 +10,7 @@ body {
     height: 100vh;
     text-align: center;
     position: relative;
+    width: 100%;
 }
 
 h1 {
@@ -19,6 +20,10 @@ h1 {
 p {
     font-size: 18px;
     color: #333;
+}
+
+html, body {
+    overflow-x: hidden;  /* Это уберет горизонтальную прокрутку */
 }
 
 /* Делаем футер фиксированным внизу */
