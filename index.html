@@ -71,42 +71,21 @@ let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
-let lastX = 0, lastY = 0;
+let lastX, lastY; // Для хранения предыдущей позиции пера
 
-// Устанавливаем размер холста в зависимости от устройства
-function setCanvasSize() {
-    if (window.innerWidth <= 768) {
-        // Для мобильных устройств: холст по высоте 70% экрана, по ширине - 100%
-        canvas.height = window.innerHeight * 0.7;
-        canvas.width = window.innerWidth;
-        document.body.style.overflow = "auto"; // Разрешаем прокрутку на мобильных
-        document.body.style.touchAction = "auto"; // Разрешаем прокрутку и жесты на мобилках
-    } else {
-        // Для ПК: холст квадратный, 80% от ширины экрана
-        const size = window.innerWidth * 0.8;
-        canvas.width = size;
-        canvas.height = size;
-        document.body.style.overflow = "hidden"; // Отключаем прокрутку на ПК
-        document.body.style.touchAction = "none"; // Отключаем жесты прокрутки
-    }
-}
-
-setCanvasSize();
-window.addEventListener("resize", setCanvasSize);
-
-// Отключаем скроллинг только при рисовании на мобильных
-document.body.style.overscrollBehavior = "none";
-
-// Обработчики кнопок
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
 
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
         toolButtons.style.display = "flex";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "120vh";
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "100vh";
     }
 });
 
@@ -121,37 +100,6 @@ eraserButton.addEventListener("click", () => {
     strokeStyle = "white";
     lineWidth = 10;
 });
-
-// Функции рисования
-function startDrawing(x, y) {
-    const rect = canvas.getBoundingClientRect();
-    lastX = (x - rect.left) * (canvas.width / rect.width);
-    lastY = (y - rect.top) * (canvas.height / rect.height);
-    drawing = true;
-}
-
-function stopDrawing() {
-    drawing = false;
-}
-
-function draw(x, y) {
-    if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const newX = (x - rect.left) * (canvas.width / rect.width);
-    const newY = (y - rect.top) * (canvas.height / rect.height);
-
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = strokeStyle;
-
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(newX, newY);
-    ctx.stroke();
-
-    lastX = newX;
-    lastY = newY;
-}
 
 // Обработчики для мыши
 canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
@@ -171,6 +119,37 @@ canvas.addEventListener("touchmove", (event) => {
     const touch = event.touches[0];
     draw(touch.clientX, touch.clientY);
 });
+
+// Функции рисования
+function startDrawing(x, y) {
+    const rect = canvas.getBoundingClientRect();
+    lastX = x - rect.left;
+    lastY = y - rect.top;
+    drawing = true;
+}
+
+function stopDrawing() {
+    drawing = false;
+}
+
+function draw(x, y) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const newX = x - rect.left;
+    const newY = y - rect.top;
+
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = strokeStyle;
+
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(newX, newY);
+    ctx.stroke();
+
+    lastX = newX;
+    lastY = newY;
+}
 </script>
 </body>
 </html>
