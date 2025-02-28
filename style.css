@@ -23,14 +23,12 @@ p {
 
 /* Делаем футер фиксированным внизу */
 .footer {
-    font-size: 14px;
-    color: gray;
-    text-align: center;
     position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
+    font-size: 14px;
+    color: gray;
 }
 @media (max-width: 767px) { /* Для мобильных устройств */
     .footer {
