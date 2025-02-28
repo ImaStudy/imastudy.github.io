@@ -73,15 +73,15 @@ let lineWidth = 3;
 let strokeStyle = "black";
 let lastX, lastY;
 
-// Устанавливаем размер холста по ширине экрана и 70% высоты
+// Устанавливаем размер холста правильно
 function setCanvasSize() {
-    canvas.width = window.innerWidth; 
-    canvas.height = window.innerHeight * 0.7;
+    canvas.width = document.documentElement.clientWidth * 0.95; // 95% ширины экрана
+    canvas.height = window.innerHeight * 0.6; // 60% высоты экрана, чтобы не пересекался с футером
 }
 setCanvasSize();
-window.addEventListener("resize", setCanvasSize); // Если размер экрана изменится
+window.addEventListener("resize", setCanvasSize);
 
-// Блокируем прокрутку при рисовании
+// Блокируем прокрутку во время рисования на мобильных
 document.body.style.overflow = "hidden";
 
 // Обработчики кнопок
@@ -91,11 +91,9 @@ drawButton.addEventListener("click", () => {
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
         toolButtons.style.display = "flex";
-        document.body.style.minHeight = "120vh";
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
-        document.body.style.minHeight = "100vh";
     }
 });
 
@@ -112,29 +110,27 @@ eraserButton.addEventListener("click", () => {
 });
 
 // Обработчики для мыши
-canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
+canvas.addEventListener("mousedown", (event) => startDrawing(event));
 canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mouseleave", stopDrawing);
-canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
+canvas.addEventListener("mousemove", (event) => draw(event));
 
 // Обработчики для сенсорных экранов
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault();
-    const touch = event.touches[0];
-    startDrawing(touch.pageX, touch.pageY); // Используем pageX/pageY для корректности
+    startDrawing(event.touches[0]);
 });
 canvas.addEventListener("touchend", stopDrawing);
 canvas.addEventListener("touchmove", (event) => {
     event.preventDefault();
-    const touch = event.touches[0];
-    draw(touch.pageX, touch.pageY);
+    draw(event.touches[0]);
 });
 
 // Функции рисования
-function startDrawing(x, y) {
+function startDrawing(event) {
     const rect = canvas.getBoundingClientRect();
-    lastX = x - rect.left;
-    lastY = y - rect.top;
+    lastX = event.clientX - rect.left;
+    lastY = event.clientY - rect.top;
     drawing = true;
 }
 
@@ -142,11 +138,11 @@ function stopDrawing() {
     drawing = false;
 }
 
-function draw(x, y) {
+function draw(event) {
     if (!drawing) return;
     const rect = canvas.getBoundingClientRect();
-    const newX = x - rect.left;
-    const newY = y - rect.top;
+    const newX = event.clientX - rect.left;
+    const newY = event.clientY - rect.top;
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
