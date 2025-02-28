@@ -71,7 +71,15 @@ let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
-let lastX, lastY; // Для хранения предыдущей позиции пера
+let lastX, lastY;
+
+// Функция установки правильного размера холста
+function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas(); // Вызываем при загрузке
 
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
@@ -81,6 +89,7 @@ drawButton.addEventListener("click", () => {
         toolButtons.style.display = "flex";
         document.body.style.height = "auto";
         document.body.style.minHeight = "120vh";
+        resizeCanvas(); // Обновляем размер холста
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
@@ -123,8 +132,8 @@ canvas.addEventListener("touchmove", (event) => {
 // Функции рисования
 function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
-    lastX = x - rect.left;
-    lastY = y - rect.top;
+    lastX = (x - rect.left) * (canvas.width / rect.width);
+    lastY = (y - rect.top) * (canvas.height / rect.height);
     drawing = true;
 }
 
@@ -135,8 +144,8 @@ function stopDrawing() {
 function draw(x, y) {
     if (!drawing) return;
     const rect = canvas.getBoundingClientRect();
-    const newX = x - rect.left;
-    const newY = y - rect.top;
+    const newX = (x - rect.left) * (canvas.width / rect.width);
+    const newY = (y - rect.top) * (canvas.height / rect.height);
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
