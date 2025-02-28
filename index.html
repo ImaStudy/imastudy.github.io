@@ -75,15 +75,25 @@ let lastX = 0, lastY = 0;
 
 // Устанавливаем размер холста так, чтобы он не заходил на футер
 function setCanvasSize() {
-    canvas.width = window.innerWidth * 0.98; // 98% ширины экрана
-    canvas.height = window.innerHeight * 0.65; // 65% высоты экрана (чтобы не залезал в футер)
+    if (window.innerWidth <= 768) {
+        // Для мобильных устройств: 100% ширины и 65% высоты экрана
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight * 0.65;
+        document.body.style.overflow = "auto"; // Разрешаем прокрутку на мобильных
+        document.body.style.touchAction = "auto"; // Разрешаем прокрутку и жесты на мобилках
+    } else {
+        // Для ПК: 90% ширины и 70% высоты экрана
+        canvas.width = window.innerWidth * 0.9;
+        canvas.height = window.innerHeight * 0.7;
+        document.body.style.overflow = "hidden"; // Отключаем прокрутку на ПК
+        document.body.style.touchAction = "none"; // Отключаем жесты прокрутки
+    }
 }
 setCanvasSize();
 window.addEventListener("resize", setCanvasSize);
 
-// Отключаем скроллинг при рисовании на мобильных
+// Отключаем скроллинг только при рисовании на мобильных
 document.body.style.overscrollBehavior = "none";
-document.body.style.touchAction = "none";
 
 // Обработчики кнопок
 drawButton.addEventListener("click", () => {
