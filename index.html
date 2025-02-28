@@ -71,23 +71,21 @@ let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
+let lastX, lastY; // Для хранения предыдущей позиции пера
 
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
 
-    // Если холст скрыт, показываем его и кнопки
     if (canvas.style.display === "none" || canvas.style.display === "") {
-        canvas.style.display = "block"; // Показываем холст
-        toolButtons.style.display = "flex"; // Показываем кнопки
-
-        document.body.style.height = "auto"; // Сброс высоты
-        document.body.style.minHeight = "120vh"; // Увеличиваем высоту страницы для мобильных
+        canvas.style.display = "block";
+        toolButtons.style.display = "flex";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "120vh";
     } else {
-        canvas.style.display = "none"; // Скрываем холст
-        toolButtons.style.display = "none"; // Скрываем кнопки
-
-        document.body.style.height = "auto"; // Сброс высоты
-        document.body.style.minHeight = "100vh"; // Сбрасываем минимальную высоту страницы
+        canvas.style.display = "none";
+        toolButtons.style.display = "none";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "100vh";
     }
 });
 
@@ -104,19 +102,29 @@ eraserButton.addEventListener("click", () => {
 });
 
 // Обработчики для мыши
-canvas.addEventListener("mousedown", () => drawing = true);
-canvas.addEventListener("mouseup", () => drawing = false);
-canvas.addEventListener("mouseleave", () => drawing = false);
-canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
+canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
 // Обработчики для сенсорных экранов
-canvas.addEventListener("touchstart", startDrawing);
+canvas.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    startDrawing(touch.clientX, touch.clientY);
+});
 canvas.addEventListener("touchend", stopDrawing);
-canvas.addEventListener("touchmove", drawTouch);
+canvas.addEventListener("touchmove", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    draw(touch.clientX, touch.clientY);
+});
 
-// Функции для сенсорных экранов
-function startDrawing(event) {
-    event.preventDefault(); // Чтобы предотвратить прокрутку и зум на мобильных
+// Функции рисования
+function startDrawing(x, y) {
+    const rect = canvas.getBoundingClientRect();
+    lastX = x - rect.left;
+    lastY = y - rect.top;
     drawing = true;
 }
 
@@ -124,38 +132,23 @@ function stopDrawing() {
     drawing = false;
 }
 
-function drawTouch(event) {
+function draw(x, y) {
     if (!drawing) return;
-
     const rect = canvas.getBoundingClientRect();
-    const touch = event.touches[0]; // Получаем первое касание
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
+    const newX = x - rect.left;
+    const newY = y - rect.top;
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
     ctx.strokeStyle = strokeStyle;
 
     ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + 0.1, y + 0.1);
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(newX, newY);
     ctx.stroke();
-}
 
-function draw(event) {
-    if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = strokeStyle;
-
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + 0.1, y + 0.1);
-    ctx.stroke();
+    lastX = newX;
+    lastY = newY;
 }
 </script>
 </body>
