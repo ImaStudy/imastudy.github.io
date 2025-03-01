@@ -80,15 +80,16 @@ let lastX, lastY;
 let undoStack = [];
 let redoStack = [];
 
-// Инициализируем холст с пустым состоянием
-function initCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    saveState();
+// Сохраняем состояние холста
+function saveState() {
+    undoStack.push(canvas.toDataURL()); // Добавляем текущий снимок
+    redoStack = [];  // Очищаем redoStack
 }
 
-function saveState() {
-    undoStack.push(canvas.toDataURL());
-    redoStack = [];  // Очищаем redoStack после нового действия
+// Инициализация холста
+function initCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    saveState();  // Сохраняем начальное состояние
 }
 
 // Открытие / закрытие канваса
@@ -99,7 +100,7 @@ drawButton.addEventListener("click", () => {
         toolButtons.style.display = "flex";
         document.body.style.height = "auto";
         document.body.style.minHeight = "120vh";
-        initCanvas();  // Инициализируем холст при открытии
+        initCanvas();  // Инициализируем холст
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
@@ -108,26 +109,27 @@ drawButton.addEventListener("click", () => {
     }
 });
 
-// Инструменты рисования
+// Выбор пера
 penButton.addEventListener("click", () => {
     erasing = false;
     strokeStyle = "black";
     lineWidth = 3;
 });
 
+// Выбор ластика
 eraserButton.addEventListener("click", () => {
     erasing = true;
     strokeStyle = "white";
     lineWidth = 10;
 });
 
-// Обработчики для мыши
+// Мышь
 canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
 canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mouseleave", stopDrawing);
 canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
-// Обработчики для сенсорных экранов
+// Сенсорный экран
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
@@ -140,6 +142,7 @@ canvas.addEventListener("touchmove", (event) => {
     draw(touch.clientX, touch.clientY);
 });
 
+// Начало рисования
 function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
     lastX = (x - rect.left) * (canvas.width / rect.width);
@@ -147,11 +150,13 @@ function startDrawing(x, y) {
     drawing = true;
 }
 
+// Остановка рисования
 function stopDrawing() {
     drawing = false;
-    saveState();
+    saveState(); // Сохраняем состояние после завершения рисования
 }
 
+// Рисование
 function draw(x, y) {
     if (!drawing) return;
     const rect = canvas.getBoundingClientRect();
@@ -171,7 +176,7 @@ function draw(x, y) {
     lastY = newY;
 }
 
-// Функции undo/redo
+// Undo (Отмена)
 function undo() {
     if (undoStack.length > 1) {
         redoStack.push(undoStack.pop());
@@ -184,6 +189,7 @@ function undo() {
     }
 }
 
+// Redo (Возврат)
 function redo() {
     if (redoStack.length > 0) {
         undoStack.push(redoStack.pop());
