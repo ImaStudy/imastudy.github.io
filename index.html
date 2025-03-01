@@ -123,25 +123,6 @@ eraserButton.addEventListener("click", () => {
     lineWidth = 10;
 });
 
-// Мышь
-canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
-canvas.addEventListener("mouseup", stopDrawing);
-canvas.addEventListener("mouseleave", stopDrawing);
-canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
-
-// Сенсорный экран
-canvas.addEventListener("touchstart", (event) => {
-    event.preventDefault();
-    const touch = event.touches[0];
-    startDrawing(touch.clientX, touch.clientY);
-});
-canvas.addEventListener("touchend", stopDrawing);
-canvas.addEventListener("touchmove", (event) => {
-    event.preventDefault();
-    const touch = event.touches[0];
-    draw(touch.clientX, touch.clientY);
-});
-
 // Начало рисования
 function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
@@ -205,6 +186,28 @@ function redo() {
 // Привязка undo/redo к кнопкам
 undoButton.addEventListener("click", undo);
 redoButton.addEventListener("click", redo);
+
+// Обработчики для мыши и сенсорных экранов (универсальные)
+canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
+canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
+
+// Сенсорный экран
+canvas.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    startDrawing(touch.clientX, touch.clientY);
+});
+canvas.addEventListener("touchend", stopDrawing);
+canvas.addEventListener("touchmove", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    draw(touch.clientX, touch.clientY);
+});
+
+// Инициализируем холст и сохраняем начальное состояние
+initCanvas();
 </script>
 </body>
 </html>
