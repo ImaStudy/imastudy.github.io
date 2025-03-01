@@ -153,50 +153,40 @@ function draw(x, y) {
     lastX = newX;
     lastY = newY;
 }
-let undoStack = [];
-let redoStack = [];
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
-
-// Функция сохранения состояния холста
+        
 function saveState() {
-    undoStack.push(canvas.toDataURL());
-    redoStack = []; // Очистить стек повтора
-}
-
-// Функция отмены действия
-function undo() {
-    if (undoStack.length > 0) {
-        redoStack.push(canvas.toDataURL());
-        let img = new Image();
-        img.src = undoStack.pop();
-        img.onload = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-        };
-    }
-}
-
-// Функция повтора действия
-function redo() {
-    if (redoStack.length > 0) {
         undoStack.push(canvas.toDataURL());
-        let img = new Image();
-        img.src = redoStack.pop();
-        img.onload = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-        };
+        redoStack = [];
     }
-}
 
-// Добавляем обработчики на кнопки
-document.getElementById("undo").addEventListener("click", undo);
-document.getElementById("redo").addEventListener("click", redo);
+    function undo() {
+        if (undoStack.length > 0) {
+            redoStack.push(canvas.toDataURL());
+            let img = new Image();
+            img.src = undoStack.pop();
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+        }
+    }
 
-// Сохраняем состояние при завершении рисования
-canvas.addEventListener("mouseup", saveState);
+    function redo() {
+        if (redoStack.length > 0) {
+            undoStack.push(canvas.toDataURL());
+            let img = new Image();
+            img.src = redoStack.pop();
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+        }
+    }
+
+    undoButton.addEventListener("click", undo);
+    redoButton.addEventListener("click", redo);
+
+    canvas.addEventListener("mouseup", saveState);
 
 </script>
 </body>
