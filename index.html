@@ -64,107 +64,95 @@
 
     <script>
     const canvas = document.getElementById("drawingCanvas");
-    const ctx = canvas.getContext("2d");
-    const drawButton = document.getElementById("drawButton");
-    const penButton = document.getElementById("penButton");
-    const eraserButton = document.getElementById("eraserButton");
-    const undoButton = document.getElementById("undo");
-    const redoButton = document.getElementById("redo");
+const ctx = canvas.getContext("2d");
+const drawButton = document.getElementById("drawButton");
+const penButton = document.getElementById("penButton");
+const eraserButton = document.getElementById("eraserButton");
+
+let drawing = false;
+let erasing = false;
+let lineWidth = 3;
+let strokeStyle = "black";
+let lastX, lastY; // Для хранения предыдущей позиции пера
+
+drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
 
-    let drawing = false;
-    let erasing = false;
-    let lineWidth = 3;
-    let strokeStyle = "black";
-    let lastX, lastY;
-
-    let undoStack = [];
-    let redoStack = [];
-
-    function saveState() {
-        undoStack.push(canvas.toDataURL()); // Сохраняем текущее изображение
-        redoStack = []; // Очистка redo после нового действия
+    if (canvas.style.display === "none" || canvas.style.display === "") {
+        canvas.style.display = "block";
+        toolButtons.style.display = "flex";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "120vh";
+    } else {
+        canvas.style.display = "none";
+        toolButtons.style.display = "none";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "100vh";
     }
+});
 
-    drawButton.addEventListener("click", () => {
-        if (canvas.style.display === "none" || canvas.style.display === "") {
-            canvas.style.display = "block";
-            toolButtons.style.display = "flex";
-            toolButtons.style.flexWrap = "wrap";
-            toolButtons.style.justifyContent = "center";
-            document.body.style.minHeight = "120vh";
-            document.body.style.overflow = "hidden"; // Фикс переполнения
-        } else {
-            canvas.style.display = "none";
-            toolButtons.style.display = "none";
-            document.body.style.minHeight = "100vh";
-            document.body.style.overflow = "auto";
-        }
-    });
+penButton.addEventListener("click", () => {
+    erasing = false;
+    strokeStyle = "black";
+    lineWidth = 3;
+});
 
-    penButton.addEventListener("click", () => {
-        erasing = false;
-        strokeStyle = "black";
-        lineWidth = 3;
-    });
+eraserButton.addEventListener("click", () => {
+    erasing = true;
+    strokeStyle = "white";
+    lineWidth = 10;
+});
 
-    eraserButton.addEventListener("click", () => {
-        erasing = true;
-        strokeStyle = "white";
-        lineWidth = 10;
-    });
+// Обработчики для мыши
+canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
+canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseup", saveState);
+canvas.addEventListener("mouseleave", stopDrawing);
+canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
-    // Обработчики мыши
-    canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
-    canvas.addEventListener("mouseup", stopDrawing);
-    canvas.addEventListener("mouseleave", stopDrawing);
-    canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
+// Обработчики для сенсорных экранов
+canvas.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    startDrawing(touch.clientX, touch.clientY);
+});
+canvas.addEventListener("touchend", stopDrawing);
+canvas.addEventListener("touchmove", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    draw(touch.clientX, touch.clientY);
+});
 
-    // Обработчики сенсорных экранов (фиксируем рисование)
-    canvas.addEventListener("touchstart", (event) => {
-        event.preventDefault();
-        const touch = event.touches[0];
-        startDrawing(touch.pageX, touch.pageY);
-    });
+// Функции рисования
+function startDrawing(x, y) {
+    const rect = canvas.getBoundingClientRect();
+    lastX = (x - rect.left) * (canvas.width / rect.width);
+    lastY = (y - rect.top) * (canvas.height / rect.height);
+    drawing = true;
+}
 
-    canvas.addEventListener("touchmove", (event) => {
-        event.preventDefault();
-        const touch = event.touches[0];
-        draw(touch.pageX, touch.pageY);
-    });
+function stopDrawing() {
+    drawing = false;
+}
 
-    canvas.addEventListener("touchend", stopDrawing);
+function draw(x, y) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const newX = (x - rect.left) * (canvas.width / rect.width);
+    const newY = (y - rect.top) * (canvas.height / rect.height);
 
-    function startDrawing(x, y) {
-        const rect = canvas.getBoundingClientRect();
-        lastX = (x - rect.left) * (canvas.width / rect.width);
-        lastY = (y - rect.top) * (canvas.height / rect.height);
-        drawing = true;
-    }
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = strokeStyle;
 
-    function stopDrawing() {
-        drawing = false;
-        saveState();
-    }
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(newX, newY);
+    ctx.stroke();
 
-    function draw(x, y) {
-        if (!drawing) return;
-        const rect = canvas.getBoundingClientRect();
-        const newX = (x - rect.left) * (canvas.width / rect.width);
-        const newY = (y - rect.top) * (canvas.height / rect.height);
-
-        ctx.lineWidth = lineWidth;
-        ctx.lineCap = "round";
-        ctx.strokeStyle = strokeStyle;
-
-        ctx.beginPath();
-        ctx.moveTo(lastX, lastY);
-        ctx.lineTo(newX, newY);
-        ctx.stroke();
-
-        lastX = newX;
-        lastY = newY;
-    }
+    lastX = newX;
+    lastY = newY;
+}
 
     function undo() {
         if (undoStack.length > 1) {
