@@ -63,8 +63,7 @@
     <p class="footer">Created by K. Chuito</p>
 
     <script>
-   const canvas = document.getElementById("drawingCanvas");
-        const canvas = document.getElementById("drawingCanvas");
+  const canvas = document.getElementById("drawingCanvas");
         const ctx = canvas.getContext("2d");
         const drawButton = document.getElementById("drawButton");
         const penButton = document.getElementById("penButton");
@@ -83,10 +82,8 @@
 
         // Сохраняем состояние холста
         function saveState() {
-            console.log("Saving state...");
             undoStack.push(canvas.toDataURL());
             redoStack = [];  // Очистка redoStack после нового действия
-            console.log("Undo Stack after save:", undoStack);
         }
 
         // Функция начала рисования
@@ -180,7 +177,7 @@
             draw(touch.clientX, touch.clientY);
         });
 
-        // Инициализация холста
+        // Функция для отображения холста
         drawButton.addEventListener("click", () => {
             const toolButtons = document.querySelector(".tool-buttons");
             if (canvas.style.display === "none" || canvas.style.display === "") {
@@ -198,6 +195,7 @@
             }
         });
 
+        // Настройка пера и ластика
         penButton.addEventListener("click", () => {
             erasing = false;
             strokeStyle = "black";
