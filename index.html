@@ -90,13 +90,15 @@
         if (canvas.style.display === "none" || canvas.style.display === "") {
             canvas.style.display = "block";
             toolButtons.style.display = "flex";
-            toolButtons.style.flexWrap = "wrap"; // Исправляет большие кнопки на мобильных
-            toolButtons.style.justifyContent = "center"; 
+            toolButtons.style.flexWrap = "wrap";
+            toolButtons.style.justifyContent = "center";
             document.body.style.minHeight = "120vh";
+            document.body.style.overflow = "hidden"; // Фикс переполнения
         } else {
             canvas.style.display = "none";
             toolButtons.style.display = "none";
             document.body.style.minHeight = "100vh";
+            document.body.style.overflow = "auto";
         }
     });
 
@@ -112,11 +114,26 @@
         lineWidth = 10;
     });
 
+    // Обработчики мыши
     canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
     canvas.addEventListener("mouseup", stopDrawing);
-    canvas.addEventListener("mouseup", saveState);
     canvas.addEventListener("mouseleave", stopDrawing);
     canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
+
+    // Обработчики сенсорных экранов (фиксируем рисование)
+    canvas.addEventListener("touchstart", (event) => {
+        event.preventDefault();
+        const touch = event.touches[0];
+        startDrawing(touch.pageX, touch.pageY);
+    });
+
+    canvas.addEventListener("touchmove", (event) => {
+        event.preventDefault();
+        const touch = event.touches[0];
+        draw(touch.pageX, touch.pageY);
+    });
+
+    canvas.addEventListener("touchend", stopDrawing);
 
     function startDrawing(x, y) {
         const rect = canvas.getBoundingClientRect();
@@ -127,6 +144,7 @@
 
     function stopDrawing() {
         drawing = false;
+        saveState();
     }
 
     function draw(x, y) {
@@ -175,9 +193,7 @@
     undoButton.addEventListener("click", undo);
     redoButton.addEventListener("click", redo);
 
-    // Сохраняем стартовое состояние
     saveState();
-
 </script>
 </body>
 </html>
