@@ -68,32 +68,38 @@ const ctx = canvas.getContext("2d");
 const drawButton = document.getElementById("drawButton");
 const penButton = document.getElementById("penButton");
 const eraserButton = document.getElementById("eraserButton");
-const undoButton = document.getElementById("undoButton"); // Исправил ID
-const redoButton = document.getElementById("redoButton"); // Исправил ID
+const undoButton = document.getElementById("undoButton");
+const redoButton = document.getElementById("redoButton");
 
 let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
-let lastX, lastY; // Для хранения предыдущей позиции пера
+let lastX, lastY;
 
-let undoStack = []; // Добавил массивы
+let undoStack = [];
 let redoStack = [];
 
-// Сохраняем стартовое состояние
+// Инициализируем холст с пустым состоянием
+function initCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    saveState();
+}
+
 function saveState() {
     undoStack.push(canvas.toDataURL());
-    redoStack = []; // Очистка redo после нового действия
-    }
+    redoStack = [];  // Очищаем redoStack после нового действия
+}
 
+// Открытие / закрытие канваса
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
-
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
         toolButtons.style.display = "flex";
         document.body.style.height = "auto";
         document.body.style.minHeight = "120vh";
+        initCanvas();  // Инициализируем холст при открытии
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
@@ -102,6 +108,7 @@ drawButton.addEventListener("click", () => {
     }
 });
 
+// Инструменты рисования
 penButton.addEventListener("click", () => {
     erasing = false;
     strokeStyle = "black";
@@ -133,9 +140,6 @@ canvas.addEventListener("touchmove", (event) => {
     draw(touch.clientX, touch.clientY);
 });
 
-canvas.addEventListener("touchend", stopDrawing);
-
-// Функции рисования
 function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
     lastX = (x - rect.left) * (canvas.width / rect.width);
@@ -171,7 +175,6 @@ function draw(x, y) {
 function undo() {
     if (undoStack.length > 1) {
         redoStack.push(undoStack.pop());
-        console.log('Undo Stack:', undoStack);
         let img = new Image();
         img.src = undoStack[undoStack.length - 1];
         img.onload = () => {
@@ -184,7 +187,6 @@ function undo() {
 function redo() {
     if (redoStack.length > 0) {
         undoStack.push(redoStack.pop());
-        console.log('Redo Stack:', redoStack);
         let img = new Image();
         img.src = undoStack[undoStack.length - 1];
         img.onload = () => {
