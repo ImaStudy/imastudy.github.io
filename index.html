@@ -187,13 +187,13 @@ function redo() {
 undoButton.addEventListener("click", undo);
 redoButton.addEventListener("click", redo);
 
-// Обработчики для мыши и сенсорных экранов (универсальные)
+// Обработчики для мыши
 canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
 canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mouseleave", stopDrawing);
 canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
-// Сенсорный экран
+// Обработчики для сенсорных экранов
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
