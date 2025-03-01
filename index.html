@@ -68,105 +68,90 @@ const ctx = canvas.getContext("2d");
 const drawButton = document.getElementById("drawButton");
 const penButton = document.getElementById("penButton");
 const eraserButton = document.getElementById("eraserButton");
-const undoButton = document.getElementById("undo");
-const redoButton = document.getElementById("redo");
 
 let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
-let lastX, lastY;
+let lastX, lastY; // Для хранения предыдущей позиции пера
 
-let undoStack = [];
-let redoStack = [];
-
-// Функция сохранения состояния для undo/redo
-function saveState() {
-    undoStack.push(canvas.toDataURL());
-    redoStack = [];
-}
-
-// Кнопка отображения холста
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
 
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
         toolButtons.style.display = "flex";
+        document.body.style.height = "auto";
         document.body.style.minHeight = "120vh";
-        document.body.style.overflow = "hidden";
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
+        document.body.style.height = "auto";
         document.body.style.minHeight = "100vh";
-        document.body.style.overflow = "auto";
     }
 });
 
-// Выбор инструмента "Карандаш"
 penButton.addEventListener("click", () => {
     erasing = false;
     strokeStyle = "black";
     lineWidth = 3;
 });
 
-// Выбор инструмента "Ластик"
 eraserButton.addEventListener("click", () => {
     erasing = true;
-    strokeStyle = "rgba(255, 255, 255, 1)"; // Прозрачный ластик
+    strokeStyle = "white";
     lineWidth = 10;
 });
 
-// Обработчики мыши
-canvas.addEventListener("mousedown", (event) => startDrawing(event.offsetX, event.offsetY));
+// Обработчики для мыши
+canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
 canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseup", saveState);
 canvas.addEventListener("mouseleave", stopDrawing);
-canvas.addEventListener("mousemove", (event) => draw(event.offsetX, event.offsetY));
+canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
-// Обработчики сенсорных экранов
+// Обработчики для сенсорных экранов
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    startDrawing(touch.pageX - rect.left, touch.pageY - rect.top);
+    startDrawing(touch.clientX, touch.clientY);
 });
-
+canvas.addEventListener("touchend", stopDrawing);
 canvas.addEventListener("touchmove", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    draw(touch.pageX - rect.left, touch.pageY - rect.top);
+    draw(touch.clientX, touch.clientY);
 });
-
-canvas.addEventListener("touchend", stopDrawing);
 
 // Функции рисования
 function startDrawing(x, y) {
-    lastX = x;
-    lastY = y;
+    const rect = canvas.getBoundingClientRect();
+    lastX = (x - rect.left) * (canvas.width / rect.width);
+    lastY = (y - rect.top) * (canvas.height / rect.height);
     drawing = true;
 }
 
 function stopDrawing() {
     drawing = false;
-    saveState();
 }
 
 function draw(x, y) {
     if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const newX = (x - rect.left) * (canvas.width / rect.width);
+    const newY = (y - rect.top) * (canvas.height / rect.height);
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
     ctx.strokeStyle = strokeStyle;
-    ctx.globalCompositeOperation = erasing ? "destination-out" : "source-over"; // Прозрачный ластик
 
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
-    ctx.lineTo(x, y);
+    ctx.lineTo(newX, newY);
     ctx.stroke();
 
-    lastX = x;
-    lastY = y;
+    lastX = newX;
+    lastY = newY;
 }
 
 // Функции undo/redo
