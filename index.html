@@ -80,7 +80,7 @@ let lastX, lastY;
 let undoStack = [];
 let redoStack = [];
 
-// Сохраняем состояние холста только по завершении рисования
+// Сохраняем состояние холста
 function saveState() {
     undoStack.push(canvas.toDataURL());
     redoStack = [];  // Очистка redoStack после нового действия
@@ -182,7 +182,7 @@ drawButton.addEventListener("click", () => {
         document.body.style.height = "auto";
         document.body.style.minHeight = "120vh";
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем холст перед началом
-        saveState(); // Сохраняем начальное состояние
+        saveState(); // Сохраняем начальное состояние только при открытии холста
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
