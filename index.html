@@ -197,12 +197,6 @@ function redo() {
 // Привязка undo/redo к кнопкам
 undoButton.addEventListener("click", undo);
 redoButton.addEventListener("click", redo);
-
-// Сохраняем стартовое состояние
-function saveState() {
-    undoStack.push(canvas.toDataURL()); // Сохраняем текущее изображение
-    redoStack = []; // Очищаем redoStack после нового действия
-}
 </script>
 </body>
 </html>
