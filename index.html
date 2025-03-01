@@ -53,8 +53,8 @@
     <div class="canvas-container">
         <canvas id="drawingCanvas" width="500" height="400"></canvas>
         <div class="tool-buttons">
-            <button id="undo">⮌</button>
-            <button id="redo">⮎</button>
+            <button id="undoButton">⮌</button>
+            <button id="redoButton">⮎</button>
             <button id="penButton">Перо</button>
             <button id="eraserButton">Ластик</button>
         </div>
@@ -171,9 +171,10 @@ function draw(x, y) {
 // Функции undo/redo
 function undo() {
     if (undoStack.length > 1) {
-        redoStack.push(undoStack.pop()); // Сохраняем текущее состояние в redo
+        redoStack.push(undoStack.pop());
+        console.log('Undo Stack:', undoStack);
         let img = new Image();
-        img.src = undoStack[undoStack.length - 1]; // Загружаем последнее состояние
+        img.src = undoStack[undoStack.length - 1];
         img.onload = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0);
@@ -181,10 +182,10 @@ function undo() {
     }
 }
 
-
 function redo() {
     if (redoStack.length > 0) {
         undoStack.push(redoStack.pop());
+        console.log('Redo Stack:', redoStack);
         let img = new Image();
         img.src = undoStack[undoStack.length - 1];
         img.onload = () => {
