@@ -68,120 +68,138 @@ const ctx = canvas.getContext("2d");
 const drawButton = document.getElementById("drawButton");
 const penButton = document.getElementById("penButton");
 const eraserButton = document.getElementById("eraserButton");
+const undoButton = document.getElementById("undo");
+const redoButton = document.getElementById("redo");
 
 let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
-let lastX, lastY; // Для хранения предыдущей позиции пера
+let lastX, lastY;
 
+let undoStack = [];
+let redoStack = [];
+
+// Функция сохранения состояния для undo/redo
+function saveState() {
+    undoStack.push(canvas.toDataURL());
+    redoStack = [];
+}
+
+// Кнопка отображения холста
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
 
     if (canvas.style.display === "none" || canvas.style.display === "") {
         canvas.style.display = "block";
         toolButtons.style.display = "flex";
-        document.body.style.height = "auto";
         document.body.style.minHeight = "120vh";
+        document.body.style.overflow = "hidden";
     } else {
         canvas.style.display = "none";
         toolButtons.style.display = "none";
-        document.body.style.height = "auto";
         document.body.style.minHeight = "100vh";
+        document.body.style.overflow = "auto";
     }
 });
 
+// Выбор инструмента "Карандаш"
 penButton.addEventListener("click", () => {
     erasing = false;
     strokeStyle = "black";
     lineWidth = 3;
 });
 
+// Выбор инструмента "Ластик"
 eraserButton.addEventListener("click", () => {
     erasing = true;
-    strokeStyle = "white";
+    strokeStyle = "rgba(255, 255, 255, 1)"; // Прозрачный ластик
     lineWidth = 10;
 });
 
-// Обработчики для мыши
-canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
+// Обработчики мыши
+canvas.addEventListener("mousedown", (event) => startDrawing(event.offsetX, event.offsetY));
 canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseup", saveState);
 canvas.addEventListener("mouseleave", stopDrawing);
-canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
+canvas.addEventListener("mousemove", (event) => draw(event.offsetX, event.offsetY));
 
-// Обработчики для сенсорных экранов
+// Обработчики сенсорных экранов
 canvas.addEventListener("touchstart", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
-    startDrawing(touch.clientX, touch.clientY);
+    const rect = canvas.getBoundingClientRect();
+    startDrawing(touch.pageX - rect.left, touch.pageY - rect.top);
 });
-canvas.addEventListener("touchend", stopDrawing);
+
 canvas.addEventListener("touchmove", (event) => {
     event.preventDefault();
     const touch = event.touches[0];
-    draw(touch.clientX, touch.clientY);
+    const rect = canvas.getBoundingClientRect();
+    draw(touch.pageX - rect.left, touch.pageY - rect.top);
 });
+
+canvas.addEventListener("touchend", stopDrawing);
 
 // Функции рисования
 function startDrawing(x, y) {
-    const rect = canvas.getBoundingClientRect();
-    lastX = (x - rect.left) * (canvas.width / rect.width);
-    lastY = (y - rect.top) * (canvas.height / rect.height);
+    lastX = x;
+    lastY = y;
     drawing = true;
 }
 
 function stopDrawing() {
     drawing = false;
+    saveState();
 }
 
 function draw(x, y) {
     if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const newX = (x - rect.left) * (canvas.width / rect.width);
-    const newY = (y - rect.top) * (canvas.height / rect.height);
 
     ctx.lineWidth = lineWidth;
     ctx.lineCap = "round";
     ctx.strokeStyle = strokeStyle;
+    ctx.globalCompositeOperation = erasing ? "destination-out" : "source-over"; // Прозрачный ластик
 
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
-    ctx.lineTo(newX, newY);
+    ctx.lineTo(x, y);
     ctx.stroke();
 
-    lastX = newX;
-    lastY = newY;
+    lastX = x;
+    lastY = y;
 }
 
-    function undo() {
-        if (undoStack.length > 1) {
-            redoStack.push(undoStack.pop());
-            let img = new Image();
-            img.src = undoStack[undoStack.length - 1];
-            img.onload = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0);
-            };
-        }
+// Функции undo/redo
+function undo() {
+    if (undoStack.length > 1) {
+        redoStack.push(undoStack.pop());
+        let img = new Image();
+        img.src = undoStack[undoStack.length - 1];
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
     }
+}
 
-    function redo() {
-        if (redoStack.length > 0) {
-            undoStack.push(redoStack.pop());
-            let img = new Image();
-            img.src = undoStack[undoStack.length - 1];
-            img.onload = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0);
-            };
-        }
+function redo() {
+    if (redoStack.length > 0) {
+        undoStack.push(redoStack.pop());
+        let img = new Image();
+        img.src = undoStack[undoStack.length - 1];
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
     }
+}
 
-    undoButton.addEventListener("click", undo);
-    redoButton.addEventListener("click", redo);
+// Привязка undo/redo к кнопкам
+undoButton.addEventListener("click", undo);
+redoButton.addEventListener("click", redo);
 
-    saveState();
+// Сохраняем стартовое состояние
+saveState();
 </script>
 </body>
 </html>
