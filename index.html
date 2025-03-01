@@ -64,145 +64,145 @@
 
     <script>
 const canvas = document.getElementById("drawingCanvas");
-        const ctx = canvas.getContext("2d");
-        const drawButton = document.getElementById("drawButton");
-        const penButton = document.getElementById("penButton");
-        const eraserButton = document.getElementById("eraserButton");
-        const undoButton = document.getElementById("undoButton");
-        const redoButton = document.getElementById("redoButton");
+const ctx = canvas.getContext("2d");
+const drawButton = document.getElementById("drawButton");
+const penButton = document.getElementById("penButton");
+const eraserButton = document.getElementById("eraserButton");
+const undoButton = document.getElementById("undoButton");
+const redoButton = document.getElementById("redoButton");
 
-        let drawing = false;
-        let erasing = false;
-        let lineWidth = 3;
-        let strokeStyle = "black";
-        let lastX, lastY;
+let drawing = false;
+let erasing = false;
+let lineWidth = 3;
+let strokeStyle = "black";
+let lastX, lastY;
 
-        let undoStack = [];
-        let redoStack = [];
+let undoStack = [];
+let redoStack = [];
 
-        // Сохраняем состояние холста только по завершении рисования
-        function saveState() {
-            undoStack.push(canvas.toDataURL());
-            redoStack = [];  // Очистка redoStack после нового действия
-        }
+// Сохраняем состояние холста только по завершении рисования
+function saveState() {
+    undoStack.push(canvas.toDataURL());
+    redoStack = [];  // Очистка redoStack после нового действия
+}
 
-        // Функция начала рисования
-        function startDrawing(x, y) {
-            const rect = canvas.getBoundingClientRect();
-            lastX = (x - rect.left) * (canvas.width / rect.width);
-            lastY = (y - rect.top) * (canvas.height / rect.height);
-            drawing = true;
-        }
+// Функция начала рисования
+function startDrawing(x, y) {
+    const rect = canvas.getBoundingClientRect();
+    lastX = (x - rect.left) * (canvas.width / rect.width);
+    lastY = (y - rect.top) * (canvas.height / rect.height);
+    drawing = true;
+}
 
-        // Функция остановки рисования
-        function stopDrawing() {
-            drawing = false;
-            saveState();  // Сохраняем состояние только когда рисование заканчивается
-        }
+// Функция остановки рисования
+function stopDrawing() {
+    drawing = false;
+    saveState();  // Сохраняем состояние только когда рисование заканчивается
+}
 
-        // Функция рисования
-        function draw(x, y) {
-            if (!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const newX = (x - rect.left) * (canvas.width / rect.width);
-            const newY = (y - rect.top) * (canvas.height / rect.height);
+// Функция рисования
+function draw(x, y) {
+    if (!drawing) return;
+    const rect = canvas.getBoundingClientRect();
+    const newX = (x - rect.left) * (canvas.width / rect.width);
+    const newY = (y - rect.top) * (canvas.height / rect.height);
 
-            ctx.lineWidth = lineWidth;
-            ctx.lineCap = "round";
-            ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = "round";
+    ctx.strokeStyle = strokeStyle;
 
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(newX, newY);
-            ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(newX, newY);
+    ctx.stroke();
 
-            lastX = newX;
-            lastY = newY;
-        }
+    lastX = newX;
+    lastY = newY;
+}
 
-        // Undo (Отмена)
-        function undo() {
-            if (undoStack.length > 1) {
-                redoStack.push(undoStack.pop());
-                let img = new Image();
-                img.src = undoStack[undoStack.length - 1];
-                img.onload = () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(img, 0, 0);
-                };
-            }
-        }
+// Undo (Отмена)
+function undo() {
+    if (undoStack.length > 1) {
+        redoStack.push(undoStack.pop());
+        let img = new Image();
+        img.src = undoStack[undoStack.length - 1];
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+    }
+}
 
-        // Redo (Возврат)
-        function redo() {
-            if (redoStack.length > 0) {
-                undoStack.push(redoStack.pop());
-                let img = new Image();
-                img.src = undoStack[undoStack.length - 1];
-                img.onload = () => {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    ctx.drawImage(img, 0, 0);
-                };
-            }
-        }
+// Redo (Возврат)
+function redo() {
+    if (redoStack.length > 0) {
+        undoStack.push(redoStack.pop());
+        let img = new Image();
+        img.src = undoStack[undoStack.length - 1];
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+    }
+}
 
-        // Привязка undo/redo к кнопкам
-        undoButton.addEventListener("click", undo);
-        redoButton.addEventListener("click", redo);
+// Привязка undo/redo к кнопкам
+undoButton.addEventListener("click", undo);
+redoButton.addEventListener("click", redo);
 
-        // Обработчики событий для мыши
-        canvas.addEventListener("mousedown", (event) => {
-            startDrawing(event.clientX, event.clientY);
-        });
-        canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseleave", stopDrawing);
-        canvas.addEventListener("mousemove", (event) => {
-            draw(event.clientX, event.clientY);
-        });
+// Обработчики событий для мыши
+canvas.addEventListener("mousedown", (event) => {
+    startDrawing(event.clientX, event.clientY);
+});
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
+canvas.addEventListener("mousemove", (event) => {
+    draw(event.clientX, event.clientY);
+});
 
-        // Привязка событий для сенсорных экранов
-        canvas.addEventListener("touchstart", (event) => {
-            event.preventDefault();
-            const touch = event.touches[0];
-            startDrawing(touch.clientX, touch.clientY);
-        });
-        canvas.addEventListener("touchend", stopDrawing);
-        canvas.addEventListener("touchmove", (event) => {
-            event.preventDefault();
-            const touch = event.touches[0];
-            draw(touch.clientX, touch.clientY);
-        });
+// Привязка событий для сенсорных экранов
+canvas.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    startDrawing(touch.clientX, touch.clientY);
+});
+canvas.addEventListener("touchend", stopDrawing);
+canvas.addEventListener("touchmove", (event) => {
+    event.preventDefault();
+    const touch = event.touches[0];
+    draw(touch.clientX, touch.clientY);
+});
 
-        // Функция для отображения холста
-        drawButton.addEventListener("click", () => {
-            const toolButtons = document.querySelector(".tool-buttons");
-            if (canvas.style.display === "none" || canvas.style.display === "") {
-                canvas.style.display = "block";
-                toolButtons.style.display = "flex";
-                document.body.style.height = "auto";
-                document.body.style.minHeight = "120vh";
-                ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем холст перед началом
-                saveState(); // Сохраняем начальное состояние
-            } else {
-                canvas.style.display = "none";
-                toolButtons.style.display = "none";
-                document.body.style.height = "auto";
-                document.body.style.minHeight = "100vh";
-            }
-        });
+// Функция для отображения холста
+drawButton.addEventListener("click", () => {
+    const toolButtons = document.querySelector(".tool-buttons");
+    if (canvas.style.display === "none" || canvas.style.display === "") {
+        canvas.style.display = "block";
+        toolButtons.style.display = "flex";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "120vh";
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищаем холст перед началом
+        saveState(); // Сохраняем начальное состояние
+    } else {
+        canvas.style.display = "none";
+        toolButtons.style.display = "none";
+        document.body.style.height = "auto";
+        document.body.style.minHeight = "100vh";
+    }
+});
 
-        // Настройка пера и ластика
-        penButton.addEventListener("click", () => {
-            erasing = false;
-            strokeStyle = "black";
-            lineWidth = 3;
-        });
+// Настройка пера и ластика
+penButton.addEventListener("click", () => {
+    erasing = false;
+    strokeStyle = "black";
+    lineWidth = 3;
+});
 
-        eraserButton.addEventListener("click", () => {
-            erasing = true;
-            strokeStyle = "white";
-            lineWidth = 10;
-        });
+eraserButton.addEventListener("click", () => {
+    erasing = true;
+    strokeStyle = "white";
+    lineWidth = 10;
+});
 </script>
 </body>
 </html>
