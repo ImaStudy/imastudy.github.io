@@ -64,6 +64,7 @@
 
     <script>
    const canvas = document.getElementById("drawingCanvas");
+        const canvas = document.getElementById("drawingCanvas");
         const ctx = canvas.getContext("2d");
         const drawButton = document.getElementById("drawButton");
         const penButton = document.getElementById("penButton");
@@ -156,11 +157,15 @@
         undoButton.addEventListener("click", undo);
         redoButton.addEventListener("click", redo);
 
-        // Привязка событий для мыши
-        canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
+        // Обработчики событий для мыши
+        canvas.addEventListener("mousedown", (event) => {
+            startDrawing(event.clientX, event.clientY);
+        });
         canvas.addEventListener("mouseup", stopDrawing);
         canvas.addEventListener("mouseleave", stopDrawing);
-        canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
+        canvas.addEventListener("mousemove", (event) => {
+            draw(event.clientX, event.clientY);
+        });
 
         // Привязка событий для сенсорных экранов
         canvas.addEventListener("touchstart", (event) => {
