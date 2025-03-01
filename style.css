@@ -146,3 +146,16 @@ html, body {
         justify-content: space-evenly; /* Размещение кнопок по ширине */
     }
 }
+button {
+    font-size: 18px;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    background-color: #ddd;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #ccc;
+}
