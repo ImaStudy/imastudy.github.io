@@ -118,6 +118,8 @@ function draw(x, y) {
 
     lastX = newX;
     lastY = newY;
+
+    saveState();  // Сохраняем состояние после каждого рисования (штриха)
 }
 
 // Undo (Отмена)
