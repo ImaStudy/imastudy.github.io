@@ -153,18 +153,19 @@ function draw(x, y) {
     lastX = newX;
     lastY = newY;
 }
-
-        let undoStack = [];
+let undoStack = [];
 let redoStack = [];
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+// Функция сохранения состояния холста
 function saveState() {
     undoStack.push(canvas.toDataURL());
     redoStack = []; // Очистить стек повтора
 }
 
+// Функция отмены действия
 function undo() {
     if (undoStack.length > 0) {
         redoStack.push(canvas.toDataURL());
@@ -177,6 +178,7 @@ function undo() {
     }
 }
 
+// Функция повтора действия
 function redo() {
     if (redoStack.length > 0) {
         undoStack.push(canvas.toDataURL());
@@ -189,8 +191,13 @@ function redo() {
     }
 }
 
+// Добавляем обработчики на кнопки
 document.getElementById("undo").addEventListener("click", undo);
 document.getElementById("redo").addEventListener("click", redo);
+
+// Сохраняем состояние при завершении рисования
+canvas.addEventListener("mouseup", saveState);
+
 </script>
 </body>
 </html>
