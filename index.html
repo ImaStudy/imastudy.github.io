@@ -48,6 +48,9 @@
         Вы просматриваете версию для мобильных устройств
     </div>
 
+    <button id="undo">⮌</button>
+    <button id="redo">⮎</button>
+    
     <button id="drawButton">Рисовать</button>
 
     <div class="canvas-container">
@@ -104,6 +107,7 @@ eraserButton.addEventListener("click", () => {
 // Обработчики для мыши
 canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
 canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseup", saveState);
 canvas.addEventListener("mouseleave", stopDrawing);
 canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
@@ -150,6 +154,44 @@ function draw(x, y) {
     lastX = newX;
     lastY = newY;
 }
+
+        let undoStack = [];
+let redoStack = [];
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function saveState() {
+    undoStack.push(canvas.toDataURL());
+    redoStack = []; // Очистить стек повтора
+}
+
+function undo() {
+    if (undoStack.length > 0) {
+        redoStack.push(canvas.toDataURL());
+        let img = new Image();
+        img.src = undoStack.pop();
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+    }
+}
+
+function redo() {
+    if (redoStack.length > 0) {
+        undoStack.push(canvas.toDataURL());
+        let img = new Image();
+        img.src = redoStack.pop();
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+    }
+}
+
+document.getElementById("undo").addEventListener("click", undo);
+document.getElementById("redo").addEventListener("click", redo);
 </script>
 </body>
 </html>
