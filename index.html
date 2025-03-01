@@ -63,7 +63,7 @@
     <p class="footer">Created by K. Chuito</p>
 
     <script>
- const canvas = document.getElementById("drawingCanvas");
+const canvas = document.getElementById("drawingCanvas");
         const ctx = canvas.getContext("2d");
         const drawButton = document.getElementById("drawButton");
         const penButton = document.getElementById("penButton");
@@ -80,7 +80,7 @@
         let undoStack = [];
         let redoStack = [];
 
-        // Сохраняем состояние холста
+        // Сохраняем состояние холста только по завершении рисования
         function saveState() {
             undoStack.push(canvas.toDataURL());
             redoStack = [];  // Очистка redoStack после нового действия
@@ -97,7 +97,7 @@
         // Функция остановки рисования
         function stopDrawing() {
             drawing = false;
-            saveState();  // Сохраняем состояние после завершения рисования
+            saveState();  // Сохраняем состояние только когда рисование заканчивается
         }
 
         // Функция рисования
@@ -118,8 +118,6 @@
 
             lastX = newX;
             lastY = newY;
-
-            saveState();  // Сохраняем состояние после каждого рисования
         }
 
         // Undo (Отмена)
@@ -149,12 +147,8 @@
         }
 
         // Привязка undo/redo к кнопкам
-        undoButton.addEventListener("click", () => {
-            undo();
-        });
-        redoButton.addEventListener("click", () => {
-            redo();
-        });
+        undoButton.addEventListener("click", undo);
+        redoButton.addEventListener("click", redo);
 
         // Обработчики событий для мыши
         canvas.addEventListener("mousedown", (event) => {
