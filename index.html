@@ -84,6 +84,7 @@ let redoStack = [];
 function saveState() {
     undoStack.push(canvas.toDataURL());
     redoStack = []; // Очистка redo после нового действия
+    }
 
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
