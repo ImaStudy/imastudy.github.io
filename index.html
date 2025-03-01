@@ -130,8 +130,6 @@
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(img, 0, 0);
                 };
-            } else {
-                console.log("Nothing to undo");
             }
         }
 
@@ -145,14 +143,16 @@
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.drawImage(img, 0, 0);
                 };
-            } else {
-                console.log("Nothing to redo");
             }
         }
 
         // Привязка undo/redo к кнопкам
-        undoButton.addEventListener("click", undo);
-        redoButton.addEventListener("click", redo);
+        undoButton.addEventListener("click", () => {
+            undo();
+        });
+        redoButton.addEventListener("click", () => {
+            redo();
+        });
 
         // Обработчики событий для мыши
         canvas.addEventListener("mousedown", (event) => {
