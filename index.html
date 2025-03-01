@@ -96,8 +96,10 @@ function startDrawing(x, y) {
 
 // Функция остановки рисования
 function stopDrawing() {
+    if (drawing) {
+        saveState();  // Сохраняем состояние при завершении рисования
+    }
     drawing = false;
-    saveState();  // Сохраняем состояние при завершении рисования
 }
 
 // Функция рисования
@@ -118,8 +120,6 @@ function draw(x, y) {
 
     lastX = newX;
     lastY = newY;
-
-    saveState();  // Сохраняем состояние после каждого рисования (штриха)
 }
 
 // Undo (Отмена)
