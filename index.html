@@ -64,106 +64,94 @@
 
     <script>
     const canvas = document.getElementById("drawingCanvas");
-const ctx = canvas.getContext("2d");
-const drawButton = document.getElementById("drawButton");
-const penButton = document.getElementById("penButton");
-const eraserButton = document.getElementById("eraserButton");
-
-let drawing = false;
-let erasing = false;
-let lineWidth = 3;
-let strokeStyle = "black";
-let lastX, lastY; // Для хранения предыдущей позиции пера
-
-drawButton.addEventListener("click", () => {
+    const ctx = canvas.getContext("2d");
+    const drawButton = document.getElementById("drawButton");
+    const penButton = document.getElementById("penButton");
+    const eraserButton = document.getElementById("eraserButton");
+    const undoButton = document.getElementById("undo");
+    const redoButton = document.getElementById("redo");
     const toolButtons = document.querySelector(".tool-buttons");
 
-    if (canvas.style.display === "none" || canvas.style.display === "") {
-        canvas.style.display = "block";
-        toolButtons.style.display = "flex";
-        document.body.style.height = "auto";
-        document.body.style.minHeight = "120vh";
-    } else {
-        canvas.style.display = "none";
-        toolButtons.style.display = "none";
-        document.body.style.height = "auto";
-        document.body.style.minHeight = "100vh";
+    let drawing = false;
+    let erasing = false;
+    let lineWidth = 3;
+    let strokeStyle = "black";
+    let lastX, lastY;
+
+    let undoStack = [];
+    let redoStack = [];
+
+    // Функция сохранения состояния холста
+    function saveState() {
+        undoStack.push(canvas.toDataURL()); // Сохраняем текущее изображение
+        redoStack = []; // Очистка redo после нового действия
     }
-});
 
-penButton.addEventListener("click", () => {
-    erasing = false;
-    strokeStyle = "black";
-    lineWidth = 3;
-});
+    drawButton.addEventListener("click", () => {
+        if (canvas.style.display === "none" || canvas.style.display === "") {
+            canvas.style.display = "block";
+            toolButtons.style.display = "flex";
+            document.body.style.minHeight = "120vh";
+        } else {
+            canvas.style.display = "none";
+            toolButtons.style.display = "none";
+            document.body.style.minHeight = "100vh";
+        }
+    });
 
-eraserButton.addEventListener("click", () => {
-    erasing = true;
-    strokeStyle = "white";
-    lineWidth = 10;
-});
+    penButton.addEventListener("click", () => {
+        erasing = false;
+        strokeStyle = "black";
+        lineWidth = 3;
+    });
 
-// Обработчики для мыши
-canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
-canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseup", saveState);
-canvas.addEventListener("mouseleave", stopDrawing);
-canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
+    eraserButton.addEventListener("click", () => {
+        erasing = true;
+        strokeStyle = "white";
+        lineWidth = 10;
+    });
 
-// Обработчики для сенсорных экранов
-canvas.addEventListener("touchstart", (event) => {
-    event.preventDefault();
-    const touch = event.touches[0];
-    startDrawing(touch.clientX, touch.clientY);
-});
-canvas.addEventListener("touchend", stopDrawing);
-canvas.addEventListener("touchmove", (event) => {
-    event.preventDefault();
-    const touch = event.touches[0];
-    draw(touch.clientX, touch.clientY);
-});
+    canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mouseup", saveState);
+    canvas.addEventListener("mouseleave", stopDrawing);
+    canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
-// Функции рисования
-function startDrawing(x, y) {
-    const rect = canvas.getBoundingClientRect();
-    lastX = (x - rect.left) * (canvas.width / rect.width);
-    lastY = (y - rect.top) * (canvas.height / rect.height);
-    drawing = true;
-}
+    function startDrawing(x, y) {
+        const rect = canvas.getBoundingClientRect();
+        lastX = (x - rect.left) * (canvas.width / rect.width);
+        lastY = (y - rect.top) * (canvas.height / rect.height);
+        drawing = true;
+    }
 
-function stopDrawing() {
-    drawing = false;
-}
+    function stopDrawing() {
+        drawing = false;
+    }
 
-function draw(x, y) {
-    if (!drawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const newX = (x - rect.left) * (canvas.width / rect.width);
-    const newY = (y - rect.top) * (canvas.height / rect.height);
+    function draw(x, y) {
+        if (!drawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const newX = (x - rect.left) * (canvas.width / rect.width);
+        const newY = (y - rect.top) * (canvas.height / rect.height);
 
-    ctx.lineWidth = lineWidth;
-    ctx.lineCap = "round";
-    ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = strokeStyle;
 
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(newX, newY);
-    ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(newX, newY);
+        ctx.stroke();
 
-    lastX = newX;
-    lastY = newY;
-}
-        
-function saveState() {
-        undoStack.push(canvas.toDataURL());
-        redoStack = [];
+        lastX = newX;
+        lastY = newY;
     }
 
     function undo() {
-        if (undoStack.length > 0) {
-            redoStack.push(canvas.toDataURL());
+        if (undoStack.length > 1) { // Должно быть хотя бы 2 состояния (начальное + хотя бы одно изменение)
+            redoStack.push(undoStack.pop()); // Сохраняем текущее состояние в redo
             let img = new Image();
-            img.src = undoStack.pop();
+            img.src = undoStack[undoStack.length - 1]; // Загружаем последнее сохраненное изображение
             img.onload = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0);
@@ -173,9 +161,9 @@ function saveState() {
 
     function redo() {
         if (redoStack.length > 0) {
-            undoStack.push(canvas.toDataURL());
+            undoStack.push(redoStack.pop()); // Переносим последнее состояние из redo в undo
             let img = new Image();
-            img.src = redoStack.pop();
+            img.src = undoStack[undoStack.length - 1];
             img.onload = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0);
@@ -186,7 +174,8 @@ function saveState() {
     undoButton.addEventListener("click", undo);
     redoButton.addEventListener("click", redo);
 
-    canvas.addEventListener("mouseup", saveState);
+    // Сохраняем стартовое состояние
+    saveState();
 
 </script>
 </body>
