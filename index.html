@@ -68,12 +68,22 @@ const ctx = canvas.getContext("2d");
 const drawButton = document.getElementById("drawButton");
 const penButton = document.getElementById("penButton");
 const eraserButton = document.getElementById("eraserButton");
+const undoButton = document.getElementById("undoButton"); // Исправил ID
+const redoButton = document.getElementById("redoButton"); // Исправил ID
 
 let drawing = false;
 let erasing = false;
 let lineWidth = 3;
 let strokeStyle = "black";
 let lastX, lastY; // Для хранения предыдущей позиции пера
+
+let undoStack = []; // Добавил массивы
+let redoStack = [];
+
+// Сохраняем стартовое состояние
+function saveState() {
+    undoStack.push(canvas.toDataURL());
+    redoStack = []; // Очистка redo после нового действия
 
 drawButton.addEventListener("click", () => {
     const toolButtons = document.querySelector(".tool-buttons");
@@ -106,7 +116,7 @@ eraserButton.addEventListener("click", () => {
 // Обработчики для мыши
 canvas.addEventListener("mousedown", (event) => startDrawing(event.clientX, event.clientY));
 canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseup", saveState);
+canvas.addEventListener("mouseup", saveState);
 canvas.addEventListener("mouseleave", stopDrawing);
 canvas.addEventListener("mousemove", (event) => draw(event.clientX, event.clientY));
 
@@ -123,6 +133,8 @@ canvas.addEventListener("touchmove", (event) => {
     draw(touch.clientX, touch.clientY);
 });
 
+canvas.addEventListener("touchend", stopDrawing);
+
 // Функции рисования
 function startDrawing(x, y) {
     const rect = canvas.getBoundingClientRect();
@@ -133,6 +145,7 @@ function startDrawing(x, y) {
 
 function stopDrawing() {
     drawing = false;
+    saveState();
 }
 
 function draw(x, y) {
