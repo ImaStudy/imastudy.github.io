@@ -92,12 +92,12 @@ function startDrawing(x, y) {
     lastX = (x - rect.left) * (canvas.width / rect.width);
     lastY = (y - rect.top) * (canvas.height / rect.height);
     drawing = true;
+    saveState();  // Сохраняем состояние сразу при начале рисования
 }
 
 // Функция остановки рисования
 function stopDrawing() {
     drawing = false;
-    saveState();  // Сохраняем состояние только когда рисование заканчивается
 }
 
 // Функция рисования
