@@ -114,3 +114,9 @@ footer {
     font-size: 16px;
   }
 }
+
+textarea#description {
+  resize: none !important;
+  height: 120px;
+  overflow: auto;
+}
