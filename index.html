@@ -151,10 +151,8 @@ function renderTasks(tasks) {
     deleteButton.textContent = "Удалить";
     deleteButton.style.marginTop = "5px";
     deleteButton.onclick = () => {
-      if (confirm("Удалить это задание?")) {
-        deleteTask(doc.id);
-      }
-    };
+  deleteTask(doc.id);
+};
 
     taskDiv.innerHTML = `
       <strong>${data.title}</strong>
