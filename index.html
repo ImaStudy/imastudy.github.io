@@ -125,30 +125,48 @@
     }
 
     // Функция отображения заданий
-    function renderTasks(tasks) {
-      tasksContainer.innerHTML = "";
-      tasks.forEach((doc) => {
-        const data = doc.data();
-        const taskDiv = document.createElement("div");
-        taskDiv.className = "task-item";
+   async function deleteTask(id) {
+  try {
+    await db.collection("tasks").doc(id).delete();
+    console.log("Задание удалено:", id);
+  } catch (error) {
+    alert("Ошибка при удалении задания: " + error.message);
+  }
+}
 
-        // Добавим ссылку "Откликнуться" через Telegram (если в контакте есть @)
-        let contactHTML = data.contact;
-        if (data.contact.includes("@")) {
-          const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
-          contactHTML = `<a href="${tgLink}" target="_blank" rel="noopener noreferrer">${data.contact}</a>`;
-        }
+function renderTasks(tasks) {
+  tasksContainer.innerHTML = "";
+  tasks.forEach((doc) => {
+    const data = doc.data();
+    const taskDiv = document.createElement("div");
+    taskDiv.className = "task-item";
 
-        taskDiv.innerHTML = `
-          <strong>${data.title}</strong>
-          <p>${data.description}</p>
-          <p><strong>Связь:</strong> ${contactHTML}</p>
-          <p><strong>Цена:</strong> ${data.price}</p>
-        `;
-
-        tasksContainer.appendChild(taskDiv);
-      });
+    let contactHTML = data.contact;
+    if (data.contact.includes("@")) {
+      const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
+      contactHTML = `<a href="${tgLink}" target="_blank" rel="noopener noreferrer">${data.contact}</a>`;
     }
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Удалить";
+    deleteButton.style.marginTop = "5px";
+    deleteButton.onclick = () => {
+      if (confirm("Удалить это задание?")) {
+        deleteTask(doc.id);
+      }
+    };
+
+    taskDiv.innerHTML = `
+      <strong>${data.title}</strong>
+      <p>${data.description}</p>
+      <p><strong>Связь:</strong> ${contactHTML}</p>
+      <p><strong>Цена:</strong> ${data.price}</p>
+    `;
+
+    taskDiv.appendChild(deleteButton);
+    tasksContainer.appendChild(taskDiv);
+  });
+}
 
     // Загрузка и отображение заданий из Firestore в реальном времени
     db.collection("tasks")
