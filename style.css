@@ -162,5 +162,8 @@ button:hover {
 }
 
 textarea {
-    resize: none !important;
+  resize: none !important;
+  overflow: auto;
+  height: 100px;  /* или любая фиксированная высота */
+  width: 100%;
 }
