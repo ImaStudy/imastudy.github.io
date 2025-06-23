@@ -1,196 +1,116 @@
+/* Основной стиль для ImaStudy */
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    position: relative;
-    width: 100%;
+  font-family: 'Noto Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+header,
+.container,
+footer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
 }
 
 h1 {
-    color: green;
+  margin: 0 0 10px;
+  color: #2c3e50;
 }
 
-p {
-    font-size: 18px;
-    color: #333;
+form {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 }
 
-html, body {
-    overflow-x: hidden;  /* Это уберет горизонтальную прокрутку */
-}
-
-/* Делаем футер фиксированным внизу */
-.footer {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 10px;
-    font-size: 14px;
-    color: gray;
-    text-align: center;
-    margin-top: 20px; /* Отступ сверху, чтобы футер не прилипал */
-    width: 100%; /* Задаём ширину 100% */
-}
-
-.worker-img {
-    width: 150px; /* Изменяй размер, если нужно */
-    margin-bottom: 20px; /* Отступ от текста */
-}
-
-@media (min-width: 768px) { /* Для компьютеров (ширина экрана 768px и больше) */
-    body {
-        justify-content: center; /* Центрируем по вертикали на ПК */
-    }
-}
-
-@media (max-width: 767px) { /* Для мобильных устройств */
-    body {
-        padding-top: 50px;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .content {
-        flex-grow: 1;
-    }
-
-    .mobile-warning {
-        display: block; /* Показываем элемент для мобильных устройств */
-        font-size: 14px;
-        color: gray;
-        text-align: center;
-        margin-top: auto;
-        margin-bottom: 10px;
-        background-color: lightyellow; /* Временный фон для выделения */
-        border: 1px solid red; /* Временная рамка для выделения */
-        padding: 10px;
-    }
-
-    .footer {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px;
-    color: gray;
-}
-
-}
-
-.mobile-warning {
-    display: none;
-}
-
-@media (max-width: 767px) { /* Для мобильных устройств */
-    .mobile-warning {
-        display: block; /* Показываем элемент для мобильных устройств */
-        font-size: 14px;
-        color: gray;
-        text-align: center;
-        background-color: lightyellow; /* Временный фон для выделения */
-        border: 1px solid red; /* Временная рамка для выделения */
-        padding: 10px;
-        margin-top: 20px; /* Отступ сверху, чтобы не слипался с остальным текстом */
-        margin-bottom: 50px; /* Отступ снизу, чтобы не слипался с футером */
-    }
-}
-
-#drawingCanvas {
-    border: 2px solid black;  /* Граница для холста */
-    background-color: white;
-    width: 100%;               /* Холст будет растягиваться на всю ширину экрана */
-    height: 400px;             /* Высота холста */
-    box-sizing: border-box;    /* Учитываем границы в общей ширине */
-}
-
-/* Для мобильных устройств */
-@media (max-width: 767px) {
-    #drawingCanvas {
-        width: calc(100% - 40px); /* Уменьшаем ширину на 40px, чтобы добавить отступы с боков */
-        margin: 0 20px;  /* Добавляем отступы по бокам (по 20px слева и справа) */
-    }
-}
-
-
-/* Скрываем кнопки по умолчанию */
-.tool-buttons {
-    display: none;
-    justify-content: center; /* Центрируем кнопки */
-    gap: 10px; /* Отступ между кнопками */
-    margin-top: 20px; /* Отступ сверху, чтобы кнопки не прилипали к холсту */
-}
-
-/* Для мобильных устройств */
-@media (max-width: 767px) {
-    .tool-buttons {
-        margin-top: 20px; /* Отступ сверху, чтобы кнопки не прилипали к холсту */
-        margin-bottom: 20px; /* Уменьшаем отступ снизу, чтобы кнопки не перекрывали футер */
-    }
-}
-
-/* Дополнительные стили для ландшафтного режима */
-@media (orientation: landscape) {
-    .tool-buttons {
-        margin-top: 20px; /* Отступ сверху */
-        margin-bottom: 20px; /* Отступ снизу */
-        width: 80%; /* Уменьшаем ширину кнопок, чтобы они не выходили за экран */
-        justify-content: space-evenly; /* Размещение кнопок по ширине */
-    }
-}
+input,
+textarea,
 button {
-    font-family: 'Noto Sans', sans-serif;
-    font-size: 14px;
-    padding: 8px 12px;
-    margin: 5px;
-    cursor: pointer;
-    border: none;
-    background-color: #ddd;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: #ccc;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 textarea {
-  resize: none !important;
-  overflow: auto;
-  height: 100px;  /* или любая фиксированная высота */
-  width: 100%;
+  resize: none;
+  height: 120px;
 }
 
-#description {
-  resize: none !important;
-  overflow: auto !important;
-  max-height: 150px; /* или нужная тебе высота */
-  min-height: 150px;
-  height: 150px !important;
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-textarea#description {
-  resize: none !important;
-  overflow: auto !important;
-  min-height: 120px !important;
-  max-height: 120px !important;
-  height: 120px !important;
+button:hover {
+  background-color: #2980b9;
 }
 
-form#taskForm textarea#description {
-  resize: none !important;
-  overflow: auto !important;
-  height: 120px !important;
-  width: 100% !important;
+.task-list {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
 }
 
-textarea#description {
-  resize: none !important;
+.task-item {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-item strong {
+  display: block;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.task-item p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.task-item a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.task-item a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+  margin-top: 40px;
+}
+
+@media (max-width: 600px) {
+  input,
+  textarea,
+  button {
+    font-size: 16px;
+  }
 }
