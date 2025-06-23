@@ -184,3 +184,9 @@ textarea#description {
   height: 120px !important;
 }
 
+form#taskForm textarea#description {
+  resize: none !important;
+  overflow: auto !important;
+  height: 120px !important;
+  width: 100% !important;
+}
