@@ -162,5 +162,5 @@ button:hover {
 }
 
 textarea {
-    resize: none;
+    resize: none !important;
 }
