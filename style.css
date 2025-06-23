@@ -160,3 +160,7 @@ button {
 button:hover {
     background-color: #ccc;
 }
+
+textarea {
+    resize: none;
+}
