@@ -167,3 +167,11 @@ textarea {
   height: 100px;  /* или любая фиксированная высота */
   width: 100%;
 }
+
+#description {
+  resize: none !important;
+  overflow: auto !important;
+  max-height: 150px; /* или нужная тебе высота */
+  min-height: 150px;
+  height: 150px !important;
+}
