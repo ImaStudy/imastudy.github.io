@@ -226,5 +226,31 @@
       });
     });
   </script>
+
+  <script>
+  const homeTabBtn = document.getElementById('homeTab');
+  const tasksTabBtn = document.getElementById('tasksTab');
+  const taskForm = document.getElementById('taskForm');
+  const taskList = document.getElementById('taskList');
+
+  homeTabBtn.addEventListener('click', () => {
+    homeTabBtn.classList.add('active');
+    tasksTabBtn.classList.remove('active');
+    taskForm.style.display = 'block';
+    taskList.style.display = 'none';
+  });
+
+  tasksTabBtn.addEventListener('click', () => {
+    tasksTabBtn.classList.add('active');
+    homeTabBtn.classList.remove('active');
+    taskForm.style.display = 'none';
+    taskList.style.display = 'block';
+  });
+
+  // По умолчанию: показать форму, скрыть список заданий
+  taskForm.style.display = 'block';
+  taskList.style.display = 'none';
+</script>
+
 </body>
 </html>
