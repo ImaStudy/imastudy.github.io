@@ -158,3 +158,29 @@ textarea#description {
     font-size: 16px;
   }
 }
+ nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+nav button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+nav button.active {
+  background-color: #3498db;
+  color: white;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin: 0 20px 20px 20px;
+}
