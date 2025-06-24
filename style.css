@@ -8,21 +8,57 @@ body {
   color: #333;
 }
 
-header,
-.container,
-footer {
+header {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  text-align: left; /* Сдвигаем влево */
 }
 
-header {
-  text-align: center;
-}
-
-h1 {
-  margin: 0 0 10px;
+header h1 {
+  margin: 0 0 5px;
   color: #2c3e50;
+}
+
+header p {
+  margin: 0;
+  font-size: 16px;
+  color: #666;
+}
+
+/* Навигация сверху под шапкой */
+nav {
+  max-width: 800px;
+  margin: 0 auto;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  gap: 20px;
+  padding: 0 20px;
+  background: #fff;
+}
+
+nav button {
+  background: none;
+  border: none;
+  padding: 15px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #3498db;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.3s;
+}
+
+nav button.active,
+nav button:hover {
+  border-bottom: 3px solid #3498db;
+  font-weight: 600;
+  color: #2980b9;
+}
+
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 20px;
 }
 
 form {
@@ -107,16 +143,18 @@ footer {
   margin-top: 40px;
 }
 
+/* Стили для textarea описания задания */
+textarea#description {
+  resize: none !important;
+  height: 120px;
+  overflow: auto;
+}
+
+/* Мобильная адаптивность */
 @media (max-width: 600px) {
   input,
   textarea,
   button {
     font-size: 16px;
   }
-}
-
-textarea#description {
-  resize: none !important;
-  height: 120px;
-  overflow: auto;
 }
