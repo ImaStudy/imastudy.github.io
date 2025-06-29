@@ -136,6 +136,17 @@ button:hover {
   text-decoration: underline;
 }
 
+.task-date {
+  color: #555;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
 footer {
   text-align: center;
   font-size: 14px;
@@ -183,15 +194,4 @@ hr {
   height: 1px;
   background-color: #ccc;
   margin: 0 20px 20px 20px;
-}
-
-.task-date {
-  color: #555;
-  font-size: 14px;
-  font-weight: bold;
-  background-color: #f0f0f0;
-  padding: 4px 8px;
-  border-radius: 6px;
-  display: inline-block;
-  margin-top: 10px;
 }
