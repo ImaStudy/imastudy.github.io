@@ -170,16 +170,15 @@ nav button {
   font-size: 16px;
   cursor: pointer;
   color: #3498db;
-  border-bottom: 3px solid transparent; /* всегда есть, но невидим */
-  transition: border-color 0.3s, background-color 0.3s;
+  border-bottom: 3px solid transparent; /* всегда есть, но невидимая */
+  transition: border-color 0.3s, color 0.3s;
 }
 
 nav button.active,
 nav button:hover {
-  border-bottom: 3px solid #3498db;
-  /* УДАЛЯЕМ жирность текста, чтобы не прыгало */
-  font-weight: normal;
-  background-color: #f0f8ff; /* лёгкий фон по желанию */
+  border-bottom: 3px solid #3498db; /* синий индикатор */
+  color: #2980b9;
+  /* font-weight убран, чтобы не дергалось */
 }
 
 hr {
