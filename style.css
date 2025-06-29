@@ -171,21 +171,24 @@ nav button {
   font-size: 14px;
   cursor: pointer;
   color: #3498db;
-  border-bottom: 3px solid transparent;
+  border-bottom: 3px solid transparent; /* фиксированная граница снизу */
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
   border-radius: 5px;
 }
 
+/* Убираем синюю полосу (border-bottom) у активной кнопки: */
 nav button.active {
   background-color: #3498db;
   color: white;
-  border-bottom-color: #1d5bbf;
+  border-bottom-color: transparent; /* Убираем синюю полоску */
 }
 
 nav button:hover:not(.active) {
   background-color: #d0e4ff;
   color: #1a4da0;
+  border-bottom-color: transparent; /* Убираем синюю полоску при ховере */
 }
+
 
 hr {
   border: none;
