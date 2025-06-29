@@ -190,9 +190,12 @@ div.innerHTML = `
   <p>${data.description}</p>
   <p><strong>Связь:</strong> ${contactHTML}</p>
   <p><strong>Цена:</strong> ${data.price}</p>
-  <p class="task-date">🗓 Добавлено: ${dateText}</p>
 `;
 
+        const dateP = document.createElement('p');
+dateP.className = 'task-date';
+dateP.textContent = `🗓 Добавлено: ${dateText}`;
+div.appendChild(dateP);
 
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
