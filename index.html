@@ -178,12 +178,21 @@ header {
           contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
         }
 
-        div.innerHTML = `
-          <strong>${data.title}</strong>
-          <p>${data.description}</p>
-          <p><strong>Связь:</strong> ${contactHTML}</p>
-          <p><strong>Цена:</strong> ${data.price}</p>
-        `;
+       let dateText = "";
+if (data.createdAt && data.createdAt.toDate) {
+  const dateObj = data.createdAt.toDate();
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  dateText = dateObj.toLocaleDateString("ru-RU", options);
+}
+
+div.innerHTML = `
+  <strong>${data.title}</strong>
+  <p>${data.description}</p>
+  <p><strong>Связь:</strong> ${contactHTML}</p>
+  <p><strong>Цена:</strong> ${data.price}</p>
+  <p class="task-date">🗓 Добавлено: ${dateText}</p>
+`;
+
 
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
