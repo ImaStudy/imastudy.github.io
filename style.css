@@ -50,7 +50,6 @@ nav button {
 nav button.active,
 nav button:hover {
   border-bottom: 3px solid #3498db;
-  font-weight: 600;
   color: #2980b9;
 }
 
