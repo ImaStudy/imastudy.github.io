@@ -165,31 +165,30 @@ textarea#description {
 }
 
 nav button {
-  background: none;
-  border: none;
   padding: 10px 20px;
   font-size: 14px;
   cursor: pointer;
   color: #3498db;
-  border-bottom: 3px solid transparent;
+  background: none;
+  border: 3px solid transparent; /* бордер всегда 3px, но прозрачный */
   border-radius: 5px;
-  height: 40px;            /* фиксируем высоту */
-  line-height: 20px;       /* выравниваем текст по центру по высоте */
-  box-sizing: border-box;  /* чтобы padding и border входили в высоту */
+  height: 40px;                 /* фиксируем высоту */
+  box-sizing: border-box;       /* чтобы padding+border входили в размер */
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 nav button.active {
   background-color: #3498db;
   color: white;
-  border-bottom-color: transparent;
+  border-color: transparent;  /* или тот цвет, что нужен */
 }
 
 nav button:hover:not(.active) {
   background-color: #d0e4ff;
   color: #1a4da0;
-  border-bottom-color: transparent;
+  border-color: transparent; /* оставляем бордер прозрачным */
 }
+
 
 hr {
   border: none;
