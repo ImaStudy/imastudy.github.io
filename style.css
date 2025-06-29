@@ -165,30 +165,34 @@ textarea#description {
 }
 
 nav button {
-  padding: 10px 20px;
+  padding: 12px 16px;
   font-size: 14px;
-  cursor: pointer;
+  font-weight: 500;
+  background-color: transparent;
   color: #3498db;
-  background: none;
-  border: 3px solid transparent; /* бордер всегда есть, но прозрачный */
-  border-radius: 5px;
-  box-sizing: border-box; /* чтобы padding+border входили в размер */
-  line-height: 1.2;
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  border: 2px solid transparent; /* бордер всегда есть */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  min-width: 120px; /* чтобы все кнопки были одинаковыми */
+  height: 40px; /* фиксированная высота */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav button:hover {
+  background-color: #e6f0ff;
+  border-color: #3498db;
+  color: #1a4da0;
 }
 
 nav button.active {
   background-color: #3498db;
-  color: white;
-  border-color: #3498db; /* бордер совпадает с фоном */
+  color: #fff;
+  border-color: #3498db;
 }
-
-nav button:hover:not(.active) {
-  background-color: #d0e4ff;
-  color: #1a4da0;
-  border-color: #a0c4ff; /* видимый бордер при ховере */
-}
-
 
 hr {
   border: none;
