@@ -37,20 +37,24 @@ nav {
 }
 
 nav button {
-  background: none;
+  background-color: transparent;
   border: none;
   padding: 15px 10px;
   font-size: 16px;
+  font-weight: 600; /* всегда жирный */
   cursor: pointer;
   color: #3498db;
-  border-bottom: 3px solid transparent;
-  transition: border-color 0.3s;
+  border-bottom: none; /* убираем бордер */
+  line-height: 1.5; /* фиксируем высоту строки */
+  transition: color 0.3s, background-color 0.3s;
 }
 
-nav button.active,
-nav button:hover {
-  border-bottom: 3px solid #3498db;
-  color: #2980b9;
+nav button:hover,
+nav button.active {
+  background-color: transparent; /* не меняем фон */
+  color: #2980b9; /* чуть темнее синий */
+  border-bottom: none; /* нет полоски */
+  font-weight: 600; /* тот же жирный */
 }
 
 .container {
@@ -163,25 +167,24 @@ textarea#description {
 }
 
 nav button {
-  background: none;
+  background-color: transparent;
   border: none;
   padding: 15px 10px;
   font-size: 16px;
+  font-weight: 600; /* всегда жирный */
   cursor: pointer;
   color: #3498db;
-  border-bottom: 3px solid transparent;
-  transition: border-color 0.3s, background-color 0.3s;
+  border-bottom: none; /* убираем бордер */
+  line-height: 1.5; /* фиксируем высоту строки */
+  transition: color 0.3s, background-color 0.3s;
 }
 
-nav button:hover {
-  border-bottom: 3px solid #3498db;
-  background-color: #f0f0f0;
-}
-
+nav button:hover,
 nav button.active {
-  border-bottom: 3px solid #3498db;
-  background-color: #e0e0e0;
-  color: #2980b9;
+  background-color: transparent; /* не меняем фон */
+  color: #2980b9; /* чуть темнее синий */
+  border-bottom: none; /* нет полоски */
+  font-weight: 600; /* тот же жирный */
 }
 
 hr {
