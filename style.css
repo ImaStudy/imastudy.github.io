@@ -170,23 +170,23 @@ nav button {
   cursor: pointer;
   color: #3498db;
   background: none;
-  border: 3px solid transparent; /* бордер всегда 3px, но прозрачный */
+  border: 3px solid transparent; /* бордер всегда есть, но прозрачный */
   border-radius: 5px;
-  height: 40px;                 /* фиксируем высоту */
-  box-sizing: border-box;       /* чтобы padding+border входили в размер */
+  box-sizing: border-box; /* чтобы padding+border входили в размер */
+  line-height: 1.2;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 nav button.active {
   background-color: #3498db;
   color: white;
-  border-color: transparent;  /* или тот цвет, что нужен */
+  border-color: #3498db; /* бордер совпадает с фоном */
 }
 
 nav button:hover:not(.active) {
   background-color: #d0e4ff;
   color: #1a4da0;
-  border-color: transparent; /* оставляем бордер прозрачным */
+  border-color: #a0c4ff; /* видимый бордер при ховере */
 }
 
 
