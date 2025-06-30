@@ -159,9 +159,13 @@ header {
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
+  // Объявляем переменные (только 1 раз!)
   const taskForm = document.getElementById("taskForm");
+  const showFormBtn = document.getElementById("showFormBtn");
   const tasksContainer = document.getElementById("tasksContainer");
   const taskList = document.getElementById("taskList");
+  const tabButtons = document.querySelectorAll(".tab-button");
+  const tabContents = document.querySelectorAll(".tab-content");
 
   async function addTask(task) {
     try {
@@ -245,15 +249,17 @@ header {
 
     await addTask(newTask);
     taskForm.reset();
+
+    // После отправки формы покажем кнопку и скроем форму
+    taskForm.style.display = "none";
+    showFormBtn.style.display = "block";
   });
 
-  // Переключение вкладок и управление видимостью контента
-  const tabButtons = document.querySelectorAll(".tab-button");
-  const tabContents = document.querySelectorAll(".tab-content");
-
-  // По умолчанию показать форму, скрыть список
+  // По умолчанию скрываем форму и список
+  taskForm.style.display = "none";
   taskList.style.display = "none";
 
+  // Переключение вкладок и управление видимостью контента
   tabButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       const target = btn.getAttribute("data-tab");
@@ -264,25 +270,23 @@ header {
       btn.classList.add("active");
       document.getElementById(target).classList.add("active");
 
-      // Управляем видимостью формы и списка
       if (target === "home") {
-        taskForm.style.display = "block";
+        showFormBtn.style.display = "block";
+        taskForm.style.display = "none";
         taskList.style.display = "none";
       } else if (target === "tasks") {
+        showFormBtn.style.display = "none";
         taskForm.style.display = "none";
         taskList.style.display = "block";
       }
     });
   });
-const showFormBtn = document.getElementById("showFormBtn");
-const taskForm = document.getElementById("taskForm");
 
-showFormBtn.addEventListener("click", () => {
-  showFormBtn.style.display = "none"; // скрыть кнопку
-  taskForm.style.display = "block";   // показать форму
-});
+  // Обработка кнопки "Разместить запрос"
+  showFormBtn.addEventListener("click", () => {
+    showFormBtn.style.display = "none"; // скрыть кнопку
+    taskForm.style.display = "block";   // показать форму
+  });
 </script>
-
-
 </body>
 </html>
