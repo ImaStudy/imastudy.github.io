@@ -127,17 +127,22 @@ button:hover {
 }
 
 .task-list {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  max-height: 400px;
-  overflow-y: auto;
+  background: transparent;
+  padding: 0 10px;
+  border-radius: 0;
+  box-shadow: none;
+  max-height: none;
+  overflow-y: visible;
 }
 
 .task-item {
-  border-bottom: 1px solid #eee;
-  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+  background: transparent;
+  margin: 0;
+  box-shadow: none;
+  border-radius: 0;
+  width: 100%;
 }
 
 .task-item:last-child {
