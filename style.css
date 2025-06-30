@@ -100,6 +100,32 @@ button:hover {
   background-color: #2980b9;
 }
 
+#showFormBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 14px 40px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#showFormBtn:hover {
+  background-color: #2980b9;
+}
+
+#taskForm {
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .task-list {
   background: #ffffff;
   padding: 20px;
