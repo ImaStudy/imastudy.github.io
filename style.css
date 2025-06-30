@@ -162,6 +162,24 @@ textarea#description {
   overflow: auto;
 }
 
+.site-info {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.site-info h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.site-info p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+}
+
 /* Мобильная адаптивность */
 @media (max-width: 600px) {
   input,
