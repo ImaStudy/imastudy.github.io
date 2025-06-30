@@ -37,24 +37,25 @@ nav {
 }
 
 nav button {
-  background: none;
+  background-color: transparent;
   border: none;
   padding: 15px 10px;
   font-size: 16px;
+  font-weight: 600; /* всегда жирный */
   cursor: pointer;
   color: #3498db;
-  border-bottom: 3px solid transparent;
-  transition: all 0.3s;
-  font-weight: normal;
-  line-height: 1.2;
+  border-bottom: none; /* убираем бордер */
+  line-height: 1.5; /* фиксируем высоту строки */
+  transition: color 0.3s, background-color 0.3s;
 }
 
-nav button.active,
-nav button:hover {
-  font-weight: normal;
-  color: #2980b9;
-  border-bottom: 3px solid transparent;
-}
+nav button:hover,
+nav button.active {
+  background-color: transparent; /* не меняем фон */
+  color: #2980b9; /* чуть темнее синий */
+  border-bottom: none; /* нет полоски */
+  font-weight: 600; /* тот же жирный */
+
 
 .container {
   max-width: 800px;
