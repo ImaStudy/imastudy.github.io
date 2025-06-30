@@ -12,7 +12,7 @@ header {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  text-align: left; /* Сдвигаем влево */
+  text-align: left;
 }
 
 header h1 {
@@ -26,35 +26,34 @@ header p {
   color: #666;
 }
 
-/* Навигация сверху под шапкой */
+/* Навигация */
 nav {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
   gap: 20px;
-  padding: 0;
+  padding: 0 20px;
   background: transparent;
 }
 
 nav button {
-  background-color: transparent;
+  background: none;
   border: none;
   padding: 15px 10px;
   font-size: 16px;
-  font-weight: 600; /* всегда жирный */
   cursor: pointer;
   color: #3498db;
-  border-bottom: none; /* убираем бордер */
-  line-height: 1.5; /* фиксируем высоту строки */
-  transition: color 0.3s, background-color 0.3s;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s;
+  font-weight: normal;
+  line-height: 1.2;
 }
 
-nav button:hover,
-nav button.active {
-  background-color: transparent; /* не меняем фон */
-  color: #2980b9; /* чуть темнее синий */
-  border-bottom: none; /* нет полоски */
-  font-weight: 600; /* тот же жирный */
+nav button.active,
+nav button:hover {
+  font-weight: normal;
+  color: #2980b9;
+  border-bottom: 3px solid transparent;
 }
 
 .container {
@@ -124,6 +123,17 @@ button:hover {
   color: #2c3e50;
 }
 
+.task-date {
+  color: #555;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
 .task-item p {
   margin: 5px 0;
   font-size: 14px;
@@ -145,7 +155,6 @@ footer {
   margin-top: 40px;
 }
 
-/* Стили для textarea описания задания */
 textarea#description {
   resize: none !important;
   height: 120px;
@@ -160,32 +169,6 @@ textarea#description {
     font-size: 16px;
   }
 }
- nav {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-nav button {
-  background-color: transparent;
-  border: none;
-  padding: 15px 10px;
-  font-size: 16px;
-  font-weight: 600; /* всегда жирный */
-  cursor: pointer;
-  color: #3498db;
-  border-bottom: none; /* убираем бордер */
-  line-height: 1.5; /* фиксируем высоту строки */
-  transition: color 0.3s, background-color 0.3s;
-}
-
-nav button:hover,
-nav button.active {
-  background-color: transparent; /* не меняем фон */
-  color: #2980b9; /* чуть темнее синий */
-  border-bottom: none; /* нет полоски */
-  font-weight: 600; /* тот же жирный */
-}
 
 hr {
   border: none;
@@ -193,16 +176,3 @@ hr {
   background-color: #ccc;
   margin: 0 20px 20px 20px;
 }
-
-.task-date {
-  color: #555;
-  background-color: #e0e7ff;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 12px;
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 14px;
-  font-style: italic;
-}
-
