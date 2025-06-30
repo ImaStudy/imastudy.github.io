@@ -99,9 +99,16 @@ header {
     <h1>ImaStudy</h1>
     <p>Размести задание — получи помощь</p>
     </div>
-    <nav>
+    <!-- Навигация для десктопа -->
+<nav class="desktop-nav">
   <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
   <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
+</nav>
+
+<!-- Навигация для мобильных -->
+<nav class="mobile-nav">
+  <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
+  <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
 </nav>
   </header>
   <hr />
@@ -130,148 +137,138 @@ header {
   <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
 
   <script>
-    // Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
-      authDomain: "imastudy-631ec.firebaseapp.com",
-      projectId: "imastudy-631ec",
-      storageBucket: "imastudy-631ec.firebasestorage.app",
-      messagingSenderId: "301505972939",
-      appId: "1:301505972939:web:061de2a898044090dae94e",
-      measurementId: "G-305V13PQ4Q",
-    };
+  // Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+    authDomain: "imastudy-631ec.firebaseapp.com",
+    projectId: "imastudy-631ec",
+    storageBucket: "imastudy-631ec.firebasestorage.app",
+    messagingSenderId: "301505972939",
+    appId: "1:301505972939:web:061de2a898044090dae94e",
+    measurementId: "G-305V13PQ4Q",
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    const taskForm = document.getElementById("taskForm");
-    const tasksContainer = document.getElementById("tasksContainer");
+  const taskForm = document.getElementById("taskForm");
+  const tasksContainer = document.getElementById("tasksContainer");
+  const taskList = document.getElementById("taskList");
 
-    async function addTask(task) {
-      try {
-        await db.collection("tasks").add({
-          ...task,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      } catch (error) {
-        alert("Ошибка при добавлении задания: " + error.message);
-      }
-    }
-
-    async function deleteTask(id) {
-      try {
-        await db.collection("tasks").doc(id).delete();
-      } catch (error) {
-        alert("Ошибка при удалении: " + error.message);
-      }
-    }
-
-    function renderTasks(tasks) {
-      tasksContainer.innerHTML = "";
-      tasks.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "task-item";
-
-        let contactHTML = data.contact;
-        if (data.contact.includes("@")) {
-          const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
-          contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
-        }
-
-       let dateText = "";
-if (data.createdAt && data.createdAt.toDate) {
-  const dateObj = data.createdAt.toDate();
-  const options = { day: 'numeric', month: 'long', year: 'numeric' };
-  dateText = dateObj.toLocaleDateString("ru-RU", options);
-}
-
-div.innerHTML = `
-  <strong>${data.title}</strong>
-  <p>${data.description}</p>
-  <p><strong>Связь:</strong> ${contactHTML}</p>
-  <p><strong>Цена:</strong> ${data.price}</p>
-`;
-
-        const dateP = document.createElement('p');
-dateP.className = 'task-date';
-dateP.textContent = `🗓 Добавлено: ${dateText}`;
-div.appendChild(dateP);
-
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "Удалить";
-        delBtn.onclick = () => {
-          deleteTask(doc.id);
-};
-
-        div.appendChild(delBtn);
-        tasksContainer.appendChild(div);
+  async function addTask(task) {
+    try {
+      await db.collection("tasks").add({
+        ...task,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+    } catch (error) {
+      alert("Ошибка при добавлении задания: " + error.message);
     }
+  }
 
-    db.collection("tasks")
-      .orderBy("createdAt", "desc")
-      .onSnapshot((snap) => renderTasks(snap.docs));
+  async function deleteTask(id) {
+    try {
+      await db.collection("tasks").doc(id).delete();
+    } catch (error) {
+      alert("Ошибка при удалении: " + error.message);
+    }
+  }
 
-    taskForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const newTask = {
-        title: taskForm.title.value.trim(),
-        description: taskForm.description.value.trim(),
-        contact: taskForm.contact.value.trim(),
-        price: taskForm.price.value.trim(),
+  function renderTasks(tasks) {
+    tasksContainer.innerHTML = "";
+    tasks.forEach((doc) => {
+      const data = doc.data();
+      const div = document.createElement("div");
+      div.className = "task-item";
+
+      let contactHTML = data.contact;
+      if (data.contact.includes("@")) {
+        const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
+        contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
+      }
+
+      let dateText = "";
+      if (data.createdAt && data.createdAt.toDate) {
+        const dateObj = data.createdAt.toDate();
+        const options = { day: "numeric", month: "long", year: "numeric" };
+        dateText = dateObj.toLocaleDateString("ru-RU", options);
+      }
+
+      div.innerHTML = `
+        <strong>${data.title}</strong>
+        <p>${data.description}</p>
+        <p><strong>Связь:</strong> ${contactHTML}</p>
+        <p><strong>Цена:</strong> ${data.price}</p>
+      `;
+
+      const dateP = document.createElement("p");
+      dateP.className = "task-date";
+      dateP.textContent = `🗓 Добавлено: ${dateText}`;
+      div.appendChild(dateP);
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Удалить";
+      delBtn.onclick = () => {
+        deleteTask(doc.id);
       };
 
-      if (!newTask.title || !newTask.description || !newTask.contact || !newTask.price) {
-        alert("Заполните все поля");
-        return;
+      div.appendChild(delBtn);
+      tasksContainer.appendChild(div);
+    });
+  }
+
+  db.collection("tasks")
+    .orderBy("createdAt", "desc")
+    .onSnapshot((snap) => renderTasks(snap.docs));
+
+  taskForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const newTask = {
+      title: taskForm.title.value.trim(),
+      description: taskForm.description.value.trim(),
+      contact: taskForm.contact.value.trim(),
+      price: taskForm.price.value.trim(),
+    };
+
+    if (!newTask.title || !newTask.description || !newTask.contact || !newTask.price) {
+      alert("Заполните все поля");
+      return;
+    }
+
+    await addTask(newTask);
+    taskForm.reset();
+  });
+
+  // Переключение вкладок и управление видимостью контента
+  const tabButtons = document.querySelectorAll(".tab-button");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  // По умолчанию показать форму, скрыть список
+  taskForm.style.display = "block";
+  taskList.style.display = "none";
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.getAttribute("data-tab");
+
+      tabButtons.forEach((b) => b.classList.remove("active"));
+      tabContents.forEach((c) => c.classList.remove("active"));
+
+      btn.classList.add("active");
+      document.getElementById(target).classList.add("active");
+
+      // Управляем видимостью формы и списка
+      if (target === "home") {
+        taskForm.style.display = "block";
+        taskList.style.display = "none";
+      } else if (target === "tasks") {
+        taskForm.style.display = "none";
+        taskList.style.display = "block";
       }
-
-      await addTask(newTask);
-      taskForm.reset();
     });
-
-    // Переключение вкладок
-    const tabButtons = document.querySelectorAll(".tab-button");
-    const tabContents = document.querySelectorAll(".tab-content");
-
-    tabButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const target = btn.getAttribute("data-tab");
-
-        tabButtons.forEach((b) => b.classList.remove("active"));
-        tabContents.forEach((c) => c.classList.remove("active"));
-
-        btn.classList.add("active");
-        document.getElementById(target).classList.add("active");
-      });
-    });
-  </script>
-
-  <script>
-  const homeTabBtn = document.getElementById('homeTab');
-  const tasksTabBtn = document.getElementById('tasksTab');
-  const taskForm = document.getElementById('taskForm');
-  const taskList = document.getElementById('taskList');
-
-  homeTabBtn.addEventListener('click', () => {
-    homeTabBtn.classList.add('active');
-    tasksTabBtn.classList.remove('active');
-    taskForm.style.display = 'block';
-    taskList.style.display = 'none';
   });
-
-  tasksTabBtn.addEventListener('click', () => {
-    tasksTabBtn.classList.add('active');
-    homeTabBtn.classList.remove('active');
-    taskForm.style.display = 'none';
-    taskList.style.display = 'block';
-  });
-
-  // По умолчанию: показать форму, скрыть список заданий
-  taskForm.style.display = 'block';
-  taskList.style.display = 'none';
 </script>
+
 
 </body>
 </html>
