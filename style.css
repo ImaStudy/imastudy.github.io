@@ -55,7 +55,7 @@ nav button.active {
   color: #2980b9; /* чуть темнее синий */
   border-bottom: none; /* нет полоски */
   font-weight: 600; /* тот же жирный */
-
+}
 
 .container {
   max-width: 800px;
