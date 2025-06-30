@@ -177,3 +177,22 @@ hr {
   background-color: #ccc;
   margin: 0 20px 20px 20px;
 }
+
+/* Скрываем мобильное меню на больших экранах */
+.desktop-nav {
+  display: flex; /* показываем */
+}
+
+.mobile-nav {
+  display: none; /* скрываем */
+}
+
+/* При ширине экрана <= 600px наоборот */
+@media (max-width: 600px) {
+  .desktop-nav {
+    display: none; /* скрываем */
+  }
+  .mobile-nav {
+    display: flex; /* показываем */
+  }
+}
