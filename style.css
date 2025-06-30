@@ -126,14 +126,13 @@ button:hover {
 
 .task-date {
   color: #555;
-  background-color: #e0e7ff;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 12px;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 8px;
   display: inline-block;
   margin-top: 10px;
   font-size: 14px;
-  font-style: italic;
 }
 
 .task-item p {
