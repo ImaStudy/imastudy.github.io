@@ -208,72 +208,36 @@ textarea#description {
 }
 
 /* Мобильная адаптивность */
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .header-left {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  
-  nav {
-    flex-direction: column;
-    width: 100%;
-    padding: 0 20px;
-  }
-  
-  nav button {
-    width: 100%;
-    margin: 5px 0;
-    font-size: 16px; /* чуть больше для удобства */
-  }
-  
+@media (max-width: 600px) {
   input,
   textarea,
   button {
-    font-size: 16px; /* удобный размер для мобильных */
-  }
-  
-  .desktop-nav {
-    display: none; /* скрываем десктопное меню */
-  }
-  
-  .mobile-nav {
-    display: flex; /* показываем мобильное меню */
-    flex-direction: column;
-    gap: 10px;
-    padding: 0 20px;
+    font-size: 16px;
   }
 }
 
-/* Для экранов больше 768px — десктоп и большие планшеты */
-@media (min-width: 769px) {
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin: 0 20px 20px 20px;
+}
+
+/* Скрываем мобильное меню на больших экранах */
+.desktop-nav {
+  display: flex; /* показываем */
+}
+
+.mobile-nav {
+  display: none; /* скрываем */
+}
+
+/* При ширине экрана <= 600px наоборот */
+@media (max-width: 600px) {
   .desktop-nav {
-    display: flex; /* показываем десктопное меню */
+    display: none; /* скрываем */
   }
-  
   .mobile-nav {
-    display: none; /* скрываем мобильное меню */
-  }
-  
-  nav {
-    flex-direction: row;
-    gap: 20px;
-    padding: 0 20px;
-  }
-  
-  nav button {
-    width: auto;
-    margin: 0;
-    font-size: 16px;
-  }
-  
-  input,
-  textarea,
-  button {
-    font-size: 14px; /* стандартный размер для десктопа */
+    display: flex; /* показываем */
   }
 }
