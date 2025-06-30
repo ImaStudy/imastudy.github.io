@@ -115,14 +115,17 @@ header {
   <div class="container">
     <!-- Вкладка 1: Главная -->
     <div class="tab-content active" id="home">
-      <form id="taskForm">
-        <h2>Разместить задание</h2>
-        <input type="text" id="title" placeholder="Название задания" required />
-        <textarea id="description" rows="4" placeholder="Описание задания" required style="resize: none;"></textarea>
-        <input type="text" id="contact" placeholder="Контакт (Telegram или e-mail)" required />
-        <input type="text" id="price" placeholder="Предложенная цена" required />
-        <button type="submit">Опубликовать</button>
-      </form>
+      <button id="showFormBtn" style="width: 100%; padding: 14px; font-size: 20px; border-radius: 8px; cursor: pointer; background-color: #3498db; color: white; border: none; margin-bottom: 20px;">
+  Разместить запрос
+</button>
+<form id="taskForm" style="display: none;">
+  <h2>Разместить задание</h2>
+  <input type="text" id="title" placeholder="Название задания" required />
+  <textarea id="description" rows="4" placeholder="Описание задания" required style="resize: none;"></textarea>
+  <input type="text" id="contact" placeholder="Контакт (Telegram или e-mail)" required />
+  <input type="text" id="price" placeholder="Предложенная цена" required />
+  <button type="submit">Опубликовать</button>
+</form>
       <div class="site-info">
   <h2>О платформе ImaStudy</h2>
   <p>ImaStudy — это место, где студенты могут публиковать свои задания, а исполнители находить подработку. Мы создаём удобную и безопасную площадку для взаимопомощи в учёбе.</p>
@@ -249,7 +252,6 @@ header {
   const tabContents = document.querySelectorAll(".tab-content");
 
   // По умолчанию показать форму, скрыть список
-  taskForm.style.display = "block";
   taskList.style.display = "none";
 
   tabButtons.forEach((btn) => {
@@ -272,6 +274,13 @@ header {
       }
     });
   });
+const showFormBtn = document.getElementById("showFormBtn");
+const taskForm = document.getElementById("taskForm");
+
+showFormBtn.addEventListener("click", () => {
+  showFormBtn.style.display = "none"; // скрыть кнопку
+  taskForm.style.display = "block";   // показать форму
+});
 </script>
 
 
