@@ -272,9 +272,7 @@
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
         delBtn.onclick = () => {
-          if (confirm("Удалить задание?")) {
             deleteTask(doc.id);
-          }
         };
         div.appendChild(delBtn);
 
