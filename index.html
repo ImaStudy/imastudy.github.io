@@ -170,7 +170,6 @@
     async function deleteTask(id) {
       try {
         await db.collection("tasks").doc(id).delete();
-        alert("Задание успешно удалено");
         // onSnapshot автоматически обновит список
       } catch (error) {
         alert("Ошибка при удалении: " + error.message);
