@@ -211,10 +211,8 @@
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
         delBtn.onclick = () => {
-          if (confirm("Вы действительно хотите удалить это задание?")) {
-            deleteTask(doc.id);
-          }
-        };
+  deleteTask(doc.id);
+};
         div.appendChild(delBtn);
 
         tasksContainer.appendChild(div);
