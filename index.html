@@ -88,7 +88,7 @@
     }
   </style>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK для Firestore (в режиме совместимости) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
@@ -103,20 +103,20 @@
       <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
 
       <div id="profile" style="display: inline-flex; align-items: center; margin-left: 20px; gap: 8px;">
-    <button id="login-btn">Войти</button>
-    <button id="logout-btn" style="display:none;">Выйти</button>
-    <span id="user-name" style="font-weight: 600;"></span>
-  </div>
+        <button id="login-btn">Войти</button>
+        <button id="logout-btn" style="display:none;">Выйти</button>
+        <span id="user-name" style="font-weight: 600;"></span>
+      </div>
     </nav>
     <nav class="mobile-nav">
       <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
       <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
 
       <div id="profile-mobile" style="display: inline-flex; align-items: center; margin-left: 10px; gap: 6px;">
-    <button id="login-btn-mobile">Войти</button>
-    <button id="logout-btn-mobile" style="display:none;">Выйти</button>
-    <span id="user-name-mobile" style="font-weight: 600;"></span>
-  </div>
+        <button id="login-btn-mobile">Войти</button>
+        <button id="logout-btn-mobile" style="display:none;">Выйти</button>
+        <span id="user-name-mobile" style="font-weight: 600;"></span>
+      </div>
     </nav>
   </header>
   <hr />
@@ -147,8 +147,10 @@
   <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
 
   <script>
-    // Инициализация Firebase
-    const firebaseConfig = {
+    // Firestore и Firebase инициализация для заданий
+    // Объект firebaseConfig тут НЕ нужен, он есть в отдельном файле
+
+    firebase.initializeApp({
       apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
       authDomain: "imastudy-631ec.firebaseapp.com",
       projectId: "imastudy-631ec",
@@ -156,9 +158,8 @@
       messagingSenderId: "301505972939",
       appId: "1:301505972939:web:061de2a898044090dae94e",
       measurementId: "G-305V13PQ4Q",
-    };
+    });
 
-    firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     const taskForm = document.getElementById("taskForm");
@@ -182,7 +183,6 @@
     async function deleteTask(id) {
       try {
         await db.collection("tasks").doc(id).delete();
-        // onSnapshot автоматически обновит список
       } catch (error) {
         alert("Ошибка при удалении: " + error.message);
       }
@@ -222,9 +222,7 @@
 
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
-        delBtn.onclick = () => {
-  deleteTask(doc.id);
-};
+        delBtn.onclick = () => deleteTask(doc.id);
         div.appendChild(delBtn);
 
         tasksContainer.appendChild(div);
@@ -287,65 +285,64 @@
     });
   </script>
 
+  <!-- Авторизация Firebase: модульный скрипт -->
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithPopup,
+      GoogleAuthProvider,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
-    authDomain: "imastudy-631ec.firebaseapp.com",
-    projectId: "imastudy-631ec",
-    storageBucket: "imastudy-631ec.firebasestorage.app",
-    messagingSenderId: "301505972939",
-    appId: "1:301505972939:web:061de2a898044090dae94e",
-    measurementId: "G-305V13PQ4Q"
-  };
+    import { firebaseConfig } from './firebaseConfig.js'; // <-- путь укажи, где твой файл
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-  // Десктоп элементы
-  const loginBtn = document.getElementById('login-btn');
-  const logoutBtn = document.getElementById('logout-btn');
-  const userName = document.getElementById('user-name');
+    // Десктоп элементы
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const userName = document.getElementById('user-name');
 
-  // Мобильные элементы
-  const loginBtnMobile = document.getElementById('login-btn-mobile');
-  const logoutBtnMobile = document.getElementById('logout-btn-mobile');
-  const userNameMobile = document.getElementById('user-name-mobile');
+    // Мобильные элементы
+    const loginBtnMobile = document.getElementById('login-btn-mobile');
+    const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+    const userNameMobile = document.getElementById('user-name-mobile');
 
-  function onLoginClick() {
-    signInWithPopup(auth, provider).catch(console.error);
-  }
-  function onLogoutClick() {
-    signOut(auth).catch(console.error);
-  }
-
-  loginBtn.addEventListener('click', onLoginClick);
-  logoutBtn.addEventListener('click', onLogoutClick);
-  loginBtnMobile.addEventListener('click', onLoginClick);
-  logoutBtnMobile.addEventListener('click', onLogoutClick);
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      userName.textContent = `Привет, ${user.displayName}`;
-      loginBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline-block';
-
-      userNameMobile.textContent = `Привет, ${user.displayName}`;
-      loginBtnMobile.style.display = 'none';
-      logoutBtnMobile.style.display = 'inline-block';
-    } else {
-      userName.textContent = '';
-      loginBtn.style.display = 'inline-block';
-      logoutBtn.style.display = 'none';
-
-      userNameMobile.textContent = '';
-      loginBtnMobile.style.display = 'inline-block';
-      logoutBtnMobile.style.display = 'none';
+    function onLoginClick() {
+      signInWithPopup(auth, provider).catch(console.error);
     }
-  });
-</script>
+    function onLogoutClick() {
+      signOut(auth).catch(console.error);
+    }
+
+    loginBtn.addEventListener('click', onLoginClick);
+    logoutBtn.addEventListener('click', onLogoutClick);
+    loginBtnMobile.addEventListener('click', onLoginClick);
+    logoutBtnMobile.addEventListener('click', onLogoutClick);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userName.textContent = `Привет, ${user.displayName}`;
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+
+        userNameMobile.textContent = `Привет, ${user.displayName}`;
+        loginBtnMobile.style.display = 'none';
+        logoutBtnMobile.style.display = 'inline-block';
+      } else {
+        userName.textContent = '';
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+
+        userNameMobile.textContent = '';
+        loginBtnMobile.style.display = 'inline-block';
+        logoutBtnMobile.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
