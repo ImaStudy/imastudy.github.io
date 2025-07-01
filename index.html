@@ -103,9 +103,16 @@
         <span id="user-name" style="font-weight: 600;"></span>
       </div>
     </nav>
-    <nav class="mobile-nav" style="display:none;">
-      <!-- Можно добавить мобильную навигацию по желанию -->
-    </nav>
+    <nav class="mobile-nav">
+      <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
+      <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
+
+      <div id="profile-mobile" style="display: inline-flex; align-items: center; margin-left: 10px; gap: 6px;">
+    <button id="login-btn-mobile">Войти</button>
+    <button id="logout-btn-mobile" style="display:none;">Выйти</button>
+    <span id="user-name-mobile" style="font-weight: 600;"></span>
+  </div>
+      </nav>
   </header>
   <hr />
   <div class="container">
