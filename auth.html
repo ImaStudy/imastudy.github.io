@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>ImaStudy — Авторизация через Google</title>
+</head>
+<body>
+
+  <div id="profile">
+    <button id="login-btn">Войти через Google</button>
+    <button id="logout-btn" style="display:none;">Выйти</button>
+    <span id="user-name"></span>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+      authDomain: "imastudy-631ec.firebaseapp.com",
+      projectId: "imastudy-631ec",
+      storageBucket: "imastudy-631ec.firebasestorage.app",
+      messagingSenderId: "301505972939",
+      appId: "1:301505972939:web:061de2a898044090dae94e",
+      measurementId: "G-305V13PQ4Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const userName = document.getElementById('user-name');
+
+    loginBtn.addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          console.log("Вход выполнен:", result.user.displayName);
+        })
+        .catch((error) => {
+          console.error("Ошибка входа:", error);
+        });
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      signOut(auth)
+        .then(() => {
+          console.log("Пользователь вышел");
+        });
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userName.textContent = `Привет, ${user.displayName}`;
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+      } else {
+        userName.textContent = '';
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
