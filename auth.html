@@ -85,7 +85,7 @@
       const pass = document.getElementById('password').value.trim();
       try {
         await signInWithEmailAndPassword(auth, email, pass);
-        window.location.href = "index.html";
+        window.location.href = "/";
       } catch (error) {
         alert("Ошибка входа: " + error.message);
       }
@@ -114,7 +114,7 @@
     if (!hasPasswordProvider) {
       document.getElementById('setPasswordBox').style.display = 'block';
     } else {
-      window.location.href = "index.html";
+      window.location.href = "/";
     }
   } catch (error) {
     alert("Ошибка Google-входа: " + error.message);
@@ -138,7 +138,7 @@
     const user = auth.currentUser;
     await updatePassword(user, newPass);
     alert('Пароль успешно установлен! Теперь можно входить по Email и паролю.');
-    window.location.href = "index.html";
+    window.location.href = "/";
   } catch (error) {
     alert('Ошибка при установке пароля: ' + error.message);
   }
