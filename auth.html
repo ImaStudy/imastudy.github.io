@@ -5,8 +5,36 @@
   <title>Авторизация - ImaStudy</title>
   <style>
     body { font-family: sans-serif; background: #f0f0f0; padding: 30px; }
-    .auth-box { background: white; padding: 20px; max-width: 400px; margin: auto; border-radius: 10px; }
-    input, button { width: 100%; padding: 10px; margin: 10px 0; }
+    .auth-box {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .google-btn {
+      background-color: #db4437;
+    }
+    .google-btn:hover {
+      background-color: #c23321;
+    }
   </style>
 </head>
 <body>
@@ -16,6 +44,8 @@
     <input type="password" id="password" placeholder="Пароль" />
     <button id="loginBtn">Войти</button>
     <button id="signupBtn">Зарегистрироваться</button>
+    <hr>
+    <button id="googleBtn" class="google-btn">Войти через Google</button>
   </div>
 
   <script type="module">
@@ -23,7 +53,9 @@
     import {
       getAuth,
       signInWithEmailAndPassword,
-      createUserWithEmailAndPassword
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -37,6 +69,7 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
     document.getElementById('loginBtn').onclick = async () => {
       const email = document.getElementById('email').value;
@@ -57,6 +90,15 @@
         alert("Аккаунт создан. Можете войти.");
       } catch (error) {
         alert("Ошибка регистрации: " + error.message);
+      }
+    };
+
+    document.getElementById('googleBtn').onclick = async () => {
+      try {
+        await signInWithPopup(auth, provider);
+        window.location.href = "index.html";
+      } catch (error) {
+        alert("Ошибка Google-входа: " + error.message);
       }
     };
   </script>
