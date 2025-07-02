@@ -206,17 +206,26 @@ loginBtnMobile.addEventListener('click', () => {
 
 // Кнопки "Выйти" пока можно скрыть, или оставить как есть без обработчиков
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        userName.textContent = `Привет, ${user.displayName}`;
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-      } else {
-        userName.textContent = '';
-        loginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-      }
-    });
+ onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const displayName = user.displayName || user.email;
+    userName.textContent = `Привет, ${displayName}`;
+    userNameMobile.textContent = `Привет, ${displayName}`;
+
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = 'inline-block';
+    loginBtnMobile.style.display = 'none';
+    logoutBtnMobile.style.display = 'inline-block';
+  } else {
+    userName.textContent = '';
+    userNameMobile.textContent = '';
+
+    loginBtn.style.display = 'inline-block';
+    logoutBtn.style.display = 'none';
+    loginBtnMobile.style.display = 'inline-block';
+    logoutBtnMobile.style.display = 'none';
+  }
+});
 
     // Firestore: добавление задания
     async function addTask(task) {
@@ -342,6 +351,30 @@ loginBtnMobile.addEventListener('click', () => {
     // Изначально скрываем форму и список заданий
     taskForm.style.display = "none";
     taskList.style.display = "none";
+
+    // Кнопки "Выйти"
+const logoutBtn = document.getElementById('logout-btn');
+const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+
+// Выход при нажатии на кнопку (десктоп)
+logoutBtn.addEventListener('click', async () => {
+  try {
+    await signOut(auth);
+    window.location.href = "auth.html"; // куда перенаправлять после выхода
+  } catch (error) {
+    alert("Ошибка при выходе: " + error.message);
+  }
+});
+
+// Выход при нажатии на кнопку (мобильная версия)
+logoutBtnMobile.addEventListener('click', async () => {
+  try {
+    await signOut(auth);
+    window.location.href = "auth.html";
+  } catch (error) {
+    alert("Ошибка при выходе: " + error.message);
+  }
+});
   </script>
 </body>
 </html>
