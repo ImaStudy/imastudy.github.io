@@ -48,6 +48,14 @@
     <button id="googleBtn" class="google-btn">Войти через Google</button>
   </div>
 
+  <div id="setPasswordBox" style="display:none; margin-top:20px;">
+  <h3>Установите пароль для входа через Email</h3>
+  <input type="password" id="newPassword" placeholder="Новый пароль" />
+  <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" />
+  <button id="setPasswordBtn">Установить пароль</button>
+</div>
+
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import {
@@ -55,7 +63,8 @@
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
       GoogleAuthProvider,
-      signInWithPopup
+      signInWithPopup,
+      updatePassword
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -94,13 +103,46 @@
     };
 
     document.getElementById('googleBtn').onclick = async () => {
-      try {
-        await signInWithPopup(auth, provider);
-        window.location.href = "index.html";
-      } catch (error) {
-        alert("Ошибка Google-входа: " + error.message);
-      }
-    };
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    const hasPasswordProvider = user.providerData.some(
+      (p) => p.providerId === 'password'
+    );
+
+    if (!hasPasswordProvider) {
+      document.getElementById('setPasswordBox').style.display = 'block';
+    } else {
+      window.location.href = "index.html";
+    }
+  } catch (error) {
+    alert("Ошибка Google-входа: " + error.message);
+  }
+};
+
+    document.getElementById('setPasswordBtn').onclick = async () => {
+  const newPass = document.getElementById('newPassword').value.trim();
+  const confirmPass = document.getElementById('confirmPassword').value.trim();
+
+  if (newPass.length < 6) {
+    alert('Пароль должен быть минимум 6 символов');
+    return;
+  }
+  if (newPass !== confirmPass) {
+    alert('Пароли не совпадают');
+    return;
+  }
+
+  try {
+    const user = auth.currentUser;
+    await updatePassword(user, newPass);
+    alert('Пароль успешно установлен! Теперь можно входить по Email и паролю.');
+    window.location.href = "index.html";
+  } catch (error) {
+    alert('Ошибка при установке пароля: ' + error.message);
+  }
+};
   </script>
 </body>
 </html>
