@@ -194,21 +194,17 @@
     const logoutBtn = document.getElementById('logout-btn');
     const userName = document.getElementById('user-name');
 
-    loginBtn.addEventListener('click', async () => {
-      try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        alert("Ошибка входа: " + error.message);
-      }
-    });
+// Перенаправление на auth.html при нажатии "Войти"
+loginBtn.addEventListener('click', () => {
+  window.location.href = "auth.html";
+});
 
-    logoutBtn.addEventListener('click', async () => {
-      try {
-        await signOut(auth);
-      } catch (error) {
-        alert("Ошибка выхода: " + error.message);
-      }
-    });
+const loginBtnMobile = document.getElementById('login-btn-mobile');
+loginBtnMobile.addEventListener('click', () => {
+  window.location.href = "auth.html";
+});
+
+// Кнопки "Выйти" пока можно скрыть, или оставить как есть без обработчиков
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
