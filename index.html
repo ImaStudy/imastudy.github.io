@@ -211,7 +211,6 @@
     logoutBtn.addEventListener('click', async () => {
       try {
         await signOut(auth);
-        window.location.href = "auth.html";
       } catch (error) {
         alert("Ошибка при выходе: " + error.message);
       }
@@ -221,7 +220,6 @@
     logoutBtnMobile.addEventListener('click', async () => {
       try {
         await signOut(auth);
-        window.location.href = "auth.html";
       } catch (error) {
         alert("Ошибка при выходе: " + error.message);
       }
