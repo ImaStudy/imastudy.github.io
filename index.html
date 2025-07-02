@@ -161,7 +161,8 @@
       signInWithPopup,
       GoogleAuthProvider,
       signOut,
-      onAuthStateChanged
+      onAuthStateChanged,
+      updatePassword
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     // Конфигурация Firebase
@@ -227,25 +228,38 @@
 
     // Слежение за состоянием авторизации
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const displayName = user.displayName || user.email;
-        userName.textContent = `Привет, ${displayName}`;
-        userNameMobile.textContent = `Привет, ${displayName}`;
+  if (user) {
+    // Проверяем, есть ли у пользователя провайдер "password"
+    const hasPasswordProvider = user.providerData.some(
+      (p) => p.providerId === 'password'
+    );
 
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        loginBtnMobile.style.display = 'none';
-        logoutBtnMobile.style.display = 'inline-block';
-      } else {
-        userName.textContent = '';
-        userNameMobile.textContent = '';
+    if (!hasPasswordProvider) {
+      // Пользователь вошёл через Google, но пароль не установлен — перекидываем на auth.html для установки пароля
+      window.location.href = "auth.html?setPassword=true";
+      return; // останавливаем дальнейшее выполнение
+    }
 
-        loginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-        loginBtnMobile.style.display = 'inline-block';
-        logoutBtnMobile.style.display = 'none';
-      }
-    });
+    // Остальной код показа имени и кнопок
+    const displayName = user.displayName || user.email;
+    userName.textContent = `Привет, ${displayName}`;
+    userNameMobile.textContent = `Привет, ${displayName}`;
+
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = 'inline-block';
+    loginBtnMobile.style.display = 'none';
+    logoutBtnMobile.style.display = 'inline-block';
+  } else {
+    // Пользователь не авторизован
+    userName.textContent = '';
+    userNameMobile.textContent = '';
+
+    loginBtn.style.display = 'inline-block';
+    logoutBtn.style.display = 'none';
+    loginBtnMobile.style.display = 'inline-block';
+    logoutBtnMobile.style.display = 'none';
+  }
+});
 
     // Firestore: добавление задания
     async function addTask(task) {
