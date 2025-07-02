@@ -72,8 +72,8 @@
     const provider = new GoogleAuthProvider();
 
     document.getElementById('loginBtn').onclick = async () => {
-      const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value.trim();
       try {
         await signInWithEmailAndPassword(auth, email, pass);
         window.location.href = "index.html";
@@ -83,8 +83,8 @@
     };
 
     document.getElementById('signupBtn').onclick = async () => {
-      const email = document.getElementById('email').value;
-      const pass = document.getElementById('password').value;
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value.trim();
       try {
         await createUserWithEmailAndPassword(auth, email, pass);
         alert("Аккаунт создан. Можете войти.");
