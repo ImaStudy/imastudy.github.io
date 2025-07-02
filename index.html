@@ -108,11 +108,11 @@
       <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
 
       <div id="profile-mobile" style="display: inline-flex; align-items: center; margin-left: 10px; gap: 6px;">
-    <button id="login-btn-mobile">Войти</button>
-    <button id="logout-btn-mobile" style="display:none;">Выйти</button>
-    <span id="user-name-mobile" style="font-weight: 600;"></span>
-  </div>
-      </nav>
+        <button id="login-btn-mobile">Войти</button>
+        <button id="logout-btn-mobile" style="display:none;">Выйти</button>
+        <span id="user-name-mobile" style="font-weight: 600;"></span>
+      </div>
+    </nav>
   </header>
   <hr />
   <div class="container">
@@ -198,57 +198,56 @@
     const logoutBtnMobile = document.getElementById('logout-btn-mobile');
     const userNameMobile = document.getElementById('user-name-mobile');
 
+    // Перенаправление на auth.html при нажатии "Войти"
+    loginBtn.addEventListener('click', () => {
+      window.location.href = "auth.html";
+    });
 
-// Перенаправление на auth.html при нажатии "Войти"
-loginBtn.addEventListener('click', () => {
-  window.location.href = "auth.html";
-});
+    loginBtnMobile.addEventListener('click', () => {
+      window.location.href = "auth.html";
+    });
 
-const loginBtnMobile = document.getElementById('login-btn-mobile');
-loginBtnMobile.addEventListener('click', () => {
-  window.location.href = "auth.html";
-});
+    // Выход — десктоп
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "auth.html";
+      } catch (error) {
+        alert("Ошибка при выходе: " + error.message);
+      }
+    });
 
-logoutBtn.addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-    window.location.href = "auth.html";
-  } catch (error) {
-    alert("Ошибка при выходе: " + error.message);
-  }
-});
+    // Выход — мобилка
+    logoutBtnMobile.addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "auth.html";
+      } catch (error) {
+        alert("Ошибка при выходе: " + error.message);
+      }
+    });
 
-logoutBtnMobile.addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-    window.location.href = "auth.html";
-  } catch (error) {
-    alert("Ошибка при выходе: " + error.message);
-  }
-});
-    
-// Кнопки "Выйти" пока можно скрыть, или оставить как есть без обработчиков
+    // Слежение за состоянием авторизации
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const displayName = user.displayName || user.email;
+        userName.textContent = `Привет, ${displayName}`;
+        userNameMobile.textContent = `Привет, ${displayName}`;
 
- onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const displayName = user.displayName || user.email;
-    userName.textContent = `Привет, ${displayName}`;
-    userNameMobile.textContent = `Привет, ${displayName}`;
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        loginBtnMobile.style.display = 'none';
+        logoutBtnMobile.style.display = 'inline-block';
+      } else {
+        userName.textContent = '';
+        userNameMobile.textContent = '';
 
-    loginBtn.style.display = 'none';
-    logoutBtn.style.display = 'inline-block';
-    loginBtnMobile.style.display = 'none';
-    logoutBtnMobile.style.display = 'inline-block';
-  } else {
-    userName.textContent = '';
-    userNameMobile.textContent = '';
-
-    loginBtn.style.display = 'inline-block';
-    logoutBtn.style.display = 'none';
-    loginBtnMobile.style.display = 'inline-block';
-    logoutBtnMobile.style.display = 'none';
-  }
-});
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        loginBtnMobile.style.display = 'inline-block';
+        logoutBtnMobile.style.display = 'none';
+      }
+    });
 
     // Firestore: добавление задания
     async function addTask(task) {
@@ -307,7 +306,7 @@ logoutBtnMobile.addEventListener('click', async () => {
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
         delBtn.onclick = () => {
-            deleteTask(doc.id);
+          deleteTask(doc.id);
         };
         div.appendChild(delBtn);
 
@@ -374,31 +373,6 @@ logoutBtnMobile.addEventListener('click', async () => {
     // Изначально скрываем форму и список заданий
     taskForm.style.display = "none";
     taskList.style.display = "none";
-
-    // Кнопки "Выйти"
-const logoutBtn = document.getElementById('logout-btn');
-const logoutBtnMobile = document.getElementById('logout-btn-mobile');
-
-// Выход при нажатии на кнопку (десктоп)
-logoutBtn.addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-    window.location.href = "auth.html"; // куда перенаправлять после выхода
-  } catch (error) {
-    alert("Ошибка при выходе: " + error.message);
-  }
-});
-
-// Выход при нажатии на кнопку (мобильная версия)
-logoutBtnMobile.addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-    window.location.href = "auth.html";
-  } catch (error) {
-    alert("Ошибка при выходе: " + error.message);
-  }
-});
   </script>
 </body>
 </html>
-
