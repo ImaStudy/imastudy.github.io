@@ -2,66 +2,63 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>ImaStudy — Авторизация через Google</title>
+  <title>Авторизация - ImaStudy</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; padding: 30px; }
+    .auth-box { background: white; padding: 20px; max-width: 400px; margin: auto; border-radius: 10px; }
+    input, button { width: 100%; padding: 10px; margin: 10px 0; }
+  </style>
 </head>
 <body>
-
-  <div id="profile">
-    <button id="login-btn">Войти через Google</button>
-    <button id="logout-btn" style="display:none;">Выйти</button>
-    <span id="user-name"></span>
+  <div class="auth-box">
+    <h2>Вход в аккаунт</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Пароль" />
+    <button id="loginBtn">Войти</button>
+    <button id="signupBtn">Зарегистрироваться</button>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
       authDomain: "imastudy-631ec.firebaseapp.com",
       projectId: "imastudy-631ec",
-      storageBucket: "imastudy-631ec.firebasestorage.app",
+      storageBucket: "imastudy-631ec.appspot.com",
       messagingSenderId: "301505972939",
-      appId: "1:301505972939:web:061de2a898044090dae94e",
-      measurementId: "G-305V13PQ4Q"
+      appId: "1:301505972939:web:061de2a898044090dae94e"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
 
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-    const userName = document.getElementById('user-name');
-
-    loginBtn.addEventListener('click', () => {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          console.log("Вход выполнен:", result.user.displayName);
-        })
-        .catch((error) => {
-          console.error("Ошибка входа:", error);
-        });
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      signOut(auth)
-        .then(() => {
-          console.log("Пользователь вышел");
-        });
-    });
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        userName.textContent = `Привет, ${user.displayName}`;
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-      } else {
-        userName.textContent = '';
-        loginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
+    document.getElementById('loginBtn').onclick = async () => {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        window.location.href = "index.html";
+      } catch (error) {
+        alert("Ошибка входа: " + error.message);
       }
-    });
+    };
+
+    document.getElementById('signupBtn').onclick = async () => {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('password').value;
+      try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        alert("Аккаунт создан. Можете войти.");
+      } catch (error) {
+        alert("Ошибка регистрации: " + error.message);
+      }
+    };
   </script>
 </body>
 </html>
