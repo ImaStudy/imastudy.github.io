@@ -201,11 +201,11 @@
 
     // Перенаправление на auth.html при нажатии "Войти"
     loginBtn.addEventListener('click', () => {
-      window.location.href = "auth.html";
+      window.location.href = "/login/";
     });
 
     loginBtnMobile.addEventListener('click', () => {
-      window.location.href = "auth.html";
+      window.location.href = "/login/";
     });
 
     // Выход — десктоп
@@ -236,7 +236,7 @@
 
     if (!hasPasswordProvider) {
       // Пользователь вошёл через Google, но пароль не установлен — перекидываем на auth.html для установки пароля
-      window.location.href = "auth.html?setPassword=true";
+      window.location.href = "/login/?setPassword=true";
       return; // останавливаем дальнейшее выполнение
     }
 
