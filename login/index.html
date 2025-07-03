@@ -36,11 +36,6 @@
     .google-btn:hover {
       background-color: #c23321;
     }
-    footer {
-      text-align: center;
-      font-size: 14px;
-      color: #666;
-    }
   </style>
 </head>
 <body>
@@ -63,6 +58,9 @@
   <button id="setPasswordBtn">Установить пароль</button>
 </div>
 
+  <footer style="text-align:center; font-size:14px; color:#666; margin-top:40px;">
+  &copy; 2025 ImaStudy. Все права защищены.
+</footer>
   
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -161,9 +159,5 @@ loginForm.addEventListener('submit', async (e) => {
   }
 };
   </script>
-
-  <footer style="text-align:center; font-size:14px; color:#666; margin-top:40px;">
-  &copy; 2025 ImaStudy. Все права защищены.
-</footer>
 </body>
 </html>
