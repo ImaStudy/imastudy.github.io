@@ -6,130 +6,91 @@
   <title>Авторизация - ImaStudy</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-  body {
-    font-family: 'Noto Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-
-  .header-left {
-    text-align: left;
-  }
-
-  h1 {
-    margin-top: 0;
-  }
-
-  nav.desktop-nav {
-    display: flex;
-    gap: 10px;
-  }
-
-  nav button {
-    background-color: #ddd;
-    color: black;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-
-  nav button.active {
-    background-color: #aaa;
-    color: white;
-  }
-
-  nav button:hover {
-    background-color: #ccc;
-  }
-
-  .auth-box {
-    background: white;
-    padding: 20px;
-    max-width: 400px;
-    margin: 20px auto;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-
-  .auth-box input,
-  .auth-box button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-
-  .auth-box button:not(.google-btn) {
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
+    body { font-family: sans-serif; background: #f0f0f0; padding: 30px; }
+    .auth-box {
+      background: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .auth-box input,
+.auth-box button {
   width: 100%;
-  font-size: 16px;
+  padding: 10px;
   margin: 10px 0;
   border: none;
   border-radius: 5px;
-  padding: 10px;
+  font-size: 16px;
 }
 
+.auth-box button {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
 
+.auth-box button:hover {
+  background-color: #45a049;
+}
+    button:hover {
+      background-color: #45a049;
+    }
+    .google-btn {
+      background-color: #db4437;
+    }
+    .google-btn:hover {
+      background-color: #c23321;
+    }
 
-  .auth-box button:hover {
-    background-color: #45a049;
-  }
-
-  .google-btn {
-    background-color: #db4437;
-    color: white;
-  }
-
-  .google-btn:hover {
-    background-color: #c23321;
-    color: white;
-  }
-
-.tab-link {
-  padding: 10px 20px;
-  font-size: 14px;
-  border: none;
+    nav button {
+  width: auto;
   background-color: #ddd;
   color: black;
-  text-decoration: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: none;
   border-radius: 5px;
-  display: inline-block;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.tab-link:hover {
+nav button:hover {
   background-color: #ccc;
 }
 
-.tab-link.active {
+nav button.active {
   background-color: #aaa;
   color: white;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header-left {
+  text-align: left;
+}
+
+nav.desktop-nav {
+  display: flex;
+  gap: 10px;
+}
     
-  footer {
-    text-align: center;
-    font-size: 14px;
-    color: #666;
-    margin-top: 40px;
-  }
-</style>
+    footer {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin-top: 40px;
+    }
+  </style>
 </head>
 <body>
   
