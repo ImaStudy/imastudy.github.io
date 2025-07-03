@@ -14,19 +14,25 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
+    .auth-box input,
+.auth-box button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.auth-box button {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+.auth-box button:hover {
+  background-color: #45a049;
+}
     button:hover {
       background-color: #45a049;
     }
@@ -36,6 +42,28 @@
     .google-btn:hover {
       background-color: #c23321;
     }
+
+    nav button {
+  width: auto;
+  background-color: #ddd;
+  color: black;
+  padding: 10px 20px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+nav button:hover {
+  background-color: #ccc;
+}
+
+nav button.active {
+  background-color: #aaa;
+  color: white;
+}
+    
     footer {
   text-align: center;
   font-size: 14px;
