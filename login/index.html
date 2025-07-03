@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Авторизация - ImaStudy</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
   <style>
   body {
     font-family: 'Noto Sans', sans-serif;
@@ -76,10 +75,17 @@
   }
 
   .auth-box button {
-    background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
-  }
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+}
+
 
   .auth-box button:hover {
     background-color: #45a049;
@@ -93,6 +99,27 @@
     background-color: #c23321;
   }
 
+.tab-link {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  background-color: #ddd;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.tab-link:hover {
+  background-color: #ccc;
+}
+
+.tab-link.active {
+  background-color: #aaa;
+  color: white;
+}
+
+    
   footer {
     text-align: center;
     font-size: 14px;
@@ -109,8 +136,8 @@
     <p>Размести задание — получи помощь</p>
   </div>
   <nav class="desktop-nav">
-    <button id="homeTab" class="tab-button" onclick="window.location.href='/'">Главная</button>
-    <button id="tasksTab" class="tab-button" onclick="window.location.href='/tasks'">Активные задания</button>
+    <a href="/" class="tab-link">Главная</a>
+    <a href="/#tasks" class="tab-link">Активные задания</a>
     <div id="profile" style="display: inline-flex; align-items: center; margin-left: 20px; gap: 8px;">
       <button id="login-btn" style="display:none;">Войти</button>
       <button id="logout-btn" style="display:none;">Выйти</button>
