@@ -194,7 +194,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const tab = urlParams.get('tab');
 
-// Если параметр есть и равен 'tasks', активируем вкладку "Активные задания"
 if (tab === 'tasks') {
   document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
@@ -206,6 +205,16 @@ if (tab === 'tasks') {
     tasksBtn.classList.add('active');
     tasksContent.classList.add('active');
   }
+
+  // Показываем список заданий, скрываем форму и кнопку
+  showFormBtn.style.display = "none";
+  taskForm.style.display = "none";
+  taskList.style.display = "block";
+} else {
+  // Иначе, например, home или пусто — показываем главную
+  showFormBtn.style.display = "block";
+  taskForm.style.display = "none";
+  taskList.style.display = "none";
 }
 
     // Авторизация
