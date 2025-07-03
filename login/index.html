@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Авторизация - ImaStudy</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <style>
     body { font-family: sans-serif; background: #f0f0f0; padding: 30px; }
     .auth-box {
@@ -25,11 +26,18 @@
   font-size: 16px;
 }
 
-.auth-box button {
+.auth-box button:not(.google-btn) {
   background-color: #4CAF50;
   color: white;
   cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
 }
+
 
 .auth-box button:hover {
   background-color: #45a049;
