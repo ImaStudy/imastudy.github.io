@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Авторизация - ImaStudy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
   <style>
     body { font-family: sans-serif; background: #f0f0f0; padding: 30px; }
     .auth-box {
@@ -16,32 +14,19 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .auth-box input,
-.auth-box button {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.auth-box button:not(.google-btn) {
-  background-color: #4CAF50;
-  color: white;
-  cursor: pointer;
-  width: 100%;
-  font-size: 16px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-
-.auth-box button:hover {
-  background-color: #45a049;
-}
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
     button:hover {
       background-color: #45a049;
     }
@@ -51,47 +36,6 @@
     .google-btn:hover {
       background-color: #c23321;
     }
-
-    nav button {
-  width: auto;
-  background-color: #ddd;
-  color: black;
-  padding: 10px 20px;
-  margin: 0 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-nav button:hover {
-  background-color: #ccc;
-}
-
-nav button.active {
-  background-color: #aaa;
-  color: white;
-}
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.header-left {
-  text-align: left;
-}
-
-nav.desktop-nav {
-  display: flex;
-  gap: 10px;
-}
-    
     footer {
   text-align: center;
   font-size: 14px;
@@ -103,21 +47,31 @@ nav.desktop-nav {
 <body>
   
   <header>
-  <div class="header-left">
-    <h1>ImaStudy</h1>
-    <p>Размести задание — получи помощь</p>
-  </div>
-  <nav class="desktop-nav">
-    <a href="/" class="tab-link">Главная</a>
-    <a href="/#tasks" class="tab-link">Активные задания</a>
-    <div id="profile" style="display: inline-flex; align-items: center; margin-left: 20px; gap: 8px;">
-      <button id="login-btn" style="display:none;">Войти</button>
-      <button id="logout-btn" style="display:none;">Выйти</button>
-      <span id="user-name" style="font-weight: 600;"></span>
+    <div class="header-left">
+      <h1>ImaStudy</h1>
+      <p>Размести задание — получи помощь</p>
     </div>
-  </nav>
-</header>
-<hr />
+    <nav class="desktop-nav">
+      <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
+      <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
+      <div id="profile" style="display: inline-flex; align-items: center; margin-left: 20px; gap: 8px;">
+        <button id="login-btn">Войти</button>
+        <button id="logout-btn" style="display:none;">Выйти</button>
+        <span id="user-name" style="font-weight: 600;"></span>
+      </div>
+    </nav>
+    <nav class="mobile-nav">
+      <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
+      <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
+
+      <div id="profile-mobile" style="display: inline-flex; align-items: center; margin-left: 10px; gap: 6px;">
+        <button id="login-btn-mobile">Войти</button>
+        <button id="logout-btn-mobile" style="display:none;">Выйти</button>
+        <span id="user-name-mobile" style="font-weight: 600;"></span>
+      </div>
+    </nav>
+  </header>
+  <hr />
 
   <div class="auth-box">
     <h2>Вход в аккаунт</h2>
