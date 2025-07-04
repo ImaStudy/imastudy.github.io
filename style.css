@@ -212,6 +212,10 @@ textarea#description {
   text-align: left;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 /* Мобильная адаптивность */
 @media (max-width: 600px) {
   input,
