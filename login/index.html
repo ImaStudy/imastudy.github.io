@@ -230,7 +230,7 @@ loginForm.addEventListener('submit', async (e) => {
   }
 };
 
-    function viewTasksWithoutLogin() {
+   window.viewTasksWithoutLogin = function() {
   localStorage.setItem("showTasksTab", "true");
   window.location.href = "/";
 }
