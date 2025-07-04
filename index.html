@@ -191,10 +191,9 @@
     const tabContents = document.querySelectorAll(".tab-content");
 
     
-
-// Сначала проверяем, не установлена ли метка в localStorage
+// Проверяем флаг из localStorage
 if (localStorage.getItem("showTasksTab") === "true") {
-  localStorage.removeItem("showTasksTab");
+  localStorage.removeItem("showTasksTab"); // очистить флаг после использования
 
   tabButtons.forEach(btn => btn.classList.remove("active"));
   tabContents.forEach(c => c.classList.remove("active"));
@@ -208,9 +207,8 @@ if (localStorage.getItem("showTasksTab") === "true") {
   showFormBtn.style.display = "none";
   taskForm.style.display = "none";
   taskList.style.display = "block";
-
 } else {
-  // Если метки нет, проверяем параметр из URL
+  // Логика открытия вкладки по параметру URL или по умолчанию
   const urlParams = new URLSearchParams(window.location.search);
   const tab = urlParams.get('tab');
 
@@ -221,21 +219,19 @@ if (localStorage.getItem("showTasksTab") === "true") {
     const tasksBtn = document.getElementById('tasksTab');
     const tasksContent = document.getElementById('tasks');
 
-    if (tasksBtn && tasksContent) {
-      tasksBtn.classList.add('active');
-      tasksContent.classList.add('active');
-    }
+    tasksBtn.classList.add('active');
+    tasksContent.classList.add('active');
 
     showFormBtn.style.display = "none";
     taskForm.style.display = "none";
     taskList.style.display = "block";
-
   } else {
     showFormBtn.style.display = "block";
     taskForm.style.display = "none";
     taskList.style.display = "none";
   }
 }
+
 
     // Авторизация
     const loginBtn = document.getElementById('login-btn');
