@@ -105,7 +105,7 @@ nav button:hover {
   </div>
   <nav class="desktop-nav">
     <button id="homeTab" class="tab-button" onclick="window.location.href='/'">Главная</button>
-    <button id="tasksTab" class="tab-button" onclick="window.location.href='/?tab=tasks'">Активные задания</button>
+    <button id="tasksTab" class="tab-button" onclick="viewTasksWithoutLogin()">Активные задания</button>
   </nav>
 </header>
 <hr />
@@ -229,6 +229,11 @@ loginForm.addEventListener('submit', async (e) => {
     alert('Ошибка при установке пароля: ' + error.message);
   }
 };
+
+    function viewTasksWithoutLogin() {
+  localStorage.setItem("showTasksTab", "true");
+  window.location.href = "/";
+}
   </script>
 </body>
 </html>
