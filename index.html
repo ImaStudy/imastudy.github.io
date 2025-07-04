@@ -190,31 +190,51 @@
     const tabButtons = document.querySelectorAll(".tab-button");
     const tabContents = document.querySelectorAll(".tab-content");
 
-    // Получаем параметр tab из URL
-const urlParams = new URLSearchParams(window.location.search);
-const tab = urlParams.get('tab');
+    
 
-if (tab === 'tasks') {
-  document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+// Сначала проверяем, не установлена ли метка в localStorage
+if (localStorage.getItem("showTasksTab") === "true") {
+  localStorage.removeItem("showTasksTab");
 
-  const tasksBtn = document.getElementById('tasksTab');
-  const tasksContent = document.getElementById('tasks');
+  tabButtons.forEach(btn => btn.classList.remove("active"));
+  tabContents.forEach(c => c.classList.remove("active"));
 
-  if (tasksBtn && tasksContent) {
-    tasksBtn.classList.add('active');
-    tasksContent.classList.add('active');
-  }
+  const tasksBtn = document.getElementById("tasksTab");
+  const tasksContent = document.getElementById("tasks");
 
-  // Показываем список заданий, скрываем форму и кнопку
+  tasksBtn.classList.add("active");
+  tasksContent.classList.add("active");
+
   showFormBtn.style.display = "none";
   taskForm.style.display = "none";
   taskList.style.display = "block";
+
 } else {
-  // Иначе, например, home или пусто — показываем главную
-  showFormBtn.style.display = "block";
-  taskForm.style.display = "none";
-  taskList.style.display = "none";
+  // Если метки нет, проверяем параметр из URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const tab = urlParams.get('tab');
+
+  if (tab === 'tasks') {
+    tabButtons.forEach(btn => btn.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+
+    const tasksBtn = document.getElementById('tasksTab');
+    const tasksContent = document.getElementById('tasks');
+
+    if (tasksBtn && tasksContent) {
+      tasksBtn.classList.add('active');
+      tasksContent.classList.add('active');
+    }
+
+    showFormBtn.style.display = "none";
+    taskForm.style.display = "none";
+    taskList.style.display = "block";
+
+  } else {
+    showFormBtn.style.display = "block";
+    taskForm.style.display = "none";
+    taskList.style.display = "none";
+  }
 }
 
     // Авторизация
