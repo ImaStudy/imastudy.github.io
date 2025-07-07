@@ -41,16 +41,20 @@ nav button {
   border: none;
   padding: 15px 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 600; /* всегда жирный */
   cursor: pointer;
   color: #3498db;
-  line-height: 1.5;
-  transition: color 0.3s ease;
+  border-bottom: none; /* убираем бордер */
+  line-height: 1.5; /* фиксируем высоту строки */
+  transition: color 0.3s, background-color 0.3s;
 }
 
 nav button:hover,
 nav button.active {
-  color: #2980b9;
+  background-color: transparent; /* не меняем фон */
+  color: #2980b9; /* чуть темнее синий */
+  border-bottom: none; /* нет полоски */
+  font-weight: 600; /* тот же жирный */
 }
 
 
