@@ -49,8 +49,6 @@ nav button {
   transition: color 0.3s, background-color 0.3s;
 }
 
-
-
 nav button:hover,
 nav button.active {
   background-color: transparent; /* не меняем фон */
@@ -246,9 +244,9 @@ hr {
 /* При ширине экрана <= 600px наоборот */
 @media (max-width: 600px) {
   .desktop-nav {
-    display: none;
+    display: none; /* скрываем */
   }
   .mobile-nav {
-    display: flex;
+    display: flex; /* показываем */
   }
 }
