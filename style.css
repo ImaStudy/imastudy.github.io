@@ -39,8 +39,8 @@ nav {
 nav button {
   background-color: #ddd;
   border: none;
-  padding: 15px 10px;
-  font-size: 16px;
+  padding: 10px 20px;
+  font-size: 14px;
   font-weight: 600; /* всегда жирный */
   cursor: pointer;
   color: #3498db;
@@ -53,9 +53,7 @@ nav button {
 nav button:hover,
 nav button.active {
   background-color: #aaa; 
-  color: white; 
-  border-bottom: none; 
-  font-weight: 600; 
+  color: white;  
 }
 
 .container {
