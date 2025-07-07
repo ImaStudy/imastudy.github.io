@@ -37,7 +37,7 @@ nav {
 }
 
 nav button {
-  background-color: transparent;
+  background-color: #ddd;
   border: none;
   padding: 15px 10px;
   font-size: 16px;
@@ -47,14 +47,15 @@ nav button {
   border-bottom: none; /* убираем бордер */
   line-height: 1.5; /* фиксируем высоту строки */
   transition: color 0.3s, background-color 0.3s;
+  border-radius: 5px;
 }
 
 nav button:hover,
 nav button.active {
-  background-color: transparent; /* не меняем фон */
-  color: #2980b9; /* чуть темнее синий */
-  border-bottom: none; /* нет полоски */
-  font-weight: 600; /* тот же жирный */
+  background-color: #aaa; 
+  color: white; 
+  border-bottom: none; 
+  font-weight: 600; 
 }
 
 .container {
