@@ -44,7 +44,7 @@ nav button {
   cursor: pointer;
   border-radius: 5px;
   color: #333;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s ease;
 }
 
 nav button.active {
@@ -53,8 +53,8 @@ nav button.active {
 }
 
 nav button:hover {
-  background-color: #ccc;
-  color: black;
+  background-color: white;
+  color: #2980b9;
 }
 
 
