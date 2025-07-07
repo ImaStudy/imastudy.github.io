@@ -37,23 +37,19 @@ nav {
 }
 
 nav button {
-  padding: 10px 20px;
-  font-size: 14px;
+  background-color: transparent;
   border: none;
-  background-color: #ddd;
+  padding: 15px 10px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 5px;
-  color: #333;
-  transition: background-color 0.3s, color 0.3s ease;
+  color: #3498db;
+  line-height: 1.5;
+  transition: color 0.3s ease;
 }
 
+nav button:hover,
 nav button.active {
-  background-color: #aaa;
-  color: white;
-}
-
-nav button:hover {
-  background-color: white;
   color: #2980b9;
 }
 
