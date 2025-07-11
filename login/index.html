@@ -189,23 +189,28 @@ loginForm.addEventListener('submit', async (e) => {
   const passInput = document.getElementById('password');
   const passwordError = document.getElementById('passwordError');
 
-  const email = emailInput.value.trim();
-  const pass = passInput.value.trim();
-
-  // Скрываем прошлую ошибку
+  // Сброс ошибок
   passwordError.style.display = 'none';
   passwordError.textContent = '';
+
+  const email = emailInput.value.trim();
+  const pass = passInput.value.trim();
 
   try {
     await signInWithEmailAndPassword(auth, email, pass);
     window.location.href = "/";
   } catch (error) {
+    // Очистим поле пароля в любом случае
+    passInput.value = "";
+
+    const errorCode = error.code;
+
     if (
-      error.code === 'auth/invalid-credential' ||
-      error.code === 'auth/user-not-found' ||
-      error.code === 'auth/wrong-password'
+      errorCode === 'auth/invalid-credential' ||
+      errorCode === 'auth/user-not-found' ||
+      errorCode === 'auth/wrong-password' ||
+      errorCode === 'auth/invalid-login-credentials' // для новых версий Firebase
     ) {
-      passInput.value = '';
       passwordError.textContent = "Неверный логин/пароль. Попробуйте ещё раз или восстановите пароль.";
       passwordError.style.display = 'block';
     } else {
@@ -214,6 +219,7 @@ loginForm.addEventListener('submit', async (e) => {
     }
   }
 });
+
 
 
     
