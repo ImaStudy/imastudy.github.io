@@ -85,6 +85,19 @@ nav button.active {
     background-color: #c23321;
   }
 
+  .error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+input.error {
+  border: 1px solid red;
+  outline: none;
+}
+  
+
   footer {
     text-align: center;
     font-size: 14px;
@@ -119,7 +132,10 @@ nav button.active {
   <div class="auth-box">
     <h2>Вход в аккаунт</h2>
     <form id="loginForm">
-    <input type="email" id="email" placeholder="Email" required/>
+    <div style="position: relative;">
+  <input type="email" id="email" placeholder="Email" required />
+  <div id="emailError" class="error-message" style="display: none;"></div>
+</div>
     <input type="password" id="password" placeholder="Пароль" required/>
     <button type="submit" id="loginBtn">Войти</button>
     <button type="button" id="signupBtn">Зарегистрироваться</button>
@@ -183,8 +199,15 @@ loginForm.addEventListener('submit', async (e) => {
 document.getElementById('signupBtn').onclick = async () => {
   const emailInput = document.getElementById('email');
   const passInput = document.getElementById('password');
+  const emailError = document.getElementById('emailError');
+
   const email = emailInput.value.trim();
   const pass = passInput.value.trim();
+
+  // Очистка прошлых ошибок
+  emailInput.classList.remove('error');
+  emailError.style.display = 'none';
+  emailError.textContent = '';
 
   if (!email) {
     emailInput.focus();
@@ -202,10 +225,14 @@ document.getElementById('signupBtn').onclick = async () => {
     alert("Аккаунт создан. Можете войти.");
   } catch (error) {
     if (error.code === 'auth/email-already-in-use') {
-      alert("Такой email уже зарегистрирован. Попробуйте войти или используйте другой email.");
+      emailInput.classList.add('error');
+      emailError.textContent = "Пользователь с таким e-mail уже существует";
+      emailError.style.display = 'block';
       emailInput.focus();
     } else if (error.code === 'auth/invalid-email') {
-      alert("Некорректный формат email.");
+      emailInput.classList.add('error');
+      emailError.textContent = "Некорректный формат email.";
+      emailError.style.display = 'block';
       emailInput.focus();
     } else if (error.code === 'auth/weak-password') {
       alert("Пароль должен быть минимум 6 символов.");
@@ -215,6 +242,7 @@ document.getElementById('signupBtn').onclick = async () => {
     }
   }
 };
+
 
 
     
