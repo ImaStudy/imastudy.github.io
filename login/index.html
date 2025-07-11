@@ -201,7 +201,18 @@ document.getElementById('signupBtn').onclick = async () => {
     await createUserWithEmailAndPassword(auth, email, pass);
     alert("Аккаунт создан. Можете войти.");
   } catch (error) {
-    alert("Ошибка регистрации: " + error.message);
+    if (error.code === 'auth/email-already-in-use') {
+      alert("Такой email уже зарегистрирован. Попробуйте войти или используйте другой email.");
+      emailInput.focus();
+    } else if (error.code === 'auth/invalid-email') {
+      alert("Некорректный формат email.");
+      emailInput.focus();
+    } else if (error.code === 'auth/weak-password') {
+      alert("Пароль должен быть минимум 6 символов.");
+      passInput.focus();
+    } else {
+      alert("Ошибка регистрации: " + error.message);
+    }
   }
 };
 
