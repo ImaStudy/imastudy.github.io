@@ -213,9 +213,12 @@ loginForm.addEventListener('submit', async (e) => {
     ) {
       passwordError.textContent = "Неверный логин/пароль. Попробуйте ещё раз или восстановите пароль.";
       passwordError.style.display = 'block';
+    } else if (error.code === 'auth/network-request-failed') {
+  passwordError.textContent = "Ошибка сети. Проверьте подключение к интернету и попробуйте снова.";
+  passwordError.style.display = 'block';
     } else {
-      passwordError.textContent = "Ошибка входа: " + error.message;
-      passwordError.style.display = 'block';
+  passwordError.textContent = "Ошибка входа: " + error.message;
+  passwordError.style.display = 'block';
     }
   }
 });
@@ -263,10 +266,12 @@ document.getElementById('signupBtn').onclick = async () => {
       emailError.style.display = 'block';
       emailInput.focus();
     } else if (error.code === 'auth/weak-password') {
-      alert("Пароль должен быть минимум 6 символов.");
-      passInput.focus();
+  alert("Пароль должен быть минимум 6 символов.");
+  passInput.focus();
+    } else if (error.code === 'auth/network-request-failed') {
+  alert("Ошибка сети. Проверьте подключение к интернету и попробуйте снова.");
     } else {
-      alert("Ошибка регистрации: " + error.message);
+  alert("Ошибка регистрации: " + error.message);
     }
   }
 };
