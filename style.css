@@ -46,7 +46,7 @@ nav button {
   cursor: pointer;
   border-radius: 5px;
   font-weight: 600;
-  color: #3498db;
+  color: #4CAF50;
   border-bottom: none;
   line-height: 1.5;
   transition: color 0.3s, background-color 0.3s;
@@ -55,7 +55,7 @@ nav button {
 nav button:hover,
 nav button.active {
   background-color: transparent;
-  color: #2980b9;
+  color: #45a049;
   border-bottom: none;
   font-weight: 600;
 }
