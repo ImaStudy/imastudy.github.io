@@ -270,6 +270,21 @@ document.getElementById('signupBtn').onclick = async () => {
     }
   }
 };
+    // Очистка ошибки при изменении email
+document.getElementById('email').addEventListener('input', () => {
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('emailError');
+  emailInput.classList.remove('error');
+  emailError.style.display = 'none';
+  emailError.textContent = '';
+});
+document.getElementById('password').addEventListener('input', () => {
+  const passwordError = document.getElementById('passwordError');
+  passwordError.style.display = 'none';
+  passwordError.textContent = '';
+});
+
+
 
 
 
