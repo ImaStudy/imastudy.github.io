@@ -432,7 +432,6 @@ document.getElementById('setPasswordBtn').onclick = async () => {
 };
 
 document.getElementById('cancelSetPassword').onclick = () => {
-  // Очистка
   const newPassInput = document.getElementById('newPassword');
   const confirmPassInput = document.getElementById('confirmPassword');
   const newPassError = document.getElementById('newPasswordError');
@@ -440,6 +439,7 @@ document.getElementById('cancelSetPassword').onclick = () => {
 
   newPassInput.value = '';
   confirmPassInput.value = '';
+
   newPassInput.classList.remove('error');
   confirmPassInput.classList.remove('error');
   newPassError.style.display = 'none';
@@ -448,13 +448,14 @@ document.getElementById('cancelSetPassword').onclick = () => {
   confirmPassError.textContent = '';
 
   document.getElementById('modalOverlay').style.display = 'none';
+};
 
+window.viewTasksWithoutLogin = function() {
+  localStorage.setItem("showTasksTab", "true");
   window.location.href = "/";
 };
 
-
-  
-    document.getElementById('newPassword').addEventListener('input', () => {
+document.getElementById('newPassword').addEventListener('input', () => {
   const input = document.getElementById('newPassword');
   const error = document.getElementById('newPasswordError');
   input.classList.remove('error');
@@ -469,34 +470,6 @@ document.getElementById('confirmPassword').addEventListener('input', () => {
   error.style.display = 'none';
   error.textContent = '';
 });
-
-         window.viewTasksWithoutLogin = function() {
-  localStorage.setItem("showTasksTab", "true");
-  window.location.href = "/";
-}; 
-
-    window.onload = async () => {
-  const params = new URLSearchParams(window.location.search);
-  const shouldSetPassword = params.get("setPassword") === "true";
-
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      const hasPasswordProvider = user.providerData.some(
-        (p) => p.providerId === 'password'
-      );
-
-      
-      if (shouldSetPassword && !hasPasswordProvider) {
-        document.getElementById('modalOverlay').style.display = 'block';
-      }
-
-      
-      else if (!shouldSetPassword) {
-        window.location.href = "/";
-      }
-    }
-  });
-};
   </script>
 </body>
 </html>
