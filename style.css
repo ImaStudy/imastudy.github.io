@@ -46,7 +46,7 @@ nav button {
   cursor: pointer;
   border-radius: 5px;
   font-weight: 600;
-  color: #4CAF50;
+  color: #3498db;
   border-bottom: none;
   line-height: 1.5;
   transition: color 0.3s, background-color 0.3s;
@@ -55,7 +55,7 @@ nav button {
 nav button:hover,
 nav button.active {
   background-color: transparent;
-  color: #45a049;
+  color: #2980b9;
   border-bottom: none;
   font-weight: 600;
 }
@@ -92,7 +92,7 @@ textarea {
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: #3498db;
   color: white;
   border: none;
   cursor: pointer;
@@ -100,11 +100,11 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #2980b9;
 }
 
 #showFormBtn {
-  background-color: #4CAF50;
+  background-color: #3498db;
   color: white;
   border: none;
   padding: 14px 40px;
@@ -117,7 +117,7 @@ button:hover {
 }
 
 #showFormBtn:hover {
-  background-color: #45a049;
+  background-color: #2980b9;
 }
 
 #taskForm {
