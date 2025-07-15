@@ -285,20 +285,25 @@ if (localStorage.getItem("showTasksTab") === "true") {
     });
 
     // Слежение за состоянием авторизации
-    onAuthStateChanged(auth, (user) => {
+   onAuthStateChanged(auth, (user) => {
+  const skipped = localStorage.getItem('skippedSetPassword');
+
   if (user) {
-    // Проверяем, есть ли у пользователя провайдер "password"
     const hasPasswordProvider = user.providerData.some(
       (p) => p.providerId === 'password'
     );
 
-    if (!hasPasswordProvider) {
-      // Пользователь вошёл через Google, но пароль не установлен — перекидываем на auth.html для установки пароля
+    if (!hasPasswordProvider && !skipped) {
+      // Если пароль не установлен и пользователь НЕ отказался — отправляем на страницу установки пароля
       window.location.href = "/login/?setPassword=true";
-      return; // останавливаем дальнейшее выполнение
+      return;
     }
 
-    // Остальной код показа имени и кнопок
+    // Если пользователь отказался, удаляем флаг
+    if (skipped) {
+      localStorage.removeItem('skippedSetPassword');
+    }
+
     const displayName = user.displayName || user.email;
     userName.textContent = `Привет, ${displayName}`;
     userNameMobile.textContent = `Привет, ${displayName}`;
@@ -308,7 +313,6 @@ if (localStorage.getItem("showTasksTab") === "true") {
     loginBtnMobile.style.display = 'none';
     logoutBtnMobile.style.display = 'inline-block';
   } else {
-    // Пользователь не авторизован
     userName.textContent = '';
     userNameMobile.textContent = '';
 
