@@ -411,7 +411,7 @@ document.getElementById('cancelSetPassword').onclick = () => {
   const confirmPassInput = document.getElementById('confirmPassword');
   const newPassError = document.getElementById('newPasswordError');
   const confirmPassError = document.getElementById('confirmPasswordError');
-  
+
   newPassInput.value = '';
   confirmPassInput.value = '';
   newPassInput.classList.remove('error');
@@ -420,9 +420,9 @@ document.getElementById('cancelSetPassword').onclick = () => {
   confirmPassError.style.display = 'none';
   newPassError.textContent = '';
   confirmPassError.textContent = '';
- 
+
   localStorage.setItem('skippedSetPassword', 'true');
-  
+
   document.getElementById('modalOverlay').style.display = 'none';
   window.location.href = "/";
 };
