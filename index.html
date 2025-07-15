@@ -293,11 +293,14 @@ if (localStorage.getItem("showTasksTab") === "true") {
       (p) => p.providerId === 'password'
     );
 
-    if (!hasPasswordProvider && !skipped) {
-      // Если пароль не установлен и пользователь НЕ отказался — отправляем на страницу установки пароля
-      window.location.href = "/login/?setPassword=true";
-      return;
-    }
+   if (!hasPasswordProvider && !skipped) {
+  // Показываем модалку установки пароля
+  const modal = document.getElementById("modalOverlay");
+  if (modal) {
+    modal.style.display = "block";
+  }
+  return;
+}
     
 
     const displayName = user.displayName || user.email;
