@@ -215,8 +215,15 @@ input.error {
   <div id="modalOverlay">
   <div id="setPasswordBox">
     <h3>Установите пароль для входа через Email</h3>
-    <input type="password" id="newPassword" placeholder="Новый пароль" />
-    <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" />
+    <div style="position: relative;">
+  <input type="password" id="newPassword" placeholder="Новый пароль" />
+  <div id="newPasswordError" class="error-message" style="display: none;"></div>
+</div>
+
+<div style="position: relative;">
+  <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" />
+  <div id="confirmPasswordError" class="error-message" style="display: none;"></div>
+</div>
     <button id="setPasswordBtn">Установить пароль</button>
     <button id="cancelSetPassword" class="cancel-btn">Отмена</button>
   </div>
@@ -375,28 +382,53 @@ document.getElementById('password').addEventListener('input', () => {
 };
 
     document.getElementById('setPasswordBtn').onclick = async () => {
-  const newPass = document.getElementById('newPassword').value.trim();
-  const confirmPass = document.getElementById('confirmPassword').value.trim();
+  const newPassInput = document.getElementById('newPassword');
+  const confirmPassInput = document.getElementById('confirmPassword');
+  const newPass = newPassInput.value.trim();
+  const confirmPass = confirmPassInput.value.trim();
+
+  const newPassError = document.getElementById('newPasswordError');
+  const confirmPassError = document.getElementById('confirmPasswordError');
+
+  // Сброс ошибок
+  newPassInput.classList.remove('error');
+  confirmPassInput.classList.remove('error');
+  newPassError.style.display = 'none';
+  confirmPassError.style.display = 'none';
+  newPassError.textContent = '';
+  confirmPassError.textContent = '';
+
+  let hasError = false;
 
   if (newPass.length < 6) {
-    alert('Пароль должен быть минимум 6 символов');
-    return;
+    newPassError.textContent = 'Пароль должен быть минимум 6 символов';
+    newPassError.style.display = 'block';
+    newPassInput.classList.add('error');
+    hasError = true;
   }
+
   if (newPass !== confirmPass) {
-    alert('Пароли не совпадают');
-    return;
+    confirmPassError.textContent = 'Пароли не совпадают';
+    confirmPassError.style.display = 'block';
+    confirmPassInput.classList.add('error');
+    hasError = true;
   }
+
+  if (hasError) return;
 
   try {
     const user = auth.currentUser;
     await updatePassword(user, newPass);
     document.getElementById('modalOverlay').style.display = 'none';
+    newPassInput.value = '';
+    confirmPassInput.value = '';
     alert('Пароль успешно установлен! Теперь можно входить по Email и паролю.');
     window.location.href = "/";
   } catch (error) {
     alert('Ошибка при установке пароля: ' + error.message);
   }
 };
+
 
   document.getElementById('cancelSetPassword').onclick = () => {
   document.getElementById('modalOverlay').style.display = 'none';
@@ -408,6 +440,22 @@ document.getElementById('password').addEventListener('input', () => {
   localStorage.setItem("showTasksTab", "true");
   window.location.href = "/";
 }
+
+    document.getElementById('newPassword').addEventListener('input', () => {
+  const input = document.getElementById('newPassword');
+  const error = document.getElementById('newPasswordError');
+  input.classList.remove('error');
+  error.style.display = 'none';
+  error.textContent = '';
+});
+
+document.getElementById('confirmPassword').addEventListener('input', () => {
+  const input = document.getElementById('confirmPassword');
+  const error = document.getElementById('confirmPasswordError');
+  input.classList.remove('error');
+  error.style.display = 'none';
+  error.textContent = '';
+});
   </script>
 </body>
 </html>
