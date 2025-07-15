@@ -447,13 +447,10 @@ document.getElementById('cancelSetPassword').onclick = () => {
   confirmPassInput.classList.remove('error');
   newPassError.style.display = 'none';
   confirmPassError.style.display = 'none';
-  newPassError.textContent = '';
-  confirmPassError.textContent = '';
 
   localStorage.setItem('skippedSetPassword', 'true');
 
   document.getElementById('modalOverlay').style.display = 'none';
-
 };
 
 window.viewTasksWithoutLogin = function() {
