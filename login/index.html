@@ -431,8 +431,8 @@ document.getElementById('setPasswordBtn').onclick = async () => {
   }
 };
 
-document.getElementById('cancelSetPassword').onclick = () => {
-  // Очистка полей и ошибок (как у тебя было)
+document.getElementById('cancelSetPassword').onclick = async () => {
+  // Очистка полей и ошибок
   const newPassInput = document.getElementById('newPassword');
   const confirmPassInput = document.getElementById('confirmPassword');
   const newPassError = document.getElementById('newPasswordError');
@@ -448,11 +448,18 @@ document.getElementById('cancelSetPassword').onclick = () => {
   newPassError.textContent = '';
   confirmPassError.textContent = '';
 
-  localStorage.setItem('skippedSetPassword', 'true');
-  
+  // Выйти из аккаунта
+  try {
+    await auth.signOut();
+  } catch (error) {
+    console.error('Ошибка при выходе:', error);
+  }
+
+  // Скрыть модалку
   document.getElementById('modalOverlay').style.display = 'none';
 
-  window.location.href = "/";
+  // Перенаправить на страницу логина
+  window.location.href = "/login/";
 };
 
 window.viewTasksWithoutLogin = function() {
