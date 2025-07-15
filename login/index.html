@@ -381,14 +381,14 @@ document.getElementById('password').addEventListener('input', () => {
   }
 };
 
-    document.getElementById('setPasswordBtn').onclick = async () => {
+   document.getElementById('setPasswordBtn').onclick = async () => {
   const newPassInput = document.getElementById('newPassword');
   const confirmPassInput = document.getElementById('confirmPassword');
-  const newPass = newPassInput.value.trim();
-  const confirmPass = confirmPassInput.value.trim();
-
   const newPassError = document.getElementById('newPasswordError');
   const confirmPassError = document.getElementById('confirmPasswordError');
+
+  const newPass = newPassInput.value.trim();
+  const confirmPass = confirmPassInput.value.trim();
 
   // Сброс ошибок
   newPassInput.classList.remove('error');
@@ -400,6 +400,7 @@ document.getElementById('password').addEventListener('input', () => {
 
   let hasError = false;
 
+  // Проверка длины нового пароля
   if (newPass.length < 6) {
     newPassError.textContent = 'Пароль должен быть минимум 6 символов';
     newPassError.style.display = 'block';
@@ -407,7 +408,8 @@ document.getElementById('password').addEventListener('input', () => {
     hasError = true;
   }
 
-  if (newPass !== confirmPass) {
+  // Проверка совпадения паролей только если длина нового пароля нормальная
+  if (!hasError && newPass !== confirmPass) {
     confirmPassError.textContent = 'Пароли не совпадают';
     confirmPassError.style.display = 'block';
     confirmPassInput.classList.add('error');
@@ -429,19 +431,31 @@ document.getElementById('password').addEventListener('input', () => {
   }
 };
 
+document.getElementById('cancelSetPassword').onclick = () => {
+  const newPassInput = document.getElementById('newPassword');
+  const confirmPassInput = document.getElementById('confirmPassword');
+  const newPassError = document.getElementById('newPasswordError');
+  const confirmPassError = document.getElementById('confirmPasswordError');
 
-  document.getElementById('cancelSetPassword').onclick = () => {
+  newPassInput.value = '';
+  confirmPassInput.value = '';
+
+  newPassInput.classList.remove('error');
+  confirmPassInput.classList.remove('error');
+  newPassError.style.display = 'none';
+  confirmPassError.style.display = 'none';
+  newPassError.textContent = '';
+  confirmPassError.textContent = '';
+
   document.getElementById('modalOverlay').style.display = 'none';
-  document.getElementById('newPassword').value = '';
-  document.getElementById('confirmPassword').value = '';
 };
 
-   window.viewTasksWithoutLogin = function() {
+window.viewTasksWithoutLogin = function() {
   localStorage.setItem("showTasksTab", "true");
   window.location.href = "/";
-}
+};
 
-    document.getElementById('newPassword').addEventListener('input', () => {
+document.getElementById('newPassword').addEventListener('input', () => {
   const input = document.getElementById('newPassword');
   const error = document.getElementById('newPasswordError');
   input.classList.remove('error');
