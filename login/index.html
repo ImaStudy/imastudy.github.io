@@ -144,6 +144,21 @@ input.error {
 #setPasswordBox button:hover {
   background-color: #2980b9;
 }
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #bbb;
+}
 
 
     
@@ -203,6 +218,7 @@ input.error {
     <input type="password" id="newPassword" placeholder="Новый пароль" />
     <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" />
     <button id="setPasswordBtn">Установить пароль</button>
+    <button id="cancelSetPassword" class="cancel-btn">Отмена</button>
   </div>
 </div>
 
@@ -380,6 +396,10 @@ document.getElementById('password').addEventListener('input', () => {
   } catch (error) {
     alert('Ошибка при установке пароля: ' + error.message);
   }
+};
+
+  document.getElementById('cancelSetPassword').onclick = () => {
+  document.getElementById('modalOverlay').style.display = 'none';
 };
 
    window.viewTasksWithoutLogin = function() {
