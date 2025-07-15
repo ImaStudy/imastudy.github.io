@@ -450,10 +450,6 @@ document.getElementById('cancelSetPassword').onclick = () => {
   document.getElementById('modalOverlay').style.display = 'none';
 };
 
-window.viewTasksWithoutLogin = function() {
-  localStorage.setItem("showTasksTab", "true");
-  window.location.href = "/";
-};
 
 document.getElementById('newPassword').addEventListener('input', () => {
   const input = document.getElementById('newPassword');
@@ -470,6 +466,11 @@ document.getElementById('confirmPassword').addEventListener('input', () => {
   error.style.display = 'none';
   error.textContent = '';
 });
+
+    window.viewTasksWithoutLogin = function() {
+  localStorage.setItem("showTasksTab", "true");
+  window.location.href = "/";
+};
   </script>
 </body>
 </html>
