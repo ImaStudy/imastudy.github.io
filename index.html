@@ -298,11 +298,7 @@ if (localStorage.getItem("showTasksTab") === "true") {
       window.location.href = "/login/?setPassword=true";
       return;
     }
-
-    // Если пользователь отказался, удаляем флаг
-    if (skipped) {
-      localStorage.removeItem('skippedSetPassword');
-    }
+    
 
     const displayName = user.displayName || user.email;
     userName.textContent = `Привет, ${displayName}`;
