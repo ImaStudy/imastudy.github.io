@@ -381,7 +381,7 @@ document.getElementById('password').addEventListener('input', () => {
   }
 };
 
-   document.getElementById('setPasswordBtn').onclick = async () => {
+document.getElementById('setPasswordBtn').onclick = async () => {
   const newPassInput = document.getElementById('newPassword');
   const confirmPassInput = document.getElementById('confirmPassword');
   const newPassError = document.getElementById('newPasswordError');
@@ -390,7 +390,7 @@ document.getElementById('password').addEventListener('input', () => {
   const newPass = newPassInput.value.trim();
   const confirmPass = confirmPassInput.value.trim();
 
-  // Сброс ошибок
+  // Сброс предыдущих ошибок
   newPassInput.classList.remove('error');
   confirmPassInput.classList.remove('error');
   newPassError.style.display = 'none';
@@ -400,7 +400,7 @@ document.getElementById('password').addEventListener('input', () => {
 
   let hasError = false;
 
-  // Проверка длины нового пароля
+  // Проверка длины пароля
   if (newPass.length < 6) {
     newPassError.textContent = 'Пароль должен быть минимум 6 символов';
     newPassError.style.display = 'block';
@@ -408,8 +408,8 @@ document.getElementById('password').addEventListener('input', () => {
     hasError = true;
   }
 
-  // Проверка совпадения паролей только если длина нового пароля нормальная
-  if (!hasError && newPass !== confirmPass) {
+  // Проверка совпадения паролей (даже если длина неправильная)
+  if (newPass !== confirmPass) {
     confirmPassError.textContent = 'Пароли не совпадают';
     confirmPassError.style.display = 'block';
     confirmPassInput.classList.add('error');
