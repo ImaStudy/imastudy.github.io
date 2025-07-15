@@ -294,13 +294,13 @@ if (localStorage.getItem("showTasksTab") === "true") {
     );
 
    if (!hasPasswordProvider && !skipped) {
-  // Показываем модалку установки пароля
-  const modal = document.getElementById("modalOverlay");
-  if (modal) {
-    modal.style.display = "block";
-  }
-  return;
-}
+      // Открываем модалку прямо на главной
+      const modal = document.getElementById("modalOverlay");
+      if (modal) {
+        modal.style.display = "block";
+      }
+      return;
+    }
     
 
     const displayName = user.displayName || user.email;
