@@ -362,7 +362,7 @@ document.getElementById('password').addEventListener('input', () => {
   passwordError.textContent = '';
 });
 
-    document.getElementById('googleBtn').onclick = async () => {
+   document.getElementById('googleBtn').onclick = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
@@ -371,7 +371,9 @@ document.getElementById('password').addEventListener('input', () => {
       (p) => p.providerId === 'password'
     );
 
-    if (!hasPasswordProvider) {
+    const skipped = localStorage.getItem('skippedSetPassword');
+
+    if (!hasPasswordProvider && !skipped) {
       document.getElementById('modalOverlay').style.display = 'block';
     } else {
       window.location.href = "/";
@@ -431,7 +433,7 @@ document.getElementById('setPasswordBtn').onclick = async () => {
   }
 };
 
-document.getElementById('cancelSetPassword').onclick = async () => {
+document.getElementById('cancelSetPassword').onclick = () => {
   // Очистка полей и ошибок
   const newPassInput = document.getElementById('newPassword');
   const confirmPassInput = document.getElementById('confirmPassword');
@@ -448,18 +450,10 @@ document.getElementById('cancelSetPassword').onclick = async () => {
   newPassError.textContent = '';
   confirmPassError.textContent = '';
 
-  // Выйти из аккаунта
-  try {
-    await auth.signOut();
-  } catch (error) {
-    console.error('Ошибка при выходе:', error);
-  }
+  localStorage.setItem('skippedSetPassword', 'true');
 
-  // Скрыть модалку
   document.getElementById('modalOverlay').style.display = 'none';
 
-  // Перенаправить на страницу логина
-  window.location.href = "/login/";
 };
 
 window.viewTasksWithoutLogin = function() {
