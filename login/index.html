@@ -370,10 +370,13 @@ document.getElementById('googleBtn').onclick = async () => {
     const user = result.user;
 
     const skipped = localStorage.getItem('skippedSetPassword');
-    
+
+    const methods = await fetchSignInMethodsForEmail(auth, user.email);
+    const hasPassword = methods.includes("password");
+
     const isGoogleOnly = user.providerData.length === 1 && user.providerData[0].providerId === "google.com";
 
-    if (isGoogleOnly && !skipped) {
+    if (isGoogleOnly && !hasPassword && !skipped) {
       document.getElementById('modalOverlay').style.display = 'block';
     } else {
       window.location.href = "/";
