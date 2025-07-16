@@ -293,7 +293,8 @@ onAuthStateChanged(auth, async (user) => {
       const methods = await fetchSignInMethodsForEmail(auth, user.email);
       const hasPasswordProvider = methods.includes("password");
 
-      if (!hasPasswordProvider && !skipped) {
+      // Если у пользователя только Google (новый пользователь) и он не пропустил установку пароля
+      if (!hasPasswordProvider && !skipped && user.providerData.length === 1 && user.providerData[0].providerId === "google.com") {
         const modal = document.getElementById("modalOverlay");
         if (modal) {
           modal.style.display = "block";
@@ -301,6 +302,7 @@ onAuthStateChanged(auth, async (user) => {
         return;
       }
 
+      // Показываем имя
       const displayName = user.displayName || user.email;
       userName.textContent = `Привет, ${displayName}`;
       userNameMobile.textContent = `Привет, ${displayName}`;
@@ -313,9 +315,9 @@ onAuthStateChanged(auth, async (user) => {
       console.error("Ошибка при проверке методов входа:", error);
     }
   } else {
+    // Пользователь вышел
     userName.textContent = '';
     userNameMobile.textContent = '';
-
     loginBtn.style.display = 'inline-block';
     logoutBtn.style.display = 'none';
     loginBtnMobile.style.display = 'inline-block';
