@@ -369,23 +369,22 @@ document.getElementById('googleBtn').onclick = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    const methods = await fetchSignInMethodsForEmail(auth, user.email);
-    console.log("Методы входа:", methods);
-
-    const hasPassword = methods.includes("password");
     const skipped = localStorage.getItem('skippedSetPassword');
+    
+    const isGoogleOnly = user.providerData.length === 1 && user.providerData[0].providerId === "google.com";
 
-    if (!hasPassword && !skipped) {
-      console.log("Показываем модалку");
+    if (isGoogleOnly && !skipped) {
       document.getElementById('modalOverlay').style.display = 'block';
     } else {
       window.location.href = "/";
     }
   } catch (error) {
-    console.error("Ошибка Google-входа: ", error);
     alert("Ошибка Google-входа: " + error.message);
   }
 };
+
+
+    
 document.getElementById('setPasswordBtn').onclick = async () => {
   const newPassInput = document.getElementById('newPassword');
   const confirmPassInput = document.getElementById('confirmPassword');
