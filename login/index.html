@@ -362,18 +362,21 @@ document.getElementById('password').addEventListener('input', () => {
   passwordError.textContent = '';
 });
 
-   document.getElementById('googleBtn').onclick = async () => {
+  import { fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+// ...
+
+document.getElementById('googleBtn').onclick = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
-    const hasPasswordProvider = user.providerData.some(
-      (p) => p.providerId === 'password'
-    );
+    const methods = await fetchSignInMethodsForEmail(auth, user.email);
 
+    const hasPassword = methods.includes("password");
     const skipped = localStorage.getItem('skippedSetPassword');
 
-    if (!hasPasswordProvider && !skipped) {
+    if (!hasPassword && !skipped) {
       document.getElementById('modalOverlay').style.display = 'block';
     } else {
       window.location.href = "/";
