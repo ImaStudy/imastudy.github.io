@@ -284,33 +284,35 @@ if (localStorage.getItem("showTasksTab") === "true") {
       }
     });
 
-    // Слежение за состоянием авторизации
-   onAuthStateChanged(auth, (user) => {
+  import { onAuthStateChanged, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+onAuthStateChanged(auth, async (user) => {
   const skipped = localStorage.getItem('skippedSetPassword');
 
   if (user) {
-    const hasPasswordProvider = user.providerData.some(
-      (p) => p.providerId === 'password'
-    );
+    try {
+      const methods = await fetchSignInMethodsForEmail(auth, user.email);
+      const hasPasswordProvider = methods.includes("password");
 
-   if (!hasPasswordProvider && !skipped) {
-      // Открываем модалку прямо на главной
-      const modal = document.getElementById("modalOverlay");
-      if (modal) {
-        modal.style.display = "block";
+      if (!hasPasswordProvider && !skipped) {
+        const modal = document.getElementById("modalOverlay");
+        if (modal) {
+          modal.style.display = "block";
+        }
+        return;
       }
-      return;
+
+      const displayName = user.displayName || user.email;
+      userName.textContent = `Привет, ${displayName}`;
+      userNameMobile.textContent = `Привет, ${displayName}`;
+
+      loginBtn.style.display = 'none';
+      logoutBtn.style.display = 'inline-block';
+      loginBtnMobile.style.display = 'none';
+      logoutBtnMobile.style.display = 'inline-block';
+    } catch (error) {
+      console.error("Ошибка при проверке методов входа:", error);
     }
-    
-
-    const displayName = user.displayName || user.email;
-    userName.textContent = `Привет, ${displayName}`;
-    userNameMobile.textContent = `Привет, ${displayName}`;
-
-    loginBtn.style.display = 'none';
-    logoutBtn.style.display = 'inline-block';
-    loginBtnMobile.style.display = 'none';
-    logoutBtnMobile.style.display = 'inline-block';
   } else {
     userName.textContent = '';
     userNameMobile.textContent = '';
