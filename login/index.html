@@ -241,7 +241,8 @@ input.error {
       createUserWithEmailAndPassword,
       GoogleAuthProvider,
       signInWithPopup,
-      updatePassword
+      updatePassword,
+      fetchSignInMethodsForEmail
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -362,9 +363,6 @@ document.getElementById('password').addEventListener('input', () => {
   passwordError.textContent = '';
 });
 
-  import { fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-
-// ...
 
 document.getElementById('googleBtn').onclick = async () => {
   try {
