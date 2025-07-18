@@ -215,9 +215,11 @@ if (localStorage.getItem("showTasksTab") === "true") {
   tabContents.forEach(c => c.classList.remove("active"));
 
   const tasksBtn = document.getElementById("tasksTab");
+  const tasksMobileBtn = document.getElementById("tasksTabMobile");
   const tasksContent = document.getElementById("tasks");
 
   tasksBtn.classList.add("active");
+  tasksMobileBtn.classList.add("active");
   tasksContent.classList.add("active");
 
   showFormBtn.style.display = "none";
