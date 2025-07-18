@@ -370,10 +370,8 @@ document.getElementById('googleBtn').onclick = async () => {
     const user = result.user;
 
     await user.reload();
-
-    const skipped = localStorage.getItem('skippedSetPassword');
-
     const refreshedUser = auth.currentUser;
+    const skipped = localStorage.getItem('skippedSetPassword');
 
     const hasPasswordProvider = refreshedUser.providerData.some(
       (p) => p.providerId === 'password'
@@ -389,7 +387,6 @@ document.getElementById('googleBtn').onclick = async () => {
     alert("Ошибка Google-входа: " + error.message);
   }
 };
-
 
     
 document.getElementById('setPasswordBtn').onclick = async () => {
