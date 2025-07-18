@@ -369,12 +369,16 @@ document.getElementById('googleBtn').onclick = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
 
+    await user.reload();
+
     const skipped = localStorage.getItem('skippedSetPassword');
 
-    const hasPasswordProvider = user.providerData.some(
+    const refreshedUser = auth.currentUser;
+
+    const hasPasswordProvider = refreshedUser.providerData.some(
       (p) => p.providerId === 'password'
     );
-    const isGoogleOnly = user.providerData.length === 1 && user.providerData[0].providerId === "google.com";
+    const isGoogleOnly = refreshedUser.providerData.length === 1 && refreshedUser.providerData[0].providerId === "google.com";
 
     if (!hasPasswordProvider && isGoogleOnly && !skipped) {
       document.getElementById('modalOverlay').style.display = 'block';
