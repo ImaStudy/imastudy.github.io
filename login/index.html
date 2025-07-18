@@ -367,6 +367,8 @@ document.getElementById('password').addEventListener('input', () => {
 
 document.getElementById('googleBtn').onclick = async () => {
   try {
+    localStorage.removeItem('skippedSetPassword');
+
     const result = await signInWithPopup(auth, provider);
     
     await auth.currentUser.reload();
