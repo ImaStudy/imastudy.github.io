@@ -84,6 +84,23 @@ nav button.active {
   </style>
 </head>
 <body>
+ <header>
+  <div class="header-left">
+    <h1>ImaStudy</h1>
+    <p>Размести задание — получи помощь</p>
+  </div>
+ <nav class="desktop-nav">
+  <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
+  <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
+</nav>
+   <nav class="mobile-nav">
+  <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
+  <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
+</nav>
+</header>
+<hr />
+
+  
   <main>
     <h1>Добро пожаловать в профиль!</h1>
     <p id="welcome-message">Загрузка...</p>
@@ -139,21 +156,5 @@ nav button.active {
     });
   </script>
 </body>
-
-   <header>
-  <div class="header-left">
-    <h1>ImaStudy</h1>
-    <p>Размести задание — получи помощь</p>
-  </div>
- <nav class="desktop-nav">
-  <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
-  <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
-</nav>
-   <nav class="mobile-nav">
-  <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
-  <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
-</nav>
-</header>
-<hr />
   
 </html>
