@@ -7,11 +7,17 @@
   <style>
     body {
       font-family: 'Noto Sans', sans-serif;
-      max-width: 600px;
+      max-width: 800px;
       margin: 40px auto;
       padding: 20px;
       background: #f9f9f9;
       color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    main {
+      flex-grow: 1;
     }
     h1 {
       margin-bottom: 10px;
@@ -25,17 +31,32 @@
       border-radius: 6px;
       cursor: pointer;
       margin-top: 20px;
+      margin-right: 10px;
     }
     button:hover {
       background: #2E7031;
     }
+    footer {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      padding: 15px 0;
+      border-top: 1px solid #ddd;
+      margin-top: 40px;
+    }
   </style>
 </head>
 <body>
-  <h1>Добро пожаловать в профиль!</h1>
-  <p id="welcome-message">Загрузка...</p>
-  <button id="logout-btn">Выйти</button>
-  <button id="home-btn">На главную</button>
+  <main>
+    <h1>Добро пожаловать в профиль!</h1>
+    <p id="welcome-message">Загрузка...</p>
+    <button id="logout-btn">Выйти</button>
+    <button id="home-btn">На главную</button>
+  </main>
+
+  <footer>
+    &copy; 2025 ImaStudy. Все права защищены.
+  </footer>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -63,7 +84,6 @@
         welcomeMessage.textContent = `Привет, ${user.displayName || user.email}!`;
       } else {
         welcomeMessage.textContent = "Вы не вошли в систему.";
-        // Можно перенаправить на страницу входа
         setTimeout(() => window.location.href = "/login/", 2000);
       }
     });
@@ -71,7 +91,7 @@
     logoutBtn.addEventListener("click", async () => {
       try {
         await signOut(auth);
-        window.location.href = "/"; // после выхода вернуться на главную
+        window.location.href = "/";
       } catch (error) {
         alert("Ошибка при выходе: " + error.message);
       }
@@ -83,4 +103,3 @@
   </script>
 </body>
 </html>
-
