@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Профиль — ImaStudy</title>
+  <style>
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background: #388E3C;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #2E7031;
+    }
+  </style>
+</head>
+<body>
+  <h1>Добро пожаловать в профиль!</h1>
+  <p id="welcome-message">Загрузка...</p>
+  <button id="logout-btn">Выйти</button>
+  <button id="home-btn">На главную</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+      authDomain: "imastudy-631ec.firebaseapp.com",
+      projectId: "imastudy-631ec",
+      storageBucket: "imastudy-631ec.firebasestorage.app",
+      messagingSenderId: "301505972939",
+      appId: "1:301505972939:web:061de2a898044090dae94e",
+      measurementId: "G-305V13PQ4Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const welcomeMessage = document.getElementById("welcome-message");
+    const logoutBtn = document.getElementById("logout-btn");
+    const homeBtn = document.getElementById("home-btn");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        welcomeMessage.textContent = `Привет, ${user.displayName || user.email}!`;
+      } else {
+        welcomeMessage.textContent = "Вы не вошли в систему.";
+        // Можно перенаправить на страницу входа
+        setTimeout(() => window.location.href = "/login/", 2000);
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        window.location.href = "/"; // после выхода вернуться на главную
+      } catch (error) {
+        alert("Ошибка при выходе: " + error.message);
+      }
+    });
+
+    homeBtn.addEventListener("click", () => {
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>
 
