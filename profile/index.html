@@ -10,17 +10,13 @@
        * {
   box-sizing: border-box;
 }
-    body {
-      font-family: 'Noto Sans', sans-serif;
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #f9f9f9;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+
+     body {
+    font-family: 'Noto Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
 
     nav {
   display: flex;
@@ -84,6 +80,7 @@ nav button.active {
   </style>
 </head>
 <body>
+  
  <header>
   <div class="header-left">
     <h1>ImaStudy</h1>
@@ -100,18 +97,17 @@ nav button.active {
 </header>
 <hr />
 
-  
   <main>
     <h1>Добро пожаловать в профиль!</h1>
     <p id="welcome-message">Загрузка...</p>
-    <button id="logout-btn">Выйти</button>
     <button id="home-btn">На главную</button>
+    <button id="logout-btn">Выйти</button>
   </main>
-
+  
   <footer>
     &copy; 2025 ImaStudy. Все права защищены.
   </footer>
-
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
