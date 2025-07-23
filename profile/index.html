@@ -155,7 +155,6 @@ nav button.active {
 }
 
 .toast {
-  visibility: hidden;
   min-width: 250px;
   margin-left: -125px;
   background-color: #2ecc71;
@@ -169,13 +168,14 @@ nav button.active {
   bottom: 30px;
   font-size: 16px;
   opacity: 0;
+  pointer-events: none; /* Чтобы клики не блокировали другие элементы */
   transition: opacity 0.5s ease, bottom 0.5s ease;
 }
 
 .toast.show {
-  visibility: visible;
   opacity: 1;
   bottom: 50px;
+  pointer-events: auto;
 }
 
 
@@ -288,11 +288,12 @@ let currentUser = null;
 function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
-  toast.className = "toast show";
+  toast.classList.add("show");
   setTimeout(() => {
-    toast.className = toast.className.replace("show", "");
+    toast.classList.remove("show");
   }, 3000);
 }
+
     
 editBtn.addEventListener("click", () => {
   if (currentUser) {
