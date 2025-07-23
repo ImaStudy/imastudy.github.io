@@ -154,6 +154,30 @@ nav button.active {
   gap: 10px;
 }
 
+    .toast {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #2ecc71;
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  padding: 12px;
+  position: fixed;
+  z-index: 1000;
+  left: 50%;
+  bottom: 30px;
+  font-size: 16px;
+  transition: opacity 0.5s, bottom 0.5s;
+  opacity: 0;
+}
+
+.toast.show {
+  visibility: visible;
+  opacity: 1;
+  bottom: 50px;
+}
+
 
     
     footer {
@@ -219,6 +243,7 @@ nav button.active {
     </div>
   </div>
 </div>
+<div id="toast" class="toast">Имя успешно обновлено!</div>
 
   
   <footer>
@@ -259,6 +284,15 @@ const cancelEditBtn = document.getElementById("cancelEditBtn");
 
 let currentUser = null;
 
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.className = "toast show";
+  setTimeout(() => {
+    toast.className = toast.className.replace("show", "");
+  }, 3000);
+}
+    
 editBtn.addEventListener("click", () => {
   if (currentUser) {
     newNameInput.value = currentUser.displayName || "";
@@ -282,7 +316,7 @@ saveNameBtn.addEventListener("click", async () => {
     userNameEl.textContent = newName;
     avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
     editModal.style.display = "none";
-    alert("Имя успешно обновлено!");
+    showToast("Имя успешно обновлено!");
   } catch (error) {
     alert("Ошибка при обновлении: " + error.message);
   }
