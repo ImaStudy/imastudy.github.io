@@ -63,6 +63,63 @@ nav button.active {
   button:hover {
     background-color: #2980b9;
   }
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: white;
+  margin: 20px auto;
+  max-width: 600px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.profile-info img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.edit-btn {
+  background: #eee;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 45%;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 28px;
+  color: #3498db;
+}
+
+.actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+    
     footer {
     text-align: center;
     font-size: 14px;
@@ -90,11 +147,31 @@ nav button.active {
 <hr />
 
   <main>
-    <h1>Добро пожаловать в профиль!</h1>
-    <p id="welcome-message">Загрузка...</p>
+  <section class="profile-info">
+    <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
+    <div>
+      <h2 id="user-name">Имя пользователя</h2>
+      <p id="user-email">email@example.com</p>
+      <button class="edit-btn">Редактировать профиль</button>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat-card">
+      <h3 id="tasks-created">0</h3>
+      <p>Размещено заданий</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="tasks-done">0</h3>
+      <p>Выполнено заданий</p>
+    </div>
+  </section>
+
+  <section class="actions">
     <button id="home-btn">На главную</button>
     <button id="logout-btn">Выйти</button>
-  </main>
+  </section>
+</main>
   
   <footer>
     &copy; 2025 ImaStudy. Все права защищены.
@@ -120,15 +197,22 @@ nav button.active {
     const welcomeMessage = document.getElementById("welcome-message");
     const logoutBtn = document.getElementById("logout-btn");
     const homeBtn = document.getElementById("home-btn");
+    const userNameEl = document.getElementById("user-name");
+    const userEmailEl = document.getElementById("user-email");
+    const avatarEl = document.getElementById("profile-avatar");
 
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        welcomeMessage.textContent = `Привет, ${user.displayName || user.email}!`;
-      } else {
-        welcomeMessage.textContent = "Вы не вошли в систему.";
-        setTimeout(() => window.location.href = "/login/", 2000);
-      }
-    });
+  if (user) {
+    const name = user.displayName || "Пользователь";
+    const email = user.email;
+    userNameEl.textContent = name;
+    userEmailEl.textContent = email;
+    avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+
+  } else {
+    setTimeout(() => window.location.href = "/login/", 1500);
+  }
+});
 
     logoutBtn.addEventListener("click", async () => {
       try {
