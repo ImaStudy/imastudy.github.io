@@ -410,6 +410,7 @@ cropConfirmBtn.addEventListener("click", async () => {
 
       const data = await response.json();
       const photoURL = data.secure_url;
+      console.log("Cloudinary photoURL:", photoURL);
 
       await updateProfile(currentUser, { photoURL });
       avatarEl.src = photoURL;
