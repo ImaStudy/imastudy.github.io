@@ -170,7 +170,7 @@ nav button.active {
   bottom: 30px;
   font-size: 16px;
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none; /* Чтобы клики не блокировали другие элементы */
   transition: opacity 0.5s ease, bottom 0.5s ease;
 }
 
@@ -324,39 +324,6 @@ cancelEditBtn.addEventListener("click", () => {
   editModal.style.display = "none";
 });
 
-    
-let userChangedAvatar = false;
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    const name = user.displayName || "Пользователь";
-    const email = user.email;
-    userNameEl.textContent = name;
-    userEmailEl.textContent = email;
-
-    const savedCustomAvatarFlag = localStorage.getItem(`avatar-custom-${user.uid}`) === "true";
-if (!savedCustomAvatarFlag) {
-  const initials = name.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
-  const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
-  avatarEl.src = newAvatar;
-
-  await updateProfile(user, { photoURL: newAvatar });
-
-  localStorage.setItem(`avatar-custom-${user.uid}`, "false");
-  userChangedAvatar = false;
-} else {
-  avatarEl.src = user.photoURL;
-  userChangedAvatar = true;
-}
-
-  } else {
-    setTimeout(() => window.location.href = "/login/", 1500);
-  }
-});
-
-
-
 saveNameBtn.addEventListener("click", async () => {
   const newName = newNameInput.value.trim();
   if (newName === "") {
@@ -366,19 +333,8 @@ saveNameBtn.addEventListener("click", async () => {
 
   try {
     await updateProfile(currentUser, { displayName: newName });
-    await currentUser.reload();
-
-    userNameEl.textContent = currentUser.displayName;
-
- if (!userChangedAvatar) {
-  const initials = currentUser.displayName.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
-  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
-  avatarEl.src = avatarUrl;
-  await updateProfile(currentUser, { photoURL: avatarUrl });
-  localStorage.setItem(`avatar-custom-${currentUser.uid}`, "false");
-  userChangedAvatar = false;
-}
-
+    userNameEl.textContent = newName;
+    avatarEl.src = https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random;
     editModal.style.display = "none";
     showToast("Имя успешно обновлено!");
   } catch (error) {
@@ -386,7 +342,47 @@ saveNameBtn.addEventListener("click", async () => {
   }
 });
 
+    
 
+    onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    const name = user.displayName || "Пользователь";
+    const email = user.email;
+    userNameEl.textContent = name;
+    userEmailEl.textContent = email;
+    avatarEl.src = user.photoURL || https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random;
+  } else {
+    setTimeout(() => window.location.href = "/login/", 1500);
+  }
+});
+
+const avatarInput = document.getElementById("avatar-upload");
+
+    let cropper;
+const cropModal = document.getElementById("cropModal");
+const cropImage = document.getElementById("crop-image");
+const cropConfirmBtn = document.getElementById("cropConfirmBtn");
+
+avatarInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (!file || !currentUser) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    cropImage.src = reader.result;
+    cropModal.style.display = "flex";
+    
+    if (cropper) cropper.destroy();
+    cropper = new Cropper(cropImage, {
+      aspectRatio: 1,
+      viewMode: 1,
+      dragMode: 'move',
+      background: false
+    });
+  };
+  reader.readAsDataURL(file);
+});
 
 cropConfirmBtn.addEventListener("click", async () => {
   if (!cropper || !currentUser) return;
@@ -403,7 +399,7 @@ cropConfirmBtn.addEventListener("click", async () => {
 
     const formData = new FormData();
     formData.append("file", blob);
-    formData.append("upload_preset", "unsigned_avatar");
+    formData.append("upload_preset", "avatar_unsigned"); // 👈 Замени на свой preset, если отличается
     formData.append("folder", "avatars");
 
     try {
@@ -416,13 +412,8 @@ cropConfirmBtn.addEventListener("click", async () => {
       const photoURL = data.secure_url;
       console.log("Cloudinary photoURL:", photoURL);
 
-   await updateProfile(currentUser, { photoURL });
-avatarEl.src = photoURL;
-
-localStorage.setItem(`avatar-custom-${currentUser.uid}`, "true");
-userChangedAvatar = true;
-
-
+      await updateProfile(currentUser, { photoURL });
+      avatarEl.src = photoURL;
       showToast("Аватар успешно обновлён!");
     } catch (error) {
       console.error("Ошибка при загрузке аватара:", error);
