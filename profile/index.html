@@ -332,20 +332,29 @@ onAuthStateChanged(auth, (user) => {
     currentUser = user;
     const name = user.displayName || "Пользователь";
     const email = user.email;
-
     userNameEl.textContent = name;
     userEmailEl.textContent = email;
-    
-    let avatarName = name.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
-    if (!avatarName) avatarName = "US"; 
 
-    const initials = name.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
-    avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
-    userChangedAvatar = false; 
+    const savedCustomAvatarFlag = localStorage.getItem(`avatar-custom-${user.uid}`) === "true";
+if (!savedCustomAvatarFlag) {
+  const initials = name.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
+  const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
+  avatarEl.src = newAvatar;
+
+  await updateProfile(user, { photoURL: newAvatar });
+
+  localStorage.setItem(`avatar-custom-${user.uid}`, "false");
+  userChangedAvatar = false;
+} else {
+  avatarEl.src = user.photoURL;
+  userChangedAvatar = true;
+}
+
   } else {
     setTimeout(() => window.location.href = "/login/", 1500);
   }
 });
+
 
 
 saveNameBtn.addEventListener("click", async () => {
@@ -361,17 +370,14 @@ saveNameBtn.addEventListener("click", async () => {
 
     userNameEl.textContent = currentUser.displayName;
 
-    if (!userChangedAvatar) {
-      const newAvatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName)}&background=random`;
-
-      await currentUser.reload(); 
-
-     const initials = currentUser.displayName
-  ? currentUser.displayName.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase()
-  : "US";
-
-avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
-    }
+ if (!userChangedAvatar) {
+  const initials = currentUser.displayName.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
+  avatarEl.src = avatarUrl;
+  await updateProfile(currentUser, { photoURL: avatarUrl });
+  localStorage.setItem(`avatar-custom-${currentUser.uid}`, "false");
+  userChangedAvatar = false;
+}
 
     editModal.style.display = "none";
     showToast("Имя успешно обновлено!");
@@ -410,10 +416,12 @@ cropConfirmBtn.addEventListener("click", async () => {
       const photoURL = data.secure_url;
       console.log("Cloudinary photoURL:", photoURL);
 
-      await updateProfile(currentUser, { photoURL });
-      avatarEl.src = photoURL;
+   await updateProfile(currentUser, { photoURL });
+avatarEl.src = photoURL;
 
-      userChangedAvatar = true;
+localStorage.setItem(`avatar-custom-${currentUser.uid}`, "true");
+userChangedAvatar = true;
+
 
       showToast("Аватар успешно обновлён!");
     } catch (error) {
