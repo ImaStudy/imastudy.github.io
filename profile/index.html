@@ -339,8 +339,8 @@ onAuthStateChanged(auth, (user) => {
     let avatarName = name.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
     if (!avatarName) avatarName = "US"; 
 
-    avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(avatarName)}&background=random`;
-
+    const initials = name.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
+    avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
     userChangedAvatar = false; 
   } else {
     setTimeout(() => window.location.href = "/login/", 1500);
@@ -364,10 +364,13 @@ saveNameBtn.addEventListener("click", async () => {
     if (!userChangedAvatar) {
       const newAvatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName)}&background=random`;
 
-      await updateProfile(currentUser, { photoURL: newAvatarURL });
       await currentUser.reload(); 
 
-      avatarEl.src = currentUser.photoURL;
+     const initials = currentUser.displayName
+  ? currentUser.displayName.trim().split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase()
+  : "US";
+
+avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=random`;
     }
 
     editModal.style.display = "none";
