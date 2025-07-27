@@ -359,9 +359,10 @@ saveNameBtn.addEventListener("click", async () => {
     userNameEl.textContent = newName;
 
     if (!userChangedAvatar) {
-      // Меняем аватарку только если пользователь её не менял вручную
       const newAvatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
+
       await updateProfile(currentUser, { photoURL: newAvatarURL });
+
       avatarEl.src = newAvatarURL;
     }
 
