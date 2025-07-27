@@ -324,6 +324,29 @@ cancelEditBtn.addEventListener("click", () => {
   editModal.style.display = "none";
 });
 
+    
+let userChangedAvatar = false;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
+    const name = user.displayName || "Пользователь";
+    const email = user.email;
+    userNameEl.textContent = name;
+    userEmailEl.textContent = email;
+
+    avatarEl.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+
+    if (!user.photoURL || user.photoURL.includes("ui-avatars.com/api")) {
+      userChangedAvatar = false;
+    } else {
+      userChangedAvatar = true;
+    }
+  } else {
+    setTimeout(() => window.location.href = "/login/", 1500);
+  }
+});
+
 saveNameBtn.addEventListener("click", async () => {
   const newName = newNameInput.value.trim();
   if (newName === "") {
@@ -335,7 +358,8 @@ saveNameBtn.addEventListener("click", async () => {
     await updateProfile(currentUser, { displayName: newName });
     userNameEl.textContent = newName;
 
-    if (!currentUser.photoURL || currentUser.photoURL.includes("ui-avatars.com/api")) {
+    if (!userChangedAvatar) {
+      // Меняем аватарку только если пользователь её не менял вручную
       const newAvatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
       await updateProfile(currentUser, { photoURL: newAvatarURL });
       avatarEl.src = newAvatarURL;
@@ -346,49 +370,6 @@ saveNameBtn.addEventListener("click", async () => {
   } catch (error) {
     alert("Ошибка при обновлении: " + error.message);
   }
-});
-
-
-    
-
-    onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-    const name = user.displayName || "Пользователь";
-    const email = user.email;
-    userNameEl.textContent = name;
-    userEmailEl.textContent = email;
-    avatarEl.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
-  } else {
-    setTimeout(() => window.location.href = "/login/", 1500);
-  }
-});
-
-const avatarInput = document.getElementById("avatar-upload");
-
-    let cropper;
-const cropModal = document.getElementById("cropModal");
-const cropImage = document.getElementById("crop-image");
-const cropConfirmBtn = document.getElementById("cropConfirmBtn");
-
-avatarInput.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  if (!file || !currentUser) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    cropImage.src = reader.result;
-    cropModal.style.display = "flex";
-    
-    if (cropper) cropper.destroy();
-    cropper = new Cropper(cropImage, {
-      aspectRatio: 1,
-      viewMode: 1,
-      dragMode: 'move',
-      background: false
-    });
-  };
-  reader.readAsDataURL(file);
 });
 
 cropConfirmBtn.addEventListener("click", async () => {
@@ -421,6 +402,9 @@ cropConfirmBtn.addEventListener("click", async () => {
 
       await updateProfile(currentUser, { photoURL });
       avatarEl.src = photoURL;
+
+      userChangedAvatar = true;
+
       showToast("Аватар успешно обновлён!");
     } catch (error) {
       console.error("Ошибка при загрузке аватара:", error);
