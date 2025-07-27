@@ -385,11 +385,7 @@ avatarInput.addEventListener("change", (event) => {
 });
 
 cropConfirmBtn.addEventListener("click", async () => {
-  console.log("Нажата кнопка 'Сохранить' в обрезке аватарки");
-  if (!cropper || !currentUser) {
-    console.log("Нет cropper или пользователь не авторизован");
-    return;
-  }
+  if (!cropper || !currentUser) return;
 
   cropper.getCroppedCanvas({
     width: 300,
@@ -397,21 +393,30 @@ cropConfirmBtn.addEventListener("click", async () => {
     imageSmoothingQuality: "high"
   }).toBlob(async (blob) => {
     if (!blob) {
-      console.log("Blob не получен");
+      console.log("Ошибка: не удалось получить изображение.");
       return;
     }
-    const storageRef = ref(storage, `avatars/${currentUser.uid}`);
+
+    const formData = new FormData();
+    formData.append("file", blob);
+    formData.append("upload_preset", "avatar_unsigned"); // 👈 Замени на свой preset, если отличается
+    formData.append("folder", "avatars");
+
     try {
-      console.log("Загрузка аватара...");
-      await uploadBytes(storageRef, blob);
-      const photoURL = await getDownloadURL(storageRef);
-      console.log("Фото загружено, URL:", photoURL);
+      const response = await fetch("https://api.cloudinary.com/v1_1/difr4y6th/image/upload", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+      const photoURL = data.secure_url;
 
       await updateProfile(currentUser, { photoURL });
       avatarEl.src = photoURL;
       showToast("Аватар успешно обновлён!");
     } catch (error) {
-      alert("Ошибка загрузки аватара: " + error.message);
+      console.error("Ошибка при загрузке аватара:", error);
+      alert("Не удалось загрузить аватар: " + error.message);
     } finally {
       cropModal.style.display = "none";
       cropper.destroy();
