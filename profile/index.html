@@ -399,7 +399,7 @@ cropConfirmBtn.addEventListener("click", async () => {
 
     const formData = new FormData();
     formData.append("file", blob);
-    formData.append("upload_preset", "avatar_unsigned"); // 👈 Замени на свой preset, если отличается
+    formData.append("upload_preset", "unsigned_avatar"); // 👈 Замени на свой preset, если отличается
     formData.append("folder", "avatars");
 
     try {
