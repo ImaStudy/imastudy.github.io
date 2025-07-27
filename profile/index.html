@@ -356,14 +356,17 @@ saveNameBtn.addEventListener("click", async () => {
 
   try {
     await updateProfile(currentUser, { displayName: newName });
-    userNameEl.textContent = newName;
+    await currentUser.reload();
+
+    userNameEl.textContent = currentUser.displayName;
 
     if (!userChangedAvatar) {
-      const newAvatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
+      const newAvatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName)}&background=random`;
 
       await updateProfile(currentUser, { photoURL: newAvatarURL });
+      await currentUser.reload(); 
 
-      avatarEl.src = newAvatarURL;
+      avatarEl.src = currentUser.photoURL;
     }
 
     editModal.style.display = "none";
@@ -372,6 +375,8 @@ saveNameBtn.addEventListener("click", async () => {
     alert("Ошибка при обновлении: " + error.message);
   }
 });
+
+
 
 cropConfirmBtn.addEventListener("click", async () => {
   if (!cropper || !currentUser) return;
