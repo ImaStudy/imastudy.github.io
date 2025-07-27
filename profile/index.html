@@ -6,6 +6,8 @@
   <title>Профиль — ImaStudy</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/style.css" />
+  <link href="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.js"></script>
   <style>
        * {
   box-sizing: border-box;
@@ -177,9 +179,6 @@ nav button.active {
   bottom: 50px;
   pointer-events: auto;
 }
-
-
-
     
     footer {
     text-align: center;
@@ -252,6 +251,17 @@ nav button.active {
 </div>
 <div id="toast" class="toast">Имя успешно обновлено!</div>
 
+  <div id="cropModal" class="modal">
+  <div class="modal-content">
+    <h3>Обрезать фото</h3>
+    <div><img id="crop-image" style="max-width: 100%; max-height: 300px;" /></div>
+    <div class="modal-actions">
+      <button id="cropConfirmBtn">Сохранить</button>
+      <button onclick="cropModal.style.display = 'none'">Отмена</button>
+    </div>
+  </div>
+</div>
+
   
   <footer>
     &copy; 2025 ImaStudy. Все права защищены.
@@ -266,7 +276,7 @@ nav button.active {
       apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
       authDomain: "imastudy-631ec.firebaseapp.com",
       projectId: "imastudy-631ec",
-      storageBucket: "imastudy-631ec.firebasestorage.app",
+      storageBucket: "imastudy-631ec.appspot.com",
       messagingSenderId: "301505972939",
       appId: "1:301505972939:web:061de2a898044090dae94e",
       measurementId: "G-305V13PQ4Q"
@@ -349,21 +359,54 @@ saveNameBtn.addEventListener("click", async () => {
 
 const avatarInput = document.getElementById("avatar-upload");
 
-avatarInput.addEventListener("change", async (event) => {
+    let cropper;
+const cropModal = document.getElementById("cropModal");
+const cropImage = document.getElementById("crop-image");
+const cropConfirmBtn = document.getElementById("cropConfirmBtn");
+
+avatarInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (!file || !currentUser) return;
 
-  const storageRef = ref(storage, `avatars/${currentUser.uid}`);
-  try {
-    await uploadBytes(storageRef, file);
-    const photoURL = await getDownloadURL(storageRef);
+  const reader = new FileReader();
+  reader.onload = () => {
+    cropImage.src = reader.result;
+    cropModal.style.display = "flex";
+    
+    if (cropper) cropper.destroy();
+    cropper = new Cropper(cropImage, {
+      aspectRatio: 1,
+      viewMode: 1,
+      dragMode: 'move',
+      background: false
+    });
+  };
+  reader.readAsDataURL(file);
+});
 
-    await updateProfile(currentUser, { photoURL });
-    avatarEl.src = photoURL;
-    showToast("Аватар успешно обновлён!");
-  } catch (error) {
-    alert("Ошибка загрузки аватара: " + error.message);
-  }
+cropConfirmBtn.addEventListener("click", async () => {
+  if (!cropper || !currentUser) return;
+
+  cropper.getCroppedCanvas({
+    width: 300,
+    height: 300,
+    imageSmoothingQuality: "high"
+  }).toBlob(async (blob) => {
+    const storageRef = ref(storage, `avatars/${currentUser.uid}`);
+    try {
+      await uploadBytes(storageRef, blob);
+      const photoURL = await getDownloadURL(storageRef);
+
+      await updateProfile(currentUser, { photoURL });
+      avatarEl.src = photoURL;
+      showToast("Аватар успешно обновлён!");
+    } catch (error) {
+      alert("Ошибка загрузки аватара: " + error.message);
+    } finally {
+      cropModal.style.display = "none";
+      cropper.destroy();
+    }
+  }, "image/jpeg", 0.95);
 });
 
 
