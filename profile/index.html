@@ -385,17 +385,27 @@ avatarInput.addEventListener("change", (event) => {
 });
 
 cropConfirmBtn.addEventListener("click", async () => {
-  if (!cropper || !currentUser) return;
+  console.log("Нажата кнопка 'Сохранить' в обрезке аватарки");
+  if (!cropper || !currentUser) {
+    console.log("Нет cropper или пользователь не авторизован");
+    return;
+  }
 
   cropper.getCroppedCanvas({
     width: 300,
     height: 300,
     imageSmoothingQuality: "high"
   }).toBlob(async (blob) => {
+    if (!blob) {
+      console.log("Blob не получен");
+      return;
+    }
     const storageRef = ref(storage, `avatars/${currentUser.uid}`);
     try {
+      console.log("Загрузка аватара...");
       await uploadBytes(storageRef, blob);
       const photoURL = await getDownloadURL(storageRef);
+      console.log("Фото загружено, URL:", photoURL);
 
       await updateProfile(currentUser, { photoURL });
       avatarEl.src = photoURL;
@@ -408,6 +418,7 @@ cropConfirmBtn.addEventListener("click", async () => {
     }
   }, "image/jpeg", 0.95);
 });
+
 
 
     
