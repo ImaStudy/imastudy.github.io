@@ -209,7 +209,13 @@ nav button.active {
 
   <main>
   <section class="profile-info">
-    <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
+    <div style="position: relative;">
+  <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
+  <label for="avatar-upload" style="position: absolute; bottom: 0; right: 0; background: #3498db; color: white; border-radius: 50%; padding: 6px; cursor: pointer;">
+    📷
+  </label>
+  <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
+</div>
     <div>
       <h2 id="user-name">Имя пользователя</h2>
       <p id="user-email">email@example.com</p>
@@ -254,6 +260,7 @@ nav button.active {
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
@@ -267,6 +274,7 @@ nav button.active {
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const storage = getStorage(app);
 
     const welcomeMessage = document.getElementById("welcome-message");
     const logoutBtn = document.getElementById("logout-btn");
@@ -333,12 +341,33 @@ saveNameBtn.addEventListener("click", async () => {
     const email = user.email;
     userNameEl.textContent = name;
     userEmailEl.textContent = email;
-    avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+    avatarEl.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
   } else {
     setTimeout(() => window.location.href = "/login/", 1500);
   }
 });
 
+const avatarInput = document.getElementById("avatar-upload");
+
+avatarInput.addEventListener("change", async (event) => {
+  const file = event.target.files[0];
+  if (!file || !currentUser) return;
+
+  const storageRef = ref(storage, `avatars/${currentUser.uid}`);
+  try {
+    await uploadBytes(storageRef, file);
+    const photoURL = await getDownloadURL(storageRef);
+
+    await updateProfile(currentUser, { photoURL });
+    avatarEl.src = photoURL;
+    showToast("Аватар успешно обновлён!");
+  } catch (error) {
+    alert("Ошибка загрузки аватара: " + error.message);
+  }
+});
+
+
+    
     logoutBtn.addEventListener("click", async () => {
       try {
         await signOut(auth);
