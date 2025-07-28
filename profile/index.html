@@ -363,6 +363,9 @@ saveNameBtn.addEventListener("click", async () => {
       await updateProfile(currentUser, { photoURL: newAvatar });
     }
 
+    newNameInput.classList.remove("input-error");
+    nameError.style.display = "none";
+
     editModal.style.display = "none";
     showToast("Имя успешно обновлено!");
   } catch (error) {
@@ -371,21 +374,17 @@ saveNameBtn.addEventListener("click", async () => {
   }
 });
 
- newNameInput.addEventListener("input", () => {
+
+newNameInput.addEventListener("input", () => {
   const nameError = document.getElementById("nameError");
   const value = newNameInput.value.trim();
 
   if (value.length >= 2) {
     newNameInput.classList.remove("input-error");
     nameError.style.display = "none";
-  } else {
-    newNameInput.classList.add("input-error");
-    nameError.style.display = "block";
   }
 });
 
-
-    
 
     onAuthStateChanged(auth, (user) => {
   if (user) {
