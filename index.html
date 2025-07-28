@@ -111,7 +111,7 @@ nav button.active {
     </div>
     <nav class="desktop-nav">
       <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
-      <a href="/tasks/" class="tab-button">Активные задания</a>
+     <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
       <div id="profile" style="position: relative; display: none;">
   <button id="profile-icon" style="background: none; border: none; font-size: 20px; cursor: pointer;">👤</button>
   <div id="profile-menu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); min-width: 140px; z-index: 1000;">
@@ -123,8 +123,8 @@ nav button.active {
     </nav>
     <nav class="mobile-nav">
       <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
-      <a href="/tasks/" class="tab-button">Активные задания</a>
-
+      <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
+ 
      <div id="profile-mobile" style="position: relative; display: none;">
   <button id="profile-icon-mobile" style="background: none; border: none; font-size: 20px; cursor: pointer;">👤</button>
   <div id="profile-menu-mobile" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); min-width: 140px; z-index: 1000;">
@@ -392,6 +392,10 @@ document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
       taskForm.style.display = "block";
     });
 
+function viewTasksWithoutLogin() {
+  window.location.href = "/tasks/";
+}
+    
     taskForm.style.display = "none";
   </script>
 </body>
