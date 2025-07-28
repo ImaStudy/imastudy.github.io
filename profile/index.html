@@ -179,6 +179,18 @@ nav button.active {
   bottom: 50px;
   pointer-events: auto;
 }
+
+.input-error {
+  border: 2px solid #e74c3c !important;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  display: none;
+}
     
     footer {
     text-align: center;
@@ -243,6 +255,7 @@ nav button.active {
   <div class="modal-content">
     <h3>Изменить имя</h3>
     <input type="text" id="newNameInput" placeholder="Новое имя" />
+    <div id="nameError" class="error-message">Имя должно содержать хотя бы 2 буквы</div>
     <div class="modal-actions">
       <button id="saveNameBtn">Сохранить</button>
       <button id="cancelEditBtn">Отмена</button>
@@ -326,8 +339,11 @@ cancelEditBtn.addEventListener("click", () => {
 
 saveNameBtn.addEventListener("click", async () => {
   const newName = newNameInput.value.trim();
-  if (newName === "") {
-    alert("Имя не может быть пустым.");
+  const nameError = document.getElementById("nameError");
+
+  if (newName.length < 2) {
+    newNameInput.classList.add("input-error");
+    nameError.style.display = "block";
     return;
   }
 
@@ -350,7 +366,21 @@ saveNameBtn.addEventListener("click", async () => {
     editModal.style.display = "none";
     showToast("Имя успешно обновлено!");
   } catch (error) {
-    alert("Ошибка при обновлении: " + error.message);
+    console.error(error);
+    alert("Ошибка при обновлении имени.");
+  }
+});
+
+ newNameInput.addEventListener("input", () => {
+  const nameError = document.getElementById("nameError");
+  const value = newNameInput.value.trim();
+
+  if (value.length >= 2) {
+    newNameInput.classList.remove("input-error");
+    nameError.style.display = "none";
+  } else {
+    newNameInput.classList.add("input-error");
+    nameError.style.display = "block";
   }
 });
 
