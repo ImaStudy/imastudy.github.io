@@ -173,52 +173,49 @@
     }
 
     function renderTasks(tasks) {
-      tasksContainer.innerHTML = "";
-      tasks.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "task-item";
+  tasksContainer.innerHTML = "";
+  tasks.forEach((doc) => {
+    const data = doc.data();
+    const div = document.createElement("div");
+    div.className = "task-item";
 
-        let contactHTML = data.contact;
-        if (data.contact.includes("@")) {
-          const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
-          contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
-        }
-
-        let dateText = "";
-        if (data.createdAt && data.createdAt.toDate) {
-          const dateObj = data.createdAt.toDate();
-          const options = { day: "numeric", month: "long", year: "numeric" };
-          dateText = dateObj.toLocaleDateString("ru-RU", options);
-        }
-
-        div.innerHTML = `
-          <strong>${data.title}</strong>
-          <p>${data.description}</p>
-          <p><strong>Связь:</strong> ${contactHTML}</p>
-          <p><strong>Цена:</strong> ${data.price}</p>
-          <p class="task-date">🗓 Добавлено: ${dateText}</p>
-        `;
-
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "Удалить";
-        delBtn.onclick = () => {
-          if (confirm("Удалить задание?")) {
-            deleteTask(doc.id);
-          }
-        };
-        div.appendChild(delBtn);
-
-        tasksContainer.appendChild(div);
-      });
+    let contactHTML = data.contact;
+    if (data.contact.includes("@")) {
+      const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
+      contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
     }
+
+    let dateText = "";
+    if (data.createdAt && data.createdAt.toDate) {
+      const dateObj = data.createdAt.toDate();
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      dateText = dateObj.toLocaleDateString("ru-RU", options);
+    }
+
+    div.innerHTML = `
+      <strong>${data.title}</strong>
+      <p>${data.description}</p>
+      <p><strong>Связь:</strong> ${contactHTML}</p>
+      <p><strong>Цена:</strong> ${data.price}</p>
+      <p class="task-date">🗓 Добавлено: ${dateText}</p>
+    `;
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Удалить";
+    delBtn.onclick = () => {
+      deleteTask(doc.id);
+    };
+    div.appendChild(delBtn);
+
+    tasksContainer.appendChild(div);
+  });
+}
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
       renderTasks(snapshot.docs);
     });
 
-    // Авторизация и показ/скрытие кнопок Войти / Профиль
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
     const profileDiv = document.getElementById('profile');
@@ -245,7 +242,6 @@
       }
     });
 
-    // Показ меню профиля
     const profileIcon = document.getElementById('profile-icon');
     const profileMenu = document.getElementById('profile-menu');
     profileIcon?.addEventListener('click', () => {
