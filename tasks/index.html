@@ -1,1 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Активные задания — ImaStudy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .task-list {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 30px 0;
+    }
+    .task-item {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+    }
+    .task-item:last-child {
+      border-bottom: none;
+    }
+    .task-item strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .task-date {
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1>ImaStudy</h1>
+      <p>Размести задание — получи помощь</p>
+    </div>
+    <nav class="desktop-nav">
+      <a href="../">Главная</a>
+      <a href="./" class="active">Активные задания</a>
+      <a href="../login/">Войти</a>
+    </nav>
+  </header>
+  <hr />
+  <div class="container">
+    <div class="task-list" id="taskList">
+      <h2>Активные задания</h2>
+      <div id="tasksContainer">Загрузка...</div>
+    </div>
+  </div>
+  <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      orderBy,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+      authDomain: "imastudy-631ec.firebaseapp.com",
+      projectId: "imastudy-631ec",
+      storageBucket: "imastudy-631ec.fir...app",
+      messagingSenderId: "301505972939",
+      appId: "1:301505972939:web:061de2a898044090dae94e",
+      measurementId: "G-305V13PQ4Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const tasksContainer = document.getElementById("tasksContainer");
+
+    function renderTasks(tasks) {
+      tasksContainer.innerHTML = "";
+      tasks.forEach((doc) => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "task-item";
+
+        let contactHTML = data.contact;
+        if (data.contact.includes("@")) {
+          const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
+          contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
+        }
+
+        let dateText = "";
+        if (data.createdAt && data.createdAt.toDate) {
+          const dateObj = data.createdAt.toDate();
+          const options = { day: "numeric", month: "long", year: "numeric" };
+          dateText = dateObj.toLocaleDateString("ru-RU", options);
+        }
+
+        div.innerHTML = `
+          <strong>${data.title}</strong>
+          <p>${data.description}</p>
+          <p><strong>Связь:</strong> ${contactHTML}</p>
+          <p><strong>Цена:</strong> ${data.price}</p>
+          <p class="task-date">🗓 Добавлено: ${dateText}</p>
+        `;
+
+        tasksContainer.appendChild(div);
+      });
+    }
+
+    const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+      renderTasks(snapshot.docs);
+    });
+  </script>
+</body>
+</html>
 
