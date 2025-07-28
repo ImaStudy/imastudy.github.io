@@ -334,7 +334,14 @@ saveNameBtn.addEventListener("click", async () => {
   try {
     await updateProfile(currentUser, { displayName: newName });
     userNameEl.textContent = newName;
-    avatarEl.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
+
+    if (!currentUser.photoURL || currentUser.photoURL.includes("ui-avatars.com")) {
+      const avatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
+      avatarEl.src = avatarURL;
+
+      await updateProfile(currentUser, { photoURL: avatarURL });
+    }
+
     editModal.style.display = "none";
     showToast("Имя успешно обновлено!");
   } catch (error) {
