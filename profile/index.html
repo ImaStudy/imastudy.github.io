@@ -374,17 +374,11 @@ saveNameBtn.addEventListener("click", async () => {
   }
 });
 
-
-newNameInput.addEventListener("input", () => {
+newNameInput.addEventListener("focus", () => {
   const nameError = document.getElementById("nameError");
-  const value = newNameInput.value.trim();
-
-  if (value.length >= 2) {
-    newNameInput.classList.remove("input-error");
-    nameError.style.display = "none";
-  }
+  newNameInput.classList.remove("input-error");
+  nameError.style.display = "none";
 });
-
 
     onAuthStateChanged(auth, (user) => {
   if (user) {
