@@ -332,16 +332,18 @@ saveNameBtn.addEventListener("click", async () => {
   }
 
   try {
-    const currentPhoto = currentUser.photoURL || "";
-    const usesDefaultAvatar = currentPhoto.includes("ui-avatars.com");
-
     await updateProfile(currentUser, { displayName: newName });
     userNameEl.textContent = newName;
 
-    if (usesDefaultAvatar) {
+    const currentPhoto = currentUser.photoURL || "";
+    const isDefaultAvatar =
+      !currentPhoto ||
+      currentPhoto.includes("ui-avatars.com") ||
+      currentPhoto.includes("googleusercontent.com");
+
+    if (isDefaultAvatar) {
       const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
       avatarEl.src = newAvatar;
-
       await updateProfile(currentUser, { photoURL: newAvatar });
     }
 
