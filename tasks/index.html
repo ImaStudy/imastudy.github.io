@@ -77,24 +77,40 @@
     .task-item strong {
       display: block;
     }
-   .task-item button {
-  margin-top: 10px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 7px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.task-item button:hover {
-  background-color: #2980b9; 
-}
+    .task-item button {
+      margin-top: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .task-item button:hover {
+      background-color: #2980b9;
+    }
     footer {
       text-align: center;
       font-size: 14px;
       color: #666;
+    }
+    /* Мобильная навигация */
+    @media (max-width: 600px) {
+      nav.desktop-nav {
+        display: none;
+      }
+      nav.mobile-nav {
+        display: flex !important;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+    }
+    @media (min-width: 601px) {
+      nav.mobile-nav {
+        display: none !important;
+      }
     }
   </style>
 </head>
@@ -105,8 +121,8 @@
       <p>Размести задание — получи помощь</p>
     </div>
     <nav class="desktop-nav">
-      <button id="homeTab" class="tab-button" onclick="window.location.href='/'">Главная</button>
-      <button id="tasksTab" class="tab-button active">Активные задания</button>
+      <button id="homeTab" onclick="window.location.href='/'">Главная</button>
+      <button id="tasksTab" class="active">Активные задания</button>
       <div id="profile" style="position: relative; display: none;">
         <button id="profile-icon" style="background: none; border: none; font-size: 20px; cursor: pointer;">👤</button>
         <div id="profile-menu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); min-width: 140px; z-index: 1000;">
@@ -116,8 +132,11 @@
       </div>
       <button id="login-btn">Войти</button>
     </nav>
-    <nav class="mobile-nav" style="display:none;">
-      <!-- Можно добавить, если надо, мобильную навигацию -->
+
+    <nav class="mobile-nav" style="display: none;">
+      <button id="homeTabMobile">Главная</button>
+      <button id="tasksTabMobile" class="active">Активные задания</button>
+      <button id="loginBtnMobile">Войти</button>
     </nav>
   </header>
   <hr />
@@ -144,8 +163,7 @@
     import {
       getAuth,
       signOut,
-      onAuthStateChanged,
-      fetchSignInMethodsForEmail
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -173,43 +191,43 @@
     }
 
     function renderTasks(tasks) {
-  tasksContainer.innerHTML = "";
-  tasks.forEach((doc) => {
-    const data = doc.data();
-    const div = document.createElement("div");
-    div.className = "task-item";
+      tasksContainer.innerHTML = "";
+      tasks.forEach((doc) => {
+        const data = doc.data();
+        const div = document.createElement("div");
+        div.className = "task-item";
 
-    let contactHTML = data.contact;
-    if (data.contact.includes("@")) {
-      const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
-      contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
+        let contactHTML = data.contact;
+        if (data.contact.includes("@")) {
+          const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
+          contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
+        }
+
+        let dateText = "";
+        if (data.createdAt && data.createdAt.toDate) {
+          const dateObj = data.createdAt.toDate();
+          const options = { day: "numeric", month: "long", year: "numeric" };
+          dateText = dateObj.toLocaleDateString("ru-RU", options);
+        }
+
+        div.innerHTML = `
+          <strong>${data.title}</strong>
+          <p>${data.description}</p>
+          <p><strong>Связь:</strong> ${contactHTML}</p>
+          <p><strong>Цена:</strong> ${data.price}</p>
+          <p class="task-date">🗓 Добавлено: ${dateText}</p>
+        `;
+
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Удалить";
+        delBtn.onclick = () => {
+          deleteTask(doc.id);
+        };
+        div.appendChild(delBtn);
+
+        tasksContainer.appendChild(div);
+      });
     }
-
-    let dateText = "";
-    if (data.createdAt && data.createdAt.toDate) {
-      const dateObj = data.createdAt.toDate();
-      const options = { day: "numeric", month: "long", year: "numeric" };
-      dateText = dateObj.toLocaleDateString("ru-RU", options);
-    }
-
-    div.innerHTML = `
-      <strong>${data.title}</strong>
-      <p>${data.description}</p>
-      <p><strong>Связь:</strong> ${contactHTML}</p>
-      <p><strong>Цена:</strong> ${data.price}</p>
-      <p class="task-date">🗓 Добавлено: ${dateText}</p>
-    `;
-
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "Удалить";
-    delBtn.onclick = () => {
-      deleteTask(doc.id);
-    };
-    div.appendChild(delBtn);
-
-    tasksContainer.appendChild(div);
-  });
-}
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
@@ -220,7 +238,15 @@
     const logoutBtn = document.getElementById('logout-btn');
     const profileDiv = document.getElementById('profile');
 
+    const loginBtnMobile = document.getElementById('loginBtnMobile');
+    const homeTabMobile = document.getElementById('homeTabMobile');
+    const tasksTabMobile = document.getElementById('tasksTabMobile');
+
     loginBtn.addEventListener('click', () => {
+      window.location.href = "/login/";
+    });
+
+    loginBtnMobile.addEventListener('click', () => {
       window.location.href = "/login/";
     });
 
@@ -236,9 +262,11 @@
       if (user) {
         profileDiv.style.display = "inline-block";
         loginBtn.style.display = "none";
+        loginBtnMobile.style.display = "none";
       } else {
         profileDiv.style.display = "none";
         loginBtn.style.display = "inline-block";
+        loginBtnMobile.style.display = "inline-block";
       }
     });
 
@@ -247,11 +275,21 @@
     profileIcon?.addEventListener('click', () => {
       profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
     });
+
     document.getElementById('profile-btn').addEventListener('click', () => {
       window.location.href = "/profile/";
     });
+
     document.getElementById('logout-btn').addEventListener('click', () => {
       signOut(auth);
+    });
+
+    homeTabMobile?.addEventListener("click", () => {
+      window.location.href = "/";
+    });
+
+    tasksTabMobile?.addEventListener("click", () => {
+      location.reload();
     });
 
   </script>
