@@ -392,6 +392,15 @@ document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
       taskForm.style.display = "block";
     });
 
+document.getElementById('tasksTab').addEventListener('click', () => {
+  window.location.href = "/tasks/";
+});
+
+document.getElementById('tasksTabMobile').addEventListener('click', () => {
+  window.location.href = "/tasks/";
+});
+
+
 function viewTasksWithoutLogin() {
   window.location.href = "/tasks/";
 }
