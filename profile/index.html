@@ -332,14 +332,17 @@ saveNameBtn.addEventListener("click", async () => {
   }
 
   try {
+    const currentPhoto = currentUser.photoURL || "";
+    const usesDefaultAvatar = currentPhoto.includes("ui-avatars.com");
+
     await updateProfile(currentUser, { displayName: newName });
     userNameEl.textContent = newName;
 
-    if (!currentUser.photoURL || currentUser.photoURL.includes("ui-avatars.com")) {
-      const avatarURL = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
-      avatarEl.src = avatarURL;
+    if (usesDefaultAvatar) {
+      const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
+      avatarEl.src = newAvatar;
 
-      await updateProfile(currentUser, { photoURL: avatarURL });
+      await updateProfile(currentUser, { photoURL: newAvatar });
     }
 
     editModal.style.display = "none";
@@ -348,6 +351,7 @@ saveNameBtn.addEventListener("click", async () => {
     alert("Ошибка при обновлении: " + error.message);
   }
 });
+
 
     
 
