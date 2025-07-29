@@ -455,9 +455,9 @@ document.getElementById('cancelSetPassword').onclick = async () => {
   await signOut(auth);
 };
 
-function viewTasksWithoutLogin() {
-  window.location.href = "/tasks/";
-}
+window.viewTasksWithoutLogin = function() {
+window.location.href = "./tasks/";
+};
 
 document.getElementById('newPassword').addEventListener('input', () => {
   const input = document.getElementById('newPassword');
