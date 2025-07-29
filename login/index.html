@@ -94,9 +94,6 @@ input.error {
   border: 1px solid red;
   outline: none;
 }
-
-
-
     
 #modalOverlay {
   display: none;
@@ -160,9 +157,6 @@ input.error {
   background-color: #bbb;
 }
 
-
-    
-
   footer {
     text-align: center;
     font-size: 14px;
@@ -170,7 +164,6 @@ input.error {
     margin-top: 40px;
   }
 
-  /* Только если не дублируется в style.css */
   .auth-box h2 {
     text-align: center;
   }
@@ -279,7 +272,6 @@ loginForm.addEventListener('submit', async (e) => {
     await signInWithEmailAndPassword(auth, email, pass);
     window.location.href = "/";
   } catch (error) {
-    // Очистим поле пароля в любом случае
     passInput.value = "";
 
     const errorCode = error.code;
@@ -350,7 +342,7 @@ document.getElementById('signupBtn').onclick = async () => {
     }
   }
 };
-    // Очистка ошибки при изменении email
+
 document.getElementById('email').addEventListener('input', () => {
   const emailInput = document.getElementById('email');
   const emailError = document.getElementById('emailError');
@@ -413,7 +405,6 @@ document.getElementById('setPasswordBtn').onclick = async () => {
 
   let hasError = false;
 
-  // Проверка длины пароля
   if (newPass.length < 6) {
     newPassError.textContent = 'Пароль должен быть минимум 6 символов';
     newPassError.style.display = 'block';
@@ -421,7 +412,6 @@ document.getElementById('setPasswordBtn').onclick = async () => {
     hasError = true;
   }
 
-  // Проверка совпадения паролей (даже если длина неправильная)
   if (newPass !== confirmPass) {
     confirmPassError.textContent = 'Пароли не совпадают';
     confirmPassError.style.display = 'block';
@@ -465,9 +455,9 @@ document.getElementById('cancelSetPassword').onclick = async () => {
   await signOut(auth);
 };
 
-window.viewTasksWithoutLogin = function() {
+function viewTasksWithoutLogin() {
   window.location.href = "/tasks/";
-};
+}
 
 document.getElementById('newPassword').addEventListener('input', () => {
   const input = document.getElementById('newPassword');
