@@ -170,7 +170,7 @@ nav button.active {
   bottom: 30px;
   font-size: 16px;
   opacity: 0;
-  pointer-events: none; /* Чтобы клики не блокировали другие элементы */
+  pointer-events: none;
   transition: opacity 0.5s ease, bottom 0.5s ease;
 }
 
@@ -200,7 +200,7 @@ nav button.active {
   }
   </style>
 </head>
-<body>
+<body style="visibility: hidden;">
   
  <header>
   <div class="header-left">
@@ -388,6 +388,7 @@ newNameInput.addEventListener("focus", () => {
     userNameEl.textContent = name;
     userEmailEl.textContent = email;
     avatarEl.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+    document.body.style.visibility = "visible";
   } else {
     setTimeout(() => window.location.href = "/login/", 1500);
   }
