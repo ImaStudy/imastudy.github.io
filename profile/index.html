@@ -461,8 +461,9 @@ cropConfirmBtn.addEventListener("click", async () => {
   }, "image/jpeg", 0.95);
 });
 
-
-
+window.viewTasksWithoutLogin = function() {
+window.location.href = "/tasks/";
+};
     
     logoutBtn.addEventListener("click", async () => {
       try {
