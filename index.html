@@ -117,6 +117,11 @@ nav button.active {
   object-fit: cover;
 }
 
+nav.desktop-nav,
+nav.mobile-nav {
+  visibility: hidden;
+}
+    
     footer {
       text-align: center;
       font-size: 14px;
@@ -178,7 +183,6 @@ nav button.active {
   <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
 
   <script type="module">
-    // Импорт из Firebase v9 модулей
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import {
       getFirestore,
@@ -202,7 +206,6 @@ nav button.active {
       fetchSignInMethodsForEmail
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-    // Конфигурация Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
       authDomain: "imastudy-631ec.firebaseapp.com",
@@ -213,13 +216,11 @@ nav button.active {
       measurementId: "G-305V13PQ4Q"
     };
 
-    // Инициализация Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // DOM элементы
     const taskForm = document.getElementById("taskForm");
     const showFormBtn = document.getElementById("showFormBtn");
     const taskList = document.getElementById("taskList");
@@ -227,7 +228,6 @@ nav button.active {
     const tabContents = document.querySelectorAll(".tab-content");
 
 
-    // Авторизация
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
     const userName = document.getElementById('user-name');
@@ -236,7 +236,6 @@ nav button.active {
     const logoutBtnMobile = document.getElementById('logout-btn-mobile');
     const userNameMobile = document.getElementById('user-name-mobile');
 
-    // Перенаправление на auth.html при нажатии "Войти"
     loginBtn.addEventListener('click', () => {
       window.location.href = "/login/";
     });
@@ -245,7 +244,6 @@ nav button.active {
       window.location.href = "/login/";
     });
 
-    // Выход — десктоп
     logoutBtn.addEventListener('click', async () => {
       try {
         await signOut(auth);
@@ -254,7 +252,6 @@ nav button.active {
       }
     });
 
-    // Выход — мобилка
     logoutBtnMobile.addEventListener('click', async () => {
       try {
         await signOut(auth);
@@ -281,9 +278,11 @@ onAuthStateChanged(auth, async (user) => {
 
     document.getElementById("profile").style.display = "inline-block";
     document.getElementById("profile-mobile").style.display = "inline-block";
+    document.querySelector("nav.desktop-nav").style.visibility = "visible";
 
     document.getElementById("login-btn").style.display = "none";
     document.getElementById("login-btn-mobile").style.display = "none";
+    document.querySelector("nav.mobile-nav").style.visibility = "visible";
 
     const profileIcon = document.getElementById("profile-icon");
       const profileIconMobile = document.getElementById("profile-icon-mobile");
