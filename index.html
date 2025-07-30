@@ -116,11 +116,6 @@ nav button.active {
   height: 100%;
   object-fit: cover;
 }
-
-nav.desktop-nav,
-nav.mobile-nav {
-  visibility: hidden;
-}
     
     footer {
       text-align: center;
@@ -278,12 +273,9 @@ onAuthStateChanged(auth, async (user) => {
 
     document.getElementById("profile").style.display = "inline-block";
     document.getElementById("profile-mobile").style.display = "inline-block";
-    document.querySelector("nav.desktop-nav").style.visibility = "visible";
 
     document.getElementById("login-btn").style.display = "none";
     document.getElementById("login-btn-mobile").style.display = "none";
-    document.querySelector("nav.mobile-nav").style.visibility = "visible";
-
     const profileIcon = document.getElementById("profile-icon");
       const profileIconMobile = document.getElementById("profile-icon-mobile");
 
