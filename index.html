@@ -222,7 +222,6 @@ nav button.active {
     // DOM элементы
     const taskForm = document.getElementById("taskForm");
     const showFormBtn = document.getElementById("showFormBtn");
-    const tasksContainer = document.getElementById("tasksContainer");
     const taskList = document.getElementById("taskList");
     const tabButtons = document.querySelectorAll(".tab-button");
     const tabContents = document.querySelectorAll(".tab-content");
@@ -350,54 +349,6 @@ document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
         alert("Ошибка при удалении: " + error.message);
       }
     }
-
-    function renderTasks(tasks) {
-      tasksContainer.innerHTML = "";
-      tasks.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "task-item";
-
-        let contactHTML = data.contact;
-        if (data.contact.includes("@")) {
-          const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
-          contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
-        }
-
-        let dateText = "";
-        if (data.createdAt && data.createdAt.toDate) {
-          const dateObj = data.createdAt.toDate();
-          const options = { day: "numeric", month: "long", year: "numeric" };
-          dateText = dateObj.toLocaleDateString("ru-RU", options);
-        }
-
-        div.innerHTML = `
-          <strong>${data.title}</strong>
-          <p>${data.description}</p>
-          <p><strong>Связь:</strong> ${contactHTML}</p>
-          <p><strong>Цена:</strong> ${data.price}</p>
-        `;
-
-        const dateP = document.createElement("p");
-        dateP.className = "task-date";
-        dateP.textContent = `🗓 Добавлено: ${dateText}`;
-        div.appendChild(dateP);
-
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "Удалить";
-        delBtn.onclick = () => {
-          deleteTask(doc.id);
-        };
-        div.appendChild(delBtn);
-
-        tasksContainer.appendChild(div);
-      });
-    }
-
-    const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
-    onSnapshot(q, (snapshot) => {
-      renderTasks(snapshot.docs);
-    });
 
     taskForm.addEventListener("submit", async (e) => {
       e.preventDefault();
