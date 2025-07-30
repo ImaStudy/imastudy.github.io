@@ -124,7 +124,7 @@ nav button.active {
     }
   </style>
 </head>
-<body>
+ <body style="visibility:hidden;">
   <header>
     <div class="header-left">
       <h1>ImaStudy</h1>
@@ -298,6 +298,7 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 }
+  document.body.style.visibility = 'visible';
 });
 
 
