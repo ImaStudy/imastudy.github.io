@@ -211,6 +211,32 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
+
+const cachedName = localStorage.getItem("profileDisplayName");
+const cachedPhoto = localStorage.getItem("profilePhotoURL");
+
+if (cachedName || cachedPhoto) {
+  const initials = (cachedName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
+
+  const avatarHTML = cachedPhoto
+    ? `<div class="avatar-circle"><img src="${cachedPhoto}" alt="Аватар"></div>`
+    : `<div class="avatar-circle">${initials}</div>`;
+
+  const profileIcon = document.getElementById("profile-icon");
+  const profileIconMobile = document.getElementById("profile-icon-mobile");
+
+  if (profileIcon) profileIcon.innerHTML = avatarHTML;
+  if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
+
+  document.getElementById("profile").style.display = "inline-block";
+  document.getElementById("profile-mobile").style.display = "inline-block";
+
+  document.getElementById("login-btn").style.display = "none";
+  document.getElementById("login-btn-mobile").style.display = "none";
+}
+
+    
+
     const tasksContainer = document.getElementById("tasksContainer");
 
     async function deleteTask(id) {
@@ -319,6 +345,10 @@
       const avatarHTML = user.photoURL
         ? `<div class="avatar-circle"><img src="${user.photoURL}" alt="Аватар"></div>`
         : `<div class="avatar-circle">${initials}</div>`;
+
+      localStorage.setItem("profileDisplayName", displayName);
+      localStorage.setItem("profilePhotoURL", user.photoURL || "");
+
 
       if (profileIcon) profileIcon.innerHTML = avatarHTML;
       if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
