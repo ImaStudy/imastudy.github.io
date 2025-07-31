@@ -357,9 +357,12 @@ if (cachedName || cachedPhoto) {
     console.error("Ошибка при проверке методов входа:", error);
   }
 } else {
+  localStorage.removeItem("profileDisplayName");
+  localStorage.removeItem("profilePhotoURL");
+    
   document.getElementById("profile").style.display = "none";
   document.getElementById("profile-mobile").style.display = "none";
-
+    
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 }
