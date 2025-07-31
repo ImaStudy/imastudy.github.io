@@ -297,13 +297,21 @@ nav button.active {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const storage = getStorage(app);
-
+  
     const welcomeMessage = document.getElementById("welcome-message");
     const logoutBtn = document.getElementById("logout-btn");
     const homeBtn = document.getElementById("home-btn");
     const userNameEl = document.getElementById("user-name");
     const userEmailEl = document.getElementById("user-email");
     const avatarEl = document.getElementById("profile-avatar");
+
+    const cachedName = localStorage.getItem("cachedName");
+const cachedEmail = localStorage.getItem("cachedEmail");
+const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
+
+if (cachedName) userNameEl.textContent = cachedName;
+if (cachedEmail) userEmailEl.textContent = cachedEmail;
+if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
 
 import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
@@ -387,6 +395,11 @@ newNameInput.addEventListener("focus", () => {
     userNameEl.textContent = name;
     userEmailEl.textContent = email;
     avatarEl.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+
+localStorage.setItem("cachedName", name);
+localStorage.setItem("cachedEmail", email);
+localStorage.setItem("cachedPhotoURL", avatarEl.src);
+
   } else {
     setTimeout(() => window.location.href = "/login/", 1500);
   }
