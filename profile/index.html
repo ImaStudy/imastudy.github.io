@@ -200,8 +200,7 @@ nav button.active {
   }
   </style>
 </head>
-<body style="visibility: hidden;">
-  
+<body> 
  <header>
   <div class="header-left">
     <h1>ImaStudy</h1>
@@ -388,7 +387,6 @@ newNameInput.addEventListener("focus", () => {
     userNameEl.textContent = name;
     userEmailEl.textContent = email;
     avatarEl.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
-    document.body.style.visibility = "visible";
   } else {
     setTimeout(() => window.location.href = "/login/", 1500);
   }
