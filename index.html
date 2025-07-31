@@ -124,7 +124,7 @@ nav button.active {
     }
   </style>
 </head>
- <body style="visibility:hidden;">
+ <body>
   <header>
     <div class="header-left">
       <h1>ImaStudy</h1>
@@ -255,6 +255,28 @@ nav button.active {
       }
     });
 
+const cachedName = localStorage.getItem("profileDisplayName");
+const cachedPhoto = localStorage.getItem("profilePhotoURL");
+
+if (cachedName) {
+  const initials = (cachedName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
+  const avatarHTML = cachedPhoto
+    ? `<div class="avatar-circle"><img src="${cachedPhoto}" alt="Аватар"></div>`
+    : `<div class="avatar-circle">${initials}</div>`;
+
+  const profileIcon = document.getElementById("profile-icon");
+  const profileIconMobile = document.getElementById("profile-icon-mobile");
+
+  if (profileIcon) profileIcon.innerHTML = avatarHTML;
+  if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
+
+  document.getElementById("profile").style.display = "inline-block";
+  document.getElementById("profile-mobile").style.display = "inline-block";
+  document.getElementById("login-btn").style.display = "none";
+  document.getElementById("login-btn-mobile").style.display = "none";
+}
+
+    
 onAuthStateChanged(auth, async (user) => {
   const skipped = localStorage.getItem('skippedSetPassword');
 
@@ -285,6 +307,10 @@ onAuthStateChanged(auth, async (user) => {
         ? `<div class="avatar-circle"><img src="${user.photoURL}" alt="Аватар"></div>`
         : `<div class="avatar-circle">${initials}</div>`;
 
+      localStorage.setItem("profileDisplayName", displayName);
+      localStorage.setItem("profilePhotoURL", user.photoURL || "");
+
+
       if (profileIcon) profileIcon.innerHTML = avatarHTML;
       if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
 
@@ -298,8 +324,8 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 }
-  document.body.style.visibility = 'visible';
 });
+    
 
 
 const profileIcon = document.getElementById('profile-icon');
