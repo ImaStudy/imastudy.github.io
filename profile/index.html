@@ -480,6 +480,11 @@ window.location.href = "/tasks/";
     logoutBtn.addEventListener("click", async () => {
       try {
         await signOut(auth);
+
+    localStorage.removeItem("cachedName");
+    localStorage.removeItem("cachedEmail");
+    localStorage.removeItem("cachedPhotoURL");
+        
         window.location.href = "/";
       } catch (error) {
         alert("Ошибка при выходе: " + error.message);
