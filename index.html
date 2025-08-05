@@ -390,9 +390,16 @@ document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
     });
 
     showFormBtn.addEventListener("click", () => {
-      showFormBtn.style.display = "none";
-      taskForm.style.display = "block";
-    });
+  const user = auth.currentUser;
+
+  if (!user) {
+    window.location.href = "/login/";
+    return;
+  }
+
+  showFormBtn.style.display = "none";
+  taskForm.style.display = "block";
+});
 
 document.getElementById('tasksTab').addEventListener('click', () => {
   window.location.href = "/tasks/";
