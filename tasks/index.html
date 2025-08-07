@@ -275,12 +275,14 @@ if (cachedName || cachedPhoto) {
           <p class="task-date">🗓 Добавлено: ${dateText}</p>
         `;
 
+        if (auth.currentUser && auth.currentUser.uid === data.userId) {
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
         delBtn.onclick = () => {
-          deleteTask(doc.id);
+        deleteTask(doc.id);
         };
         div.appendChild(delBtn);
+        }
 
         tasksContainer.appendChild(div);
       });
