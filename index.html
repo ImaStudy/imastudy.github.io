@@ -239,7 +239,7 @@ nav button.active {
       window.location.href = "/login/";
     });
 
-    logoutBtn.addEventListener('click', async () => {
+    logoutBtn.addEventListener('click',  () => {
       try {
         await signOut(auth);
       } catch (error) {
@@ -247,7 +247,7 @@ nav button.active {
       }
     });
 
-    logoutBtnMobile.addEventListener('click', async () => {
+    logoutBtnMobile.addEventListener('click',  () => {
       try {
         await signOut(auth);
       } catch (error) {
@@ -353,23 +353,22 @@ document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
 
     
     async function addTask(task) {
-      try {
-        await addDoc(collection(db, "tasks"), {
-          ...task,
-          createdAt: serverTimestamp()
-        });
-      } catch (error) {
-        alert("Ошибка при добавлении задания: " + error.message);
-      }
-    }
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Вы должны быть авторизованы для публикации задания.");
+    return;
+  }
 
-    async function deleteTask(id) {
-      try {
-        await deleteDoc(doc(db, "tasks", id));
-      } catch (error) {
-        alert("Ошибка при удалении: " + error.message);
-      }
-    }
+  try {
+    await addDoc(collection(db, "tasks"), {
+      ...task,
+      createdAt: serverTimestamp(),
+      authorUid: user.uid 
+    });
+  } catch (error) {
+    alert("Ошибка при добавлении задания: " + error.message);
+  }
+}
 
     taskForm.addEventListener("submit", async (e) => {
       e.preventDefault();
