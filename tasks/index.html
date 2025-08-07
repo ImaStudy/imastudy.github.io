@@ -275,7 +275,7 @@ if (cachedName || cachedPhoto) {
           <p class="task-date">🗓 Добавлено: ${dateText}</p>
         `;
 
-        if (auth.currentUser && auth.currentUser.uid === data.userId) {
+        if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
         const delBtn = document.createElement("button");
         delBtn.textContent = "Удалить";
         delBtn.onclick = () => {
