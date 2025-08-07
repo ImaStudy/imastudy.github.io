@@ -60,36 +60,62 @@
       background-color: #aaa;
       color: white;
     }
-    .task-list {
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 30px;
-    }
-    .task-item {
-      border-bottom: 1px solid #ddd;
-      padding: 10px 0;
-    }
-    .task-item:last-child {
-      border-bottom: none;
-    }
-    .task-item strong {
-      display: block;
-    }
-    .task-item button {
-      margin-top: 10px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      padding: 7px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .task-item button:hover {
-      background-color: #2980b9;
-    }
+   .task-list {
+  background: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.task-list h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  border-left: 5px solid #3498db;
+  padding-left: 10px;
+  color: #333;
+}
+
+.task-item {
+  background: white;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.task-item strong {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.task-item p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.task-item .task-date {
+  font-style: italic;
+  color: #777;
+}
+
+.task-item button {
+  margin-top: 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.task-item button:hover {
+  background-color: #c0392b;
+}
+
 
 
     .avatar-circle {
@@ -247,46 +273,45 @@ if (cachedName || cachedPhoto) {
       }
     }
 
-    function renderTasks(tasks) {
-      tasksContainer.innerHTML = "";
-      tasks.forEach((doc) => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "task-item";
+function renderTasks(tasks) {
+  tasksContainer.innerHTML = "";
+  tasks.forEach((doc) => {
+    const data = doc.data();
+    const div = document.createElement("div");
+    div.className = "task-item";
 
-        let contactHTML = data.contact;
-        if (data.contact.includes("@")) {
-          const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
-          contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
-        }
-
-        let dateText = "";
-        if (data.createdAt && data.createdAt.toDate) {
-          const dateObj = data.createdAt.toDate();
-          const options = { day: "numeric", month: "long", year: "numeric" };
-          dateText = dateObj.toLocaleDateString("ru-RU", options);
-        }
-
-        div.innerHTML = `
-          <strong>${data.title}</strong>
-          <p>${data.description}</p>
-          <p><strong>Связь:</strong> ${contactHTML}</p>
-          <p><strong>Цена:</strong> ${data.price}</p>
-          <p class="task-date">🗓 Добавлено: ${dateText}</p>
-        `;
-
-        if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
-        const delBtn = document.createElement("button");
-        delBtn.textContent = "Удалить";
-        delBtn.onclick = () => {
-        deleteTask(doc.id);
-        };
-        div.appendChild(delBtn);
-        }
-
-        tasksContainer.appendChild(div);
-      });
+    let contactHTML = data.contact;
+    if (data.contact.includes("@")) {
+      const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
+      contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
     }
+
+    let dateText = "";
+    if (data.createdAt && data.createdAt.toDate) {
+      const dateObj = data.createdAt.toDate();
+      const options = { day: "numeric", month: "long", year: "numeric" };
+      dateText = dateObj.toLocaleDateString("ru-RU", options);
+    }
+
+    div.innerHTML = `
+      <strong>${data.title}</strong>
+      <p>${data.description}</p>
+      <p><strong>Связь:</strong> ${contactHTML}</p>
+      <p><strong>Цена:</strong> ${data.price}</p>
+      <p class="task-date">🗓 Добавлено: ${dateText}</p>
+    `;
+
+    if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Удалить";
+      delBtn.onclick = () => deleteTask(doc.id);
+      div.appendChild(delBtn);
+    }
+
+    tasksContainer.appendChild(div);
+  });
+}
+
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
