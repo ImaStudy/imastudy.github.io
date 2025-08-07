@@ -356,7 +356,8 @@ document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
       try {
         await addDoc(collection(db, "tasks"), {
           ...task,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          authorUid: user.uid
         });
       } catch (error) {
         alert("Ошибка при добавлении задания: " + error.message);
