@@ -352,18 +352,12 @@ document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
 
 
     
-    async function addTask(task) {
-  const user = auth.currentUser;
-  if (!user) {
-    alert("Вы должны быть авторизованы для публикации задания.");
-    return;
-  }
-
+ async function addTask(task) {
   try {
     await addDoc(collection(db, "tasks"), {
       ...task,
       createdAt: serverTimestamp(),
-      authorUid: user.uid 
+      authorUid: user.uid
     });
   } catch (error) {
     alert("Ошибка при добавлении задания: " + error.message);
