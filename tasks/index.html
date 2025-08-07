@@ -367,6 +367,10 @@ if (cachedName || cachedPhoto) {
     
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
+
+  onSnapshot(q, (snapshot) => {
+  renderTasks(snapshot.docs);
+  });
 }
 });
 
