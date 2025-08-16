@@ -282,9 +282,6 @@ nav button.active {
     const auth = getAuth(app);
     const storage = getStorage(app);
   
-    const welcomeMessage = document.getElementById("welcome-message");
-    const logoutBtn = document.getElementById("logout-btn");
-    const homeBtn = document.getElementById("home-btn");
     const userNameEl = document.getElementById("user-name");
     const userEmailEl = document.getElementById("user-email");
     const avatarEl = document.getElementById("profile-avatar");
@@ -460,24 +457,6 @@ cropConfirmBtn.addEventListener("click", async () => {
 window.viewTasksWithoutLogin = function() {
 window.location.href = "/tasks/";
 };
-    
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-
-    localStorage.removeItem("cachedName");
-    localStorage.removeItem("cachedEmail");
-    localStorage.removeItem("cachedPhotoURL");
-        
-        window.location.href = "/";
-      } catch (error) {
-        alert("Ошибка при выходе: " + error.message);
-      }
-    });
-
-    homeBtn.addEventListener("click", () => {
-      window.location.href = "/";
-    });
   </script>
 </body>
   
