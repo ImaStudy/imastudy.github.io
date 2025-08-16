@@ -191,89 +191,6 @@ nav button.active {
   margin-bottom: 10px;
   display: none;
 }
-
-.avatar-edit-btn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #3498db;
-  color: white;
-  border-radius: 50%;
-  padding: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  border: 2px solid white;
-}
-
-.bio-card, .rating-card, .skills-card {
-  background: white;
-  padding: 20px;
-  margin: 20px auto;
-  max-width: 600px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.bio-card h3, .rating-card h3, .skills-card h3 {
-  margin-top: 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.rating-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.stars {
-  color: #f1c40f;
-  font-size: 18px;
-}
-
-.rating-score {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.reviews {
-  color: #666;
-  font-size: 14px;
-}
-
-.edit-bio-btn, .add-skill-btn {
-  margin-top: 10px;
-  background-color: #ddd;
-  color: #333;
-  border-radius: 5px;
-  padding: 6px 12px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.edit-bio-btn:hover, .add-skill-btn:hover {
-  background-color: #ccc;
-}
-
-/* Навыки */
-.skills-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.skill-tag {
-  background: #3498db;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 13px;
-}
-
-
     
     footer {
     text-align: center;
@@ -301,13 +218,14 @@ nav button.active {
 <hr />
 
   <main>
-  <!-- Базовая информация -->
   <section class="profile-info">
     <div style="position: relative;">
-      <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
-      <label for="avatar-upload" class="avatar-edit-btn">📷</label>
-      <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
-    </div>
+  <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
+  <label for="avatar-upload" style="position: absolute; bottom: 0; right: 0; background: #3498db; color: white; border-radius: 50%; padding: 6px; cursor: pointer;">
+    📷
+  </label>
+  <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
+</div>
     <div>
       <h2 id="user-name">Имя пользователя</h2>
       <p id="user-email">email@example.com</p>
@@ -315,36 +233,22 @@ nav button.active {
     </div>
   </section>
 
-  <!-- Биография -->
-  <section class="bio-card">
-    <h3>О себе</h3>
-    <p id="user-bio">Пока здесь пусто. Добавьте информацию о себе ✍️</p>
-    <button class="edit-bio-btn">Изменить биографию</button>
+  <section class="stats">
+    <div class="stat-card">
+      <h3 id="tasks-created">0</h3>
+      <p>Размещено заданий</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="tasks-done">0</h3>
+      <p>Выполнено заданий</p>
+    </div>
   </section>
 
-  <!-- Рейтинг -->
-  <section class="rating-card">
-    <h3>Рейтинг</h3>
-    <div class="rating-info">
-      <span class="stars">⭐⭐⭐⭐☆</span>
-      <span class="rating-score">4.8</span>
-      <span class="reviews">(12 отзывов)</span>
-    </div>
-    <p>Выполнено заданий: <strong>25</strong></p>
-  </section>
-
-  <!-- Навыки -->
-  <section class="skills-card">
-    <h3>Навыки</h3>
-    <div class="skills-list" id="skills-list">
-      <span class="skill-tag">#математика</span>
-      <span class="skill-tag">#программирование</span>
-      <span class="skill-tag">#эссе</span>
-    </div>
-    <button class="add-skill-btn">+ Добавить навык</button>
+  <section class="actions">
+    <button id="home-btn">На главную</button>
+    <button id="logout-btn">Выйти</button>
   </section>
 </main>
-
 
 <div id="editModal" class="modal">
   <div class="modal-content">
