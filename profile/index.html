@@ -232,6 +232,22 @@ nav button.active {
       <button class="edit-btn">Редактировать профиль</button>
     </div>
   </section>
+
+  <section class="stats">
+    <div class="stat-card">
+      <h3 id="tasks-created">0</h3>
+      <p>Размещено заданий</p>
+    </div>
+    <div class="stat-card">
+      <h3 id="tasks-done">0</h3>
+      <p>Выполнено заданий</p>
+    </div>
+  </section>
+
+  <section class="actions">
+    <button id="home-btn">На главную</button>
+    <button id="logout-btn">Выйти</button>
+  </section>
 </main>
 
 <div id="editModal" class="modal">
@@ -282,6 +298,9 @@ nav button.active {
     const auth = getAuth(app);
     const storage = getStorage(app);
   
+    const welcomeMessage = document.getElementById("welcome-message");
+    const logoutBtn = document.getElementById("logout-btn");
+    const homeBtn = document.getElementById("home-btn");
     const userNameEl = document.getElementById("user-name");
     const userEmailEl = document.getElementById("user-email");
     const avatarEl = document.getElementById("profile-avatar");
@@ -457,7 +476,7 @@ cropConfirmBtn.addEventListener("click", async () => {
 window.viewTasksWithoutLogin = function() {
 window.location.href = "/tasks/";
 };
-
+    
     logoutBtn.addEventListener("click", async () => {
       try {
         await signOut(auth);
@@ -470,6 +489,10 @@ window.location.href = "/tasks/";
       } catch (error) {
         alert("Ошибка при выходе: " + error.message);
       }
+    });
+
+    homeBtn.addEventListener("click", () => {
+      window.location.href = "/";
     });
   </script>
 </body>
