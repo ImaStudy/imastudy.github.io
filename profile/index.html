@@ -508,11 +508,6 @@ const newBioInput = document.getElementById("newBioInput");
 const saveBioBtn = document.getElementById("saveBioBtn");
 const cancelBioBtn = document.getElementById("cancelBioBtn");
 const bioError = document.getElementById("bioError");
-const userBioEl = document.getElementById("user-bio");
-
-
-const cachedBio = localStorage.getItem("cachedBio");
-if (cachedBio) userBioEl.textContent = cachedBio;
 
 editBioBtn.addEventListener("click", () => {
   newBioInput.value = userBioEl.textContent === "Расскажите немного о себе..." ? "" : userBioEl.textContent;
