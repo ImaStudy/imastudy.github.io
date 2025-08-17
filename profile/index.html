@@ -265,7 +265,6 @@ nav button.active {
 
 
  <script>
-    document.addEventListener("DOMContentLoaded", () => {
     const userNameEl = document.getElementById("user-name");
     const userEmailEl = document.getElementById("user-email");
     const avatarEl = document.getElementById("profile-avatar");
@@ -277,7 +276,6 @@ nav button.active {
     if (cachedName) userNameEl.textContent = cachedName;
     if (cachedEmail) userEmailEl.textContent = cachedEmail;
     if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-    });
   </script>
  
  <script type="module">
