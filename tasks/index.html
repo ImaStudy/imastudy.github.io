@@ -396,6 +396,22 @@ function renderTasks(tasks) {
 
   onSnapshot(q, (snapshot) => {
   renderTasks(snapshot.docs);
+
+const taskCount = snapshot.docs.length;
+  let countEl = document.getElementById("task-count");
+
+  if (!countEl) {
+    countEl = document.createElement("p");
+    countEl.id = "task-count";
+    countEl.style.fontWeight = "500";
+    countEl.style.margin = "10px 0";
+    countEl.style.color = "#555";
+    const taskListDiv = document.getElementById("taskList");
+    taskListDiv.insertBefore(countEl, tasksContainer);
+  }
+
+  countEl.textContent = `Всего заданий: ${taskCount}`;
+    
   });
 }
 });
