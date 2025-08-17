@@ -262,6 +262,23 @@ nav button.active {
  <footer>
    © 2025 ImaStudy. Все права защищены.
  </footer>
+
+
+ <script>
+    (function() {
+    const userNameEl = document.getElementById("user-name");
+    const userEmailEl = document.getElementById("user-email");
+    const avatarEl = document.getElementById("profile-avatar");
+
+    const cachedName = localStorage.getItem("cachedName");
+    const cachedEmail = localStorage.getItem("cachedEmail");
+    const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
+
+    if (cachedName) userNameEl.textContent = cachedName;
+    if (cachedEmail) userEmailEl.textContent = cachedEmail;
+    if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
+    })();
+  </script>
  
  <script type="module">
    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -277,22 +294,6 @@ nav button.active {
      appId: "1:301505972939:web:061de2a898044090dae94e",
      measurementId: "G-305V13PQ4Q"
    };
-
-   const app = initializeApp(firebaseConfig);
-   const auth = getAuth(app);
-   const storage = getStorage(app);
- 
-   const userNameEl = document.getElementById("user-name");
-   const userEmailEl = document.getElementById("user-email");
-   const avatarEl = document.getElementById("profile-avatar");
-
-   const cachedName = localStorage.getItem("cachedName");
-const cachedEmail = localStorage.getItem("cachedEmail");
-const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
-
-if (cachedName) userNameEl.textContent = cachedName;
-if (cachedEmail) userEmailEl.textContent = cachedEmail;
-if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
 
 import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
