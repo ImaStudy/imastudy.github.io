@@ -191,7 +191,29 @@ nav button.active {
  margin-bottom: 10px;
  display: none;
 }
-   
+
+#user-bio {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+  .profile-bio {
+  margin-top: 30px;
+}
+
+#editBioBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+#editBioBtn:hover {
+  background-color: #2980b9;
+}
+  
    footer {
    text-align: center;
    font-size: 14px;
@@ -232,6 +254,13 @@ nav button.active {
      <button class="edit-btn">Редактировать профиль</button>
    </div>
  </section>
+  <section class="profile-bio">
+  <div style="background: white; padding: 20px; max-width: 600px; margin: 0 auto 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+    <h3>О себе</h3>
+    <p id="user-bio" style="color: #555;">Расскажите немного о себе...</p>
+    <button id="editBioBtn" style="margin-top: 10px; background-color: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Редактировать</button>
+  </div>
+</section>
 </main>
 
 <div id="editModal" class="modal">
@@ -258,6 +287,17 @@ nav button.active {
  </div>
 </div>
 
+ <div id="editBioModal" class="modal">
+  <div class="modal-content">
+    <h3>Редактировать информацию о себе</h3>
+    <textarea id="newBioInput" placeholder="Напишите что-то о себе..." rows="4" style="width: 100%; padding: 10px; margin: 15px 0; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+    <div id="bioError" class="error-message">Текст должен содержать хотя бы 10 символов</div>
+    <div class="modal-actions">
+      <button id="saveBioBtn">Сохранить</button>
+      <button id="cancelBioBtn">Отмена</button>
+    </div>
+  </div>
+</div>
  
  <footer>
    © 2025 ImaStudy. Все права защищены.
@@ -431,7 +471,7 @@ cropConfirmBtn.addEventListener("click", async () => {
 
    const formData = new FormData();
    formData.append("file", blob);
-   formData.append("upload_preset", "unsigned_avatar"); // 👈 Замени на свой preset, если отличается
+   formData.append("upload_preset", "unsigned_avatar");
    formData.append("folder", "avatars");
 
    try {
@@ -457,6 +497,55 @@ cropConfirmBtn.addEventListener("click", async () => {
  }, "image/jpeg", 0.95);
 });
 
+const editBioBtn = document.getElementById("editBioBtn");
+const editBioModal = document.getElementById("editBioModal");
+const newBioInput = document.getElementById("newBioInput");
+const saveBioBtn = document.getElementById("saveBioBtn");
+const cancelBioBtn = document.getElementById("cancelBioBtn");
+const bioError = document.getElementById("bioError");
+const userBioEl = document.getElementById("user-bio");
+
+
+const cachedBio = localStorage.getItem("cachedBio");
+if (cachedBio) userBioEl.textContent = cachedBio;
+
+editBioBtn.addEventListener("click", () => {
+  newBioInput.value = userBioEl.textContent === "Расскажите немного о себе..." ? "" : userBioEl.textContent;
+  editBioModal.style.display = "flex";
+});
+
+cancelBioBtn.addEventListener("click", () => {
+  editBioModal.style.display = "none";
+});
+
+saveBioBtn.addEventListener("click", async () => {
+  const newBio = newBioInput.value.trim();
+  if (newBio.length < 10) {
+    newBioInput.classList.add("input-error");
+    bioError.style.display = "block";
+    return;
+  }
+
+  try {
+    localStorage.setItem("cachedBio", newBio);
+    userBioEl.textContent = newBio;
+
+    newBioInput.classList.remove("input-error");
+    bioError.style.display = "none";
+    editBioModal.style.display = "none";
+    showToast("Био успешно обновлено!");
+  } catch (error) {
+    console.error(error);
+    alert("Ошибка при обновлении био.");
+  }
+});
+
+newBioInput.addEventListener("focus", () => {
+  newBioInput.classList.remove("input-error");
+  bioError.style.display = "none";
+});
+
+  
 window.viewTasksWithoutLogin = function() {
 window.location.href = "/tasks/";
 };
