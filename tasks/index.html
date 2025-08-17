@@ -117,7 +117,23 @@
   background-color: #2980b9;
 }
 
+#task-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 16px;
+  color: #2c3e50;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  margin: 10px 0 20px 0;
+}
 
+#task-count strong {
+  margin-left: 5px;
+}
 
     .avatar-circle {
   width: 32px;
@@ -312,19 +328,17 @@ function renderTasks(tasks) {
     tasksContainer.appendChild(div);
   });
 
-  const taskCount = tasks.length;
-  let countEl = document.getElementById("task-count");
-  if (!countEl) {
-    countEl = document.createElement("p");
-    countEl.id = "task-count";
-    countEl.style.fontWeight = "500";
-    countEl.style.margin = "5px 0 15px 0";
-    countEl.style.color = "#555";
-    countEl.style.fontSize = "16px";
-    const taskListDiv = document.getElementById("taskList");
-    taskListDiv.insertBefore(countEl, tasksContainer);
-  }
-  countEl.textContent = `Всего заданий: ${taskCount}`;
+ const taskCount = tasks.length;
+let countEl = document.getElementById("task-count");
+if (!countEl) {
+  countEl = document.createElement("div");
+  countEl.id = "task-count";
+  const taskListDiv = document.getElementById("taskList");
+  taskListDiv.insertBefore(countEl, tasksContainer);
+}
+
+countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
+
 }
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
