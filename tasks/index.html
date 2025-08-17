@@ -311,8 +311,21 @@ function renderTasks(tasks) {
 
     tasksContainer.appendChild(div);
   });
-}
 
+  const taskCount = tasks.length;
+  let countEl = document.getElementById("task-count");
+  if (!countEl) {
+    countEl = document.createElement("p");
+    countEl.id = "task-count";
+    countEl.style.fontWeight = "500";
+    countEl.style.margin = "5px 0 15px 0";
+    countEl.style.color = "#555";
+    countEl.style.fontSize = "16px";
+    const taskListDiv = document.getElementById("taskList");
+    taskListDiv.insertBefore(countEl, tasksContainer);
+  }
+  countEl.textContent = `Всего заданий: ${taskCount}`;
+}
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
@@ -395,23 +408,7 @@ function renderTasks(tasks) {
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 
   onSnapshot(q, (snapshot) => {
-  renderTasks(snapshot.docs);
-
-const taskCount = snapshot.docs.length;
-  let countEl = document.getElementById("task-count");
-
-  if (!countEl) {
-    countEl = document.createElement("p");
-    countEl.id = "task-count";
-    countEl.style.fontWeight = "500";
-    countEl.style.margin = "10px 0";
-    countEl.style.color = "#555";
-    const taskListDiv = document.getElementById("taskList");
-    taskListDiv.insertBefore(countEl, tasksContainer);
-  }
-
-  countEl.textContent = `Всего заданий: ${taskCount}`;
-    
+  renderTasks(snapshot.docs);    
   });
 }
 });
