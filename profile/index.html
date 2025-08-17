@@ -295,6 +295,10 @@ nav button.active {
      measurementId: "G-305V13PQ4Q"
    };
 
+  const app = initializeApp(firebaseConfig); 
+  const auth = getAuth(app); 
+  const storage = getStorage(app);
+  
 import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 const editBtn = document.querySelector(".edit-btn");
