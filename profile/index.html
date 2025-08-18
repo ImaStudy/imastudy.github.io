@@ -440,8 +440,8 @@ saveProfileBtn.addEventListener("click", async () => {
       await updateProfile(currentUser, { photoURL: newAvatar });
     }
 
-    localStorage.setItem(`bio_${currentUser.uid}`, newBio);
-    userBioEl.textContent = newBio;
+   localStorage.setItem("cachedBio", newBio);
+userBioEl.textContent = newBio;
 
     editProfileModal.style.display = "none";
     showToast("Профиль успешно обновлён!");
@@ -465,8 +465,8 @@ localStorage.setItem("cachedName", name);
 localStorage.setItem("cachedEmail", email);
 localStorage.setItem("cachedPhotoURL", avatarEl.src);
 
-  const savedBio = localStorage.getItem(`bio_${user.uid}`);
-userBioEl.textContent = savedBio || "Расскажите немного о себе...";
+const savedBio = localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
+userBioEl.textContent = savedBio;
 
  } else {
    setTimeout(() => window.location.href = "/login/", 1500);
