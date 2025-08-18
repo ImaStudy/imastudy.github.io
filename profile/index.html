@@ -228,18 +228,10 @@ nav button.active {
   margin-top: 30px;
 }
 
-#editBioBtn {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
-#editBioBtn:hover {
-  background-color: #2980b9;
+#editProfileBtn {
+  width: auto;
+  display: inline-block;
+  white-space: nowrap;
 }
   
    footer {
@@ -278,30 +270,16 @@ nav button.active {
      <div>
        <h2 id="user-name"></h2>
        <p id="user-email"></p>
-       <button class="edit-btn">Редактировать профиль</button>
      </div>
    </div>
 
    <div class="profile-bio">
      <h3>О себе</h3>
      <p id="user-bio">Расскажите немного о себе...</p>
-     <button id="editBioBtn">Редактировать</button>
+     <button id="editProfileBtn">Редактировать профиль</button>
    </div>
  </section>
 </main>
-
-<div id="editModal" class="modal">
- <div class="modal-content">
-   <h3>Изменить имя</h3>
-   <input type="text" id="newNameInput" placeholder="Новое имя" />
-   <div id="nameError" class="error-message">Имя должно содержать хотя бы 2 буквы</div>
-   <div class="modal-actions">
-     <button id="saveNameBtn">Сохранить</button>
-     <button id="cancelEditBtn">Отмена</button>
-   </div>
- </div>
-</div>
-<div id="toast" class="toast">Имя успешно обновлено!</div>
 
  <div id="cropModal" class="modal">
  <div class="modal-content">
@@ -313,23 +291,31 @@ nav button.active {
    </div>
  </div>
 </div>
-
- <div id="editBioModal" class="modal">
+ 
+ <div id="editProfileModal" class="modal">
   <div class="modal-content">
-    <h3>Редактировать информацию о себе</h3>
-    <textarea id="newBioInput" placeholder="Напишите что-то о себе..." rows="4" style="width: 100%; padding: 10px; margin: 15px 0; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
+    <h3>Редактировать профиль</h3>
+
+    <input type="text" id="newNameInput" placeholder="Новое имя" />
+    <div id="nameError" class="error-message">Имя должно содержать хотя бы 2 буквы</div>
+
+    <textarea id="newBioInput" placeholder="Напишите что-то о себе..." rows="4"
+      style="width: 100%; padding: 10px; margin: 15px 0; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
     <div id="bioError" class="error-message">Текст должен содержать хотя бы 10 символов</div>
+
     <div class="modal-actions">
-      <button id="saveBioBtn">Сохранить</button>
-      <button id="cancelBioBtn">Отмена</button>
+      <button id="saveProfileBtn">Сохранить</button>
+      <button id="cancelProfileBtn">Отмена</button>
     </div>
   </div>
 </div>
+
  
  <footer>
    © 2025 ImaStudy. Все права защищены.
  </footer>
 
+ <div id="toast" class="toast"></div>
 
  <script>
     const userNameEl = document.getElementById("user-name");
@@ -370,11 +356,17 @@ nav button.active {
   
 import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-const editBtn = document.querySelector(".edit-btn");
-const editModal = document.getElementById("editModal");
+const editProfileBtn   = document.getElementById("editProfileBtn");
+const editProfileModal = document.getElementById("editProfileModal");
+
 const newNameInput = document.getElementById("newNameInput");
-const saveNameBtn = document.getElementById("saveNameBtn");
-const cancelEditBtn = document.getElementById("cancelEditBtn");
+const nameError    = document.getElementById("nameError");
+
+const newBioInput  = document.getElementById("newBioInput");
+const bioError     = document.getElementById("bioError");
+
+const saveProfileBtn   = document.getElementById("saveProfileBtn");
+const cancelProfileBtn = document.getElementById("cancelProfileBtn");
 
 let currentUser = null;
 
@@ -387,60 +379,82 @@ function showToast(message) {
  }, 3000);
 }
 
-   
-editBtn.addEventListener("click", () => {
- if (currentUser) {
-   newNameInput.value = currentUser.displayName || "";
-   editModal.style.display = "flex";
- }
+editProfileBtn.addEventListener("click", () => {
+  if (!currentUser) return;
+
+  newNameInput.value = currentUser.displayName || "";
+  newBioInput.value = (userBioEl.textContent === "Расскажите немного о себе...") ? "" : userBioEl.textContent;
+
+  // сброс ошибок
+  newNameInput.classList.remove("input-error");
+  newBioInput.classList.remove("input-error");
+  nameError.style.display = "none";
+  bioError.style.display = "none";
+
+  editProfileModal.style.display = "flex";
 });
 
-cancelEditBtn.addEventListener("click", () => {
- editModal.style.display = "none";
-});
-
-saveNameBtn.addEventListener("click", async () => {
- const newName = newNameInput.value.trim();
- const nameError = document.getElementById("nameError");
-
- if (newName.length < 2) {
-   newNameInput.classList.add("input-error");
-   nameError.style.display = "block";
-   return;
- }
-
- try {
-   await updateProfile(currentUser, { displayName: newName });
-   userNameEl.textContent = newName;
-
-   const currentPhoto = currentUser.photoURL || "";
-   const isDefaultAvatar =
-     !currentPhoto ||
-     currentPhoto.includes("ui-avatars.com") ||
-     currentPhoto.includes("googleusercontent.com");
-
-   if (isDefaultAvatar) {
-     const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
-     avatarEl.src = newAvatar;
-     await updateProfile(currentUser, { photoURL: newAvatar });
-   }
-
-   newNameInput.classList.remove("input-error");
-   nameError.style.display = "none";
-
-   editModal.style.display = "none";
-   showToast("Имя успешно обновлено!");
- } catch (error) {
-   console.error(error);
-   alert("Ошибка при обновлении имени.");
- }
+cancelProfileBtn.addEventListener("click", () => {
+  editProfileModal.style.display = "none";
 });
 
 newNameInput.addEventListener("focus", () => {
- const nameError = document.getElementById("nameError");
- newNameInput.classList.remove("input-error");
- nameError.style.display = "none";
+  newNameInput.classList.remove("input-error");
+  nameError.style.display = "none";
 });
+
+newBioInput.addEventListener("focus", () => {
+  newBioInput.classList.remove("input-error");
+  bioError.style.display = "none";
+});
+
+saveProfileBtn.addEventListener("click", async () => {
+  const newName = newNameInput.value.trim();
+  const newBio  = newBioInput.value.trim();
+
+  let hasError = false;
+  if (newName.length < 2) {
+    newNameInput.classList.add("input-error");
+    nameError.style.display = "block";
+    hasError = true;
+  }
+  if (newBio.length < 10) {
+    newBioInput.classList.add("input-error");
+    bioError.style.display = "block";
+    hasError = true;
+  }
+  if (hasError) return;
+
+  try {
+    // 1) Имя в Firebase
+    await updateProfile(currentUser, { displayName: newName });
+    userNameEl.textContent = newName;
+
+    // 2) Если аватар дефолтный — обновим его под новое имя
+    const currentPhoto = currentUser.photoURL || "";
+    const isDefaultAvatar =
+      !currentPhoto ||
+      currentPhoto.includes("ui-avatars.com") ||
+      currentPhoto.includes("googleusercontent.com");
+
+    if (isDefaultAvatar) {
+      const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
+      avatarEl.src = newAvatar;
+      await updateProfile(currentUser, { photoURL: newAvatar });
+    }
+
+    // 3) Био (локально)
+    localStorage.setItem("cachedBio", newBio);
+    userBioEl.textContent = newBio;
+
+    editProfileModal.style.display = "none";
+    showToast("Профиль успешно обновлён!");
+  } catch (error) {
+    console.error(error);
+    alert("Ошибка при обновлении профиля.");
+  }
+});   
+
 
    onAuthStateChanged(auth, (user) => {
  if (user) {
@@ -526,49 +540,6 @@ cropConfirmBtn.addEventListener("click", async () => {
      cropper.destroy();
    }
  }, "image/jpeg", 0.95);
-});
-
-const editBioBtn = document.getElementById("editBioBtn");
-const editBioModal = document.getElementById("editBioModal");
-const newBioInput = document.getElementById("newBioInput");
-const saveBioBtn = document.getElementById("saveBioBtn");
-const cancelBioBtn = document.getElementById("cancelBioBtn");
-const bioError = document.getElementById("bioError");
-
-editBioBtn.addEventListener("click", () => {
-  newBioInput.value = userBioEl.textContent === "Расскажите немного о себе..." ? "" : userBioEl.textContent;
-  editBioModal.style.display = "flex";
-});
-
-cancelBioBtn.addEventListener("click", () => {
-  editBioModal.style.display = "none";
-});
-
-saveBioBtn.addEventListener("click", async () => {
-  const newBio = newBioInput.value.trim();
-  if (newBio.length < 10) {
-    newBioInput.classList.add("input-error");
-    bioError.style.display = "block";
-    return;
-  }
-
-  try {
-    localStorage.setItem("cachedBio", newBio);
-    userBioEl.textContent = newBio;
-
-    newBioInput.classList.remove("input-error");
-    bioError.style.display = "none";
-    editBioModal.style.display = "none";
-    showToast("Био успешно обновлено!");
-  } catch (error) {
-    console.error(error);
-    alert("Ошибка при обновлении био.");
-  }
-});
-
-newBioInput.addEventListener("focus", () => {
-  newBioInput.classList.remove("input-error");
-  bioError.style.display = "none";
 });
 
   
