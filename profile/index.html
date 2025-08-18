@@ -326,12 +326,10 @@ nav button.active {
     const cachedName = localStorage.getItem("cachedName");
     const cachedEmail = localStorage.getItem("cachedEmail");
     const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
-    const savedBio = localStorage.getItem(`bio_${user.uid}`);
 
     if (cachedName) userNameEl.textContent = cachedName;
     if (cachedEmail) userEmailEl.textContent = cachedEmail;
     if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-    userBioEl.textContent = savedBio || "Расскажите немного о себе...";
   </script>
  
  <script type="module">
@@ -464,9 +462,13 @@ localStorage.setItem("cachedName", name);
 localStorage.setItem("cachedEmail", email);
 localStorage.setItem("cachedPhotoURL", avatarEl.src);
 
+  const savedBio = localStorage.getItem(`bio_${user.uid}`);
+userBioEl.textContent = savedBio || "Расскажите немного о себе...";
+
  } else {
    setTimeout(() => window.location.href = "/login/", 1500);
  }
+
 });
 
 const avatarInput = document.getElementById("avatar-upload");
