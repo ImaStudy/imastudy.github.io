@@ -326,13 +326,12 @@ nav button.active {
     const cachedName = localStorage.getItem("cachedName");
     const cachedEmail = localStorage.getItem("cachedEmail");
     const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
-    const cachedBio = localStorage.getItem("cachedBio");
+    const savedBio = localStorage.getItem(`bio_${user.uid}`);
 
     if (cachedName) userNameEl.textContent = cachedName;
     if (cachedEmail) userEmailEl.textContent = cachedEmail;
     if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-    if (cachedBio) userBioEl.textContent = cachedBio;
-  else userBioEl.textContent = "Расскажите немного о себе...";
+    userBioEl.textContent = savedBio || "Расскажите немного о себе...";
   </script>
  
  <script type="module">
@@ -385,7 +384,6 @@ editProfileBtn.addEventListener("click", () => {
   newNameInput.value = currentUser.displayName || "";
   newBioInput.value = (userBioEl.textContent === "Расскажите немного о себе...") ? "" : userBioEl.textContent;
 
-  // сброс ошибок
   newNameInput.classList.remove("input-error");
   newBioInput.classList.remove("input-error");
   nameError.style.display = "none";
@@ -426,11 +424,9 @@ saveProfileBtn.addEventListener("click", async () => {
   if (hasError) return;
 
   try {
-    // 1) Имя в Firebase
     await updateProfile(currentUser, { displayName: newName });
     userNameEl.textContent = newName;
 
-    // 2) Если аватар дефолтный — обновим его под новое имя
     const currentPhoto = currentUser.photoURL || "";
     const isDefaultAvatar =
       !currentPhoto ||
@@ -443,8 +439,7 @@ saveProfileBtn.addEventListener("click", async () => {
       await updateProfile(currentUser, { photoURL: newAvatar });
     }
 
-    // 3) Био (локально)
-    localStorage.setItem("cachedBio", newBio);
+    localStorage.setItem(`bio_${currentUser.uid}`, newBio);
     userBioEl.textContent = newBio;
 
     editProfileModal.style.display = "none";
