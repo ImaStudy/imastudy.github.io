@@ -318,21 +318,28 @@ nav button.active {
  <div id="toast" class="toast"></div>
 
  <script>
-       const userNameEl = document.getElementById("user-name");
-    const userEmailEl = document.getElementById("user-email");
-    const avatarEl = document.getElementById("profile-avatar");
-    const userBioEl = document.getElementById("user-bio");
+const userNameEl = document.getElementById("user-name");
+const userEmailEl = document.getElementById("user-email");
+const avatarEl = document.getElementById("profile-avatar");
+const userBioEl = document.getElementById("user-bio");
 
-    const cachedName = localStorage.getItem("cachedName");
-    const cachedEmail = localStorage.getItem("cachedEmail");
-    const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
-    const cachedBio = localStorage.getItem("cachedBio");
+// Получаем данные из localStorage
+const cachedName = localStorage.getItem("cachedName");
+const cachedEmail = localStorage.getItem("cachedEmail");
+const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
 
-    if (cachedName) userNameEl.textContent = cachedName;
-    if (cachedEmail) userEmailEl.textContent = cachedEmail;
-    if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-    if (cachedBio) userBioEl.textContent = cachedBio;
-  else userBioEl.textContent = "Расскажите немного о себе...";
+let cachedBio = "";
+if (cachedEmail) {
+  // Биография хранится индивидуально по email
+  cachedBio = localStorage.getItem(`cachedBio_${cachedEmail}`);
+}
+
+// Отображаем данные
+if (cachedName) userNameEl.textContent = cachedName;
+if (cachedEmail) userEmailEl.textContent = cachedEmail;
+if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
+if (cachedBio) userBioEl.textContent = cachedBio;
+else userBioEl.textContent = "Расскажите немного о себе...";
   </script>
  
  <script type="module">
@@ -440,7 +447,10 @@ saveProfileBtn.addEventListener("click", async () => {
       await updateProfile(currentUser, { photoURL: newAvatar });
     }
 
-   localStorage.setItem("cachedBio", newBio);
+  const cachedEmail = localStorage.getItem("cachedEmail") || (currentUser ? currentUser.email : null);
+if (cachedEmail) {
+  localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
+}
 userBioEl.textContent = newBio;
 
     editProfileModal.style.display = "none";
@@ -465,8 +475,8 @@ localStorage.setItem("cachedName", name);
 localStorage.setItem("cachedEmail", email);
 localStorage.setItem("cachedPhotoURL", avatarEl.src);
 
-const savedBio = localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
-userBioEl.textContent = savedBio;
+   const savedBio = localStorage.getItem(`bio_${user.uid}`) || "Расскажите немного о себе...";
+    userBioEl.textContent = savedBio;
 
  } else {
    setTimeout(() => window.location.href = "/login/", 1500);
