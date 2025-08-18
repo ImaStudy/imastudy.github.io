@@ -323,24 +323,16 @@ const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
 const userBioEl = document.getElementById("user-bio");
 
-// Получаем данные из localStorage
+userBioEl.style.visibility = "hidden";
+
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
 
-let cachedBio = "";
-if (cachedEmail) {
-  // Биография хранится индивидуально по email
-  cachedBio = localStorage.getItem(`cachedBio_${cachedEmail}`);
-}
-
-// Отображаем данные
 if (cachedName) userNameEl.textContent = cachedName;
 if (cachedEmail) userEmailEl.textContent = cachedEmail;
 if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-if (cachedBio) userBioEl.textContent = cachedBio;
-else userBioEl.textContent = "Расскажите немного о себе...";
-  </script>
+</script>
  
  <script type="module">
    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -475,8 +467,10 @@ localStorage.setItem("cachedName", name);
 localStorage.setItem("cachedEmail", email);
 localStorage.setItem("cachedPhotoURL", avatarEl.src);
 
-   const savedBio = localStorage.getItem(`bio_${user.uid}`) || "Расскажите немного о себе...";
+ const savedBio = localStorage.getItem(`cachedBio_${email}`) || "Расскажите немного о себе...";
     userBioEl.textContent = savedBio;
+
+  userBioEl.style.visibility = "visible";
 
  } else {
    setTimeout(() => window.location.href = "/login/", 1500);
