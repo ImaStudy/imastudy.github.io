@@ -329,9 +329,18 @@ const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
 
+let cachedBio = "";
+if (cachedEmail) {
+  cachedBio = localStorage.getItem(`cachedBio_${cachedEmail}`);
+}
+
 if (cachedName) userNameEl.textContent = cachedName;
 if (cachedEmail) userEmailEl.textContent = cachedEmail;
 if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
+if (cachedBio) userBioEl.textContent = cachedBio;
+else userBioEl.textContent = "Расскажите немного о себе...";
+
+userBioEl.style.visibility = "visible"; 
 </script>
  
  <script type="module">
