@@ -233,6 +233,20 @@ nav button.active {
   display: inline-block;
   white-space: nowrap;
 }
+
+  .inline-input, .inline-textarea {
+  width: 100%;
+  max-width: 520px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+.inline-textarea { margin-top: 8px; }
+.hidden { display: none; }
+
   
    footer {
    text-align: center;
@@ -273,6 +287,9 @@ nav button.active {
      </div>
    </div>
 
+<input id="edit-name" type="text" class="inline-input hidden" />
+<textarea id="edit-bio" rows="4" class="inline-textarea hidden"></textarea>
+  
    <div class="profile-bio">
      <h3>О себе</h3>
      <p id="user-bio">Расскажите немного о себе...</p>
@@ -291,26 +308,8 @@ nav button.active {
    </div>
  </div>
 </div>
- 
- <div id="editProfileModal" class="modal">
-  <div class="modal-content">
-    <h3>Редактировать профиль</h3>
 
-    <input type="text" id="newNameInput" placeholder="Новое имя" />
-    <div id="nameError" class="error-message">Имя должно содержать хотя бы 2 буквы</div>
 
-    <textarea id="newBioInput" placeholder="Напишите что-то о себе..." rows="4"
-      style="width: 100%; padding: 10px; margin: 15px 0; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;"></textarea>
-    <div id="bioError" class="error-message">Текст должен содержать хотя бы 10 символов</div>
-
-    <div class="modal-actions">
-      <button id="saveProfileBtn">Сохранить</button>
-      <button id="cancelProfileBtn">Отмена</button>
-    </div>
-  </div>
-</div>
-
- 
  <footer>
    © 2025 ImaStudy. Все права защищены.
  </footer>
@@ -365,16 +364,8 @@ userBioEl.style.visibility = "visible";
 import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 const editProfileBtn   = document.getElementById("editProfileBtn");
-const editProfileModal = document.getElementById("editProfileModal");
-
-const newNameInput = document.getElementById("newNameInput");
-const nameError    = document.getElementById("nameError");
-
-const newBioInput  = document.getElementById("newBioInput");
-const bioError     = document.getElementById("bioError");
-
-const saveProfileBtn   = document.getElementById("saveProfileBtn");
-const cancelProfileBtn = document.getElementById("cancelProfileBtn");
+const nameInput = document.getElementById("edit-name");
+const bioInput  = document.getElementById("edit-bio");
 
 let currentUser = null;
 
@@ -387,50 +378,50 @@ function showToast(message) {
  }, 3000);
 }
 
-editProfileBtn.addEventListener("click", () => {
+
+function setEditMode(on) {
+  if (on) {
+    nameInput.value = userNameEl.textContent || "";
+    bioInput.value  = (userBioEl.textContent === "Расскажите немного о себе...") ? "" : (userBioEl.textContent || "");
+
+    userNameEl.classList.add("hidden");
+    userBioEl.classList.add("hidden");
+    nameInput.classList.remove("hidden");
+    bioInput.classList.remove("hidden");
+
+    editProfileBtn.textContent = "Сохранить профиль";
+    editProfileBtn.dataset.mode = "edit";
+  } else {
+    userNameEl.classList.remove("hidden");
+    userBioEl.classList.remove("hidden");
+    nameInput.classList.add("hidden");
+    bioInput.classList.add("hidden");
+
+    editProfileBtn.textContent = "Редактировать профиль";
+    editProfileBtn.dataset.mode = "view";
+  }
+}
+
+editProfileBtn.addEventListener("click", async () => {
   if (!currentUser) return;
 
-  newNameInput.value = currentUser.displayName || "";
-  newBioInput.value = (userBioEl.textContent === "Расскажите немного о себе...") ? "" : userBioEl.textContent;
+  const isView = editProfileBtn.dataset.mode !== "edit";
+  if (isView) {
+    setEditMode(true);
+    return;
+  }
 
-  newNameInput.classList.remove("input-error");
-  newBioInput.classList.remove("input-error");
-  nameError.style.display = "none";
-  bioError.style.display = "none";
+  const newName = nameInput.value.trim();
+  const newBio  = bioInput.value.trim();
 
-  editProfileModal.style.display = "flex";
-});
-
-cancelProfileBtn.addEventListener("click", () => {
-  editProfileModal.style.display = "none";
-});
-
-newNameInput.addEventListener("focus", () => {
-  newNameInput.classList.remove("input-error");
-  nameError.style.display = "none";
-});
-
-newBioInput.addEventListener("focus", () => {
-  newBioInput.classList.remove("input-error");
-  bioError.style.display = "none";
-});
-
-saveProfileBtn.addEventListener("click", async () => {
-  const newName = newNameInput.value.trim();
-  const newBio  = newBioInput.value.trim();
-
-  let hasError = false;
   if (newName.length < 2) {
-    newNameInput.classList.add("input-error");
-    nameError.style.display = "block";
-    hasError = true;
+    showToast("Имя должно быть не короче 2 символов");
+    return;
   }
-  if (newBio.length < 10) {
-    newBioInput.classList.add("input-error");
-    bioError.style.display = "block";
-    hasError = true;
+  if (newBio !== "" && newBio.length < 10) {
+    showToast("Текст должен содержать минимум 10 символов (или оставьте поле пустым)");
+    return;
   }
-  if (hasError) return;
 
   try {
     await updateProfile(currentUser, { displayName: newName });
@@ -441,26 +432,27 @@ saveProfileBtn.addEventListener("click", async () => {
       !currentPhoto ||
       currentPhoto.includes("ui-avatars.com") ||
       currentPhoto.includes("googleusercontent.com");
-
     if (isDefaultAvatar) {
       const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
       avatarEl.src = newAvatar;
       await updateProfile(currentUser, { photoURL: newAvatar });
     }
 
-  const cachedEmail = localStorage.getItem("cachedEmail") || (currentUser ? currentUser.email : null);
-if (cachedEmail) {
-  localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
-}
-userBioEl.textContent = newBio;
+    const cachedEmail = localStorage.getItem("cachedEmail") || currentUser.email;
+    if (cachedEmail) {
+      localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
+    }
+    userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
-    editProfileModal.style.display = "none";
+    setEditMode(false);
     showToast("Профиль успешно обновлён!");
   } catch (error) {
     console.error(error);
     alert("Ошибка при обновлении профиля.");
   }
-});   
+});
+
+editProfileBtn.dataset.mode = "view";
 
 
    onAuthStateChanged(auth, (user) => {
