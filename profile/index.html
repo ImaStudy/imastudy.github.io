@@ -234,48 +234,44 @@ nav button.active {
   white-space: nowrap;
 }
 
- .inline-input, .inline-textarea {
-  width: 100%;
-  max-width: 520px;
-  padding: 8px 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  outline: none;
-  background: #f9f9f9;
-  transition: border 0.3s, box-shadow 0.3s;
-}
-
-.inline-input:focus, .inline-textarea:focus {
-  border-color: #3498db;
-  box-shadow: 0 0 4px rgba(52, 152, 219, 0.3);
-}
-
-  #editProfileBtn, #cancelEditBtn {
+#cancelEditBtn {
+  display: none;
+  background-color: #3498db;
+  color: white;
   padding: 8px 16px;
   font-size: 14px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  margin-left: 10px;
   transition: background 0.3s;
 }
 
-#editProfileBtn {
-  background-color: #3498db;
-  color: white;
-}
-
-#editProfileBtn:hover {
+#cancelEditBtn:hover {
   background-color: #2980b9;
 }
 
-#cancelEditBtn {
-  background-color: #e0e0e0;
-  color: #555;
+.inline-input, .inline-textarea {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 10px;
+  width: 100%;
+  max-width: 520px;
+  background: #f9f9f9;
+  font-size: 14px;
+  transition: border 0.3s, box-shadow 0.3s;
 }
 
-#cancelEditBtn:hover {
-  background-color: #d0d0d0;
+.inline-input:focus, .inline-textarea:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 4px rgba(52,152,219,0.3);
+  background: #fff;
+}
+
+.profile-bio p {
+  background: none;
+  padding: 0;
+  margin: 5px 0 15px 0;
 }
 
    footer {
@@ -432,13 +428,13 @@ function enterEditMode() {
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
-  cancelEditBtn.classList.remove("hidden");
+  cancelEditBtn.style.display = "inline-block"; 
 }
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
-  cancelEditBtn.classList.add("hidden");
+   cancelEditBtn.style.display = "none";
 }
 
 editProfileBtn.addEventListener("click", async () => {
