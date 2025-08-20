@@ -229,34 +229,40 @@ nav button.active {
 }
 
 .inline-input, .inline-textarea {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
   width: 100%;
   max-width: 520px;
-  font-size: 16px;
-  padding: 4px 0; 
-  border: none; 
-  border-bottom: 2px solid #ccc; 
-  border-radius: 0; 
-  background: transparent; 
+  padding: 2px 0;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  background: transparent;
   outline: none;
   transition: border-color 0.3s;
 }
 
 .inline-input:focus, .inline-textarea:focus {
-  border-color: #3498db; 
+  border-color: #3498db;
+}
+
+.inline-textarea {
+  resize: none;
+  overflow: hidden;
 }
 
 #editProfileBtn, #cancelEditBtn {
   display: inline-block;
-  padding: 8px 16px;
+  padding: 6px 14px;
   font-size: 14px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
   background-color: #3498db;
   color: white;
-  margin-left: 8px;
+  margin-left: 6px;
   transition: background 0.3s;
-  min-width: auto; 
 }
 
 #editProfileBtn:hover,
@@ -441,6 +447,13 @@ function exitEditMode() {
   userNameEl.textContent = oldName;
   userBioEl.textContent  = oldBio || "Расскажите немного о себе...";
 }
+
+  function autoResizeTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+bioInput.addEventListener('input', () => autoResizeTextarea(bioInput));
 
 editProfileBtn.addEventListener("click", async () => {
   if (!currentUser) return;
