@@ -286,14 +286,12 @@ nav button.active {
        <p id="user-email"></p>
      </div>
    </div>
-
-<input id="edit-name" type="text" class="inline-input hidden" />
-<textarea id="edit-bio" rows="4" class="inline-textarea hidden"></textarea>
   
    <div class="profile-bio">
      <h3>О себе</h3>
      <p id="user-bio">Расскажите немного о себе...</p>
      <button id="editProfileBtn">Редактировать профиль</button>
+     <button id="cancelEditBtn" class="hidden">Отмена</button>
    </div>
  </section>
 </main>
@@ -363,11 +361,18 @@ userBioEl.style.visibility = "visible";
   
 import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-const editProfileBtn   = document.getElementById("editProfileBtn");
-const nameInput = document.getElementById("edit-name");
-const bioInput  = document.getElementById("edit-bio");
+const editProfileBtn = document.getElementById("editProfileBtn");
+const cancelEditBtn  = document.getElementById("cancelEditBtn");
 
-let currentUser = null;
+const nameInput = document.createElement("input");
+nameInput.type = "text";
+nameInput.className = "inline-input";
+nameInput.placeholder = "Никнейм";
+
+const bioInput = document.createElement("textarea");
+bioInput.rows = 4;
+bioInput.className = "inline-textarea";
+bioInput.placeholder = "О себе";
 
 function showToast(message) {
  const toast = document.getElementById("toast");
@@ -378,28 +383,32 @@ function showToast(message) {
  }, 3000);
 }
 
+let currentUser = null;
+let oldName = "";
+let oldBio  = "";
 
-function setEditMode(on) {
-  if (on) {
-    nameInput.value = userNameEl.textContent || "";
-    bioInput.value  = (userBioEl.textContent === "Расскажите немного о себе...") ? "" : (userBioEl.textContent || "");
+function enterEditMode() {
+  oldName = (userNameEl.textContent || "").trim();
+  oldBio  = (userBioEl.textContent || "").trim();
 
-    userNameEl.classList.add("hidden");
-    userBioEl.classList.add("hidden");
-    nameInput.classList.remove("hidden");
-    bioInput.classList.remove("hidden");
+  nameInput.value = oldName;
+  bioInput.value  = (oldBio === "Расскажите немного о себе..." ? "" : oldBio);
 
-    editProfileBtn.textContent = "Сохранить профиль";
-    editProfileBtn.dataset.mode = "edit";
-  } else {
-    userNameEl.classList.remove("hidden");
-    userBioEl.classList.remove("hidden");
-    nameInput.classList.add("hidden");
-    bioInput.classList.add("hidden");
+  userNameEl.textContent = "";
+  userNameEl.appendChild(nameInput);
 
-    editProfileBtn.textContent = "Редактировать профиль";
-    editProfileBtn.dataset.mode = "view";
-  }
+  userBioEl.textContent = "";
+  userBioEl.appendChild(bioInput);
+
+  editProfileBtn.textContent = "Сохранить профиль";
+  editProfileBtn.dataset.mode = "edit";
+  cancelEditBtn.classList.remove("hidden");
+}
+
+function exitEditMode() {
+  editProfileBtn.textContent = "Редактировать профиль";
+  editProfileBtn.dataset.mode = "view";
+  cancelEditBtn.classList.add("hidden");
 }
 
 editProfileBtn.addEventListener("click", async () => {
@@ -407,7 +416,7 @@ editProfileBtn.addEventListener("click", async () => {
 
   const isView = editProfileBtn.dataset.mode !== "edit";
   if (isView) {
-    setEditMode(true);
+    enterEditMode();
     return;
   }
 
@@ -442,9 +451,10 @@ editProfileBtn.addEventListener("click", async () => {
     if (cachedEmail) {
       localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
     }
+
     userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
-    setEditMode(false);
+    exitEditMode();
     showToast("Профиль успешно обновлён!");
   } catch (error) {
     console.error(error);
@@ -452,7 +462,12 @@ editProfileBtn.addEventListener("click", async () => {
   }
 });
 
-editProfileBtn.dataset.mode = "view";
+cancelEditBtn.addEventListener("click", () => {
+  userNameEl.textContent = oldName || "Пользователь";
+  userBioEl.textContent  = oldBio || "Расскажите немного о себе...";
+  exitEditMode();
+});
+
 
 
    onAuthStateChanged(auth, (user) => {
