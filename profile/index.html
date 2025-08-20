@@ -397,6 +397,7 @@ import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
 
 const editProfileBtn = document.getElementById("editProfileBtn");
 const cancelEditBtn  = document.getElementById("cancelEditBtn");
+cancelEditBtn.style.display = "none";
 
 const nameInput = document.createElement("input");
 nameInput.type = "text";
@@ -434,21 +435,22 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
-  userBioEl.style.visibility = "visible";
   cancelEditBtn.style.display = "inline-block";
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
 }
 
+
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
-  cancelEditBtn.style.display = "none";
+  cancelEditBtn.style.display = "none"; 
 
   userNameEl.textContent = oldName;
   userBioEl.textContent  = oldBio || "Расскажите немного о себе...";
 }
+
 
   function autoResizeTextarea(el) {
   el.style.height = 'auto';
