@@ -356,8 +356,6 @@ const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
 const userBioEl = document.getElementById("user-bio");
 
-userBioEl.style.visibility = "hidden";
-
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
@@ -399,7 +397,6 @@ import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebas
 
 const editProfileBtn = document.getElementById("editProfileBtn");
 const cancelEditBtn  = document.getElementById("cancelEditBtn");
-cancelEditBtn.style.display = "none";
 
 const nameInput = document.createElement("input");
 nameInput.type = "text";
@@ -437,11 +434,12 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
+  userBioEl.style.visibility = "visible";
+  cancelEditBtn.style.display = "inline-block";
+
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
-  cancelEditBtn.style.display = "inline-block";
 }
-
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
