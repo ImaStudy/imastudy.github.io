@@ -228,50 +228,44 @@ nav button.active {
   margin-top: 30px;
 }
 
-#editProfileBtn {
-  width: auto;
+#editProfileBtn, #cancelEditBtn {
   display: inline-block;
-  white-space: nowrap;
-}
-
-#cancelEditBtn {
-  display: none;
-  background-color: #3498db;
-  color: white;
-  padding: 8px 16px;
+  padding: 10px 20px;
   font-size: 14px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  margin-left: 10px;
   transition: background 0.3s;
+  background-color: #3498db;
+  color: white;
+  margin-left: 10px;
 }
 
+#editProfileBtn:hover,
 #cancelEditBtn:hover {
   background-color: #2980b9;
 }
 
 .inline-input, .inline-textarea {
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 8px 10px;
   width: 100%;
   max-width: 520px;
-  background: #f9f9f9;
+  padding: 10px;
   font-size: 14px;
-  transition: border 0.3s, box-shadow 0.3s;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  outline: none;
 }
 
 .inline-input:focus, .inline-textarea:focus {
   border-color: #3498db;
   box-shadow: 0 0 4px rgba(52,152,219,0.3);
-  background: #fff;
 }
 
 .profile-bio p {
   background: none;
   padding: 0;
-  margin: 5px 0 15px 0;
+  margin: 0 0 15px 0;
 }
 
    footer {
@@ -420,21 +414,25 @@ function enterEditMode() {
   nameInput.value = oldName;
   bioInput.value  = (oldBio === "Расскажите немного о себе..." ? "" : oldBio);
 
-  userNameEl.textContent = "";
+  userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
 
-  userBioEl.textContent = "";
+  userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
-  cancelEditBtn.style.display = "inline-block"; 
+  cancelEditBtn.style.display = "inline-block";
 }
+
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
-   cancelEditBtn.style.display = "none";
+  cancelEditBtn.style.display = "none";
+
+  userNameEl.textContent = oldName;
+  userBioEl.textContent  = oldBio || "Расскажите немного о себе...";
 }
 
 editProfileBtn.addEventListener("click", async () => {
