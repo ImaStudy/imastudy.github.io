@@ -434,18 +434,6 @@ const bioInput = document.createElement("textarea");
 bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
-
-bioInput.addEventListener("input", () => {
-  autoResizeTextarea(bioInput);
-  const bioErrorEl = document.getElementById("bio-error");
-  if (bioInput.value.trim() !== "" && bioInput.value.trim().length < 10) {
-    bioInput.classList.add("input-error");
-    bioErrorEl.classList.add("show");
-  } else {
-    bioInput.classList.remove("input-error");
-    bioErrorEl.classList.remove("show");
-  }
-});
   
 function showToast(message) {
   const toast = document.getElementById("toast");
@@ -459,12 +447,16 @@ function autoResizeTextarea(el) {
   el.style.height = el.scrollHeight + 'px';
 }
 
-bioInput.addEventListener('input', () => autoResizeTextarea(bioInput));
+bioInput.addEventListener("input", () => {
+  autoResizeTextarea(bioInput);
 
- bioInput.addEventListener("input", () => {
-  if (bioInput.classList.contains("input-error")) {
+  const bioErrorEl = document.getElementById("bio-error");
+  if (bioInput.value.trim() !== "" && bioInput.value.trim().length < 10) {
+    bioInput.classList.add("input-error");
+    bioErrorEl.classList.add("show");
+  } else {
     bioInput.classList.remove("input-error");
-    document.getElementById("bio-error").style.display = "none";
+    bioErrorEl.classList.remove("show"); 
   }
 });
 
