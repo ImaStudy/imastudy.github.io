@@ -215,9 +215,16 @@ nav button.active {
   color: #e74c3c;
   font-size: 13px;
   margin-top: 5px;
-  display: none;
+  opacity: 0;
+  height: 0;
+  transition: opacity 0.3s ease, height 0.3s ease;
+  overflow: hidden;
 }
 
+.error-message.show {
+  opacity: 1;
+  height: auto;
+}
 
 #user-bio {
   word-wrap: break-word;
@@ -428,6 +435,18 @@ bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
 
+bioInput.addEventListener("input", () => {
+  autoResizeTextarea(bioInput);
+  const bioErrorEl = document.getElementById("bio-error");
+  if (bioInput.value.trim() !== "" && bioInput.value.trim().length < 10) {
+    bioInput.classList.add("input-error");
+    bioErrorEl.classList.add("show");
+  } else {
+    bioInput.classList.remove("input-error");
+    bioErrorEl.classList.remove("show");
+  }
+});
+  
 function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
@@ -495,14 +514,16 @@ editProfileBtn.addEventListener("click", async () => {
     showToast("Имя должно быть не короче 2 символов");
     return;
   }
- if (newBio !== "" && newBio.length < 10) {
-  bioInput.classList.add("input-error");
-  document.getElementById("bio-error").style.display = "block";
-  return;
-} else {
-  bioInput.classList.remove("input-error");
-  document.getElementById("bio-error").style.display = "none";
-}
+
+  const bioErrorEl = document.getElementById("bio-error");
+  if (newBio !== "" && newBio.length < 10) {
+    bioInput.classList.add("input-error");
+    bioErrorEl.classList.add("show");
+    return;
+  } else {
+    bioInput.classList.remove("input-error");
+    bioErrorEl.classList.remove("show");
+  }
 
   try {
     await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
@@ -519,7 +540,7 @@ editProfileBtn.addEventListener("click", async () => {
 
     oldName = newName;
     oldBio = newBio;
-   
+
     userNameEl.textContent = newName;
     userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
