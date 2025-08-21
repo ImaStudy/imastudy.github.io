@@ -442,6 +442,13 @@ function autoResizeTextarea(el) {
 
 bioInput.addEventListener('input', () => autoResizeTextarea(bioInput));
 
+ bioInput.addEventListener("input", () => {
+  if (bioInput.classList.contains("input-error")) {
+    bioInput.classList.remove("input-error");
+    document.getElementById("bio-error").style.display = "none";
+  }
+});
+
 function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
   oldBio = (userBioEl.textContent || "").trim();
