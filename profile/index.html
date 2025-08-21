@@ -456,9 +456,11 @@ function exitEditMode() {
   editProfileBtn.dataset.mode = "view";
   cancelEditBtn.style.display = "none";
 
-  userNameEl.textContent = oldName;
-  userBioEl.textContent = oldBio || "Расскажите немного о себе...";
+  userNameEl.textContent = currentUser.displayName || oldName;
+  const savedBio = localStorage.getItem(`cachedBio_${currentUser.email}`) || "Расскажите немного о себе...";
+  userBioEl.textContent = savedBio;
 }
+
 
 editProfileBtn.addEventListener("click", async () => {
   if (!currentUser) return;
@@ -493,6 +495,9 @@ editProfileBtn.addEventListener("click", async () => {
       localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
     }
 
+    oldName = newName;
+    oldBio = newBio;
+   
     userNameEl.textContent = newName;
     userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
