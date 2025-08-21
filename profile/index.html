@@ -254,7 +254,7 @@ nav button.active {
 
 #editProfileBtn, #cancelEditBtn {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 6px 10px;
   font-size: 13px;
   border-radius: 6px;
   border: none;
@@ -262,11 +262,11 @@ nav button.active {
   background-color: #3498db;
   color: white;
   margin-left: 6px;
-  min-width: 110px;
-  text-align: center;
-  transition: background 0.3s;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-
 
 #editProfileBtn:hover,
 #cancelEditBtn:hover {
