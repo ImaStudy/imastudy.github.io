@@ -483,33 +483,27 @@ editProfileBtn.addEventListener("click", async () => {
   }
 
   try {
-    await updateProfile(currentUser, { displayName: newName });
-    userNameEl.textContent = newName;
+  await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
 
-    const currentPhoto = currentUser.photoURL || "";
-    const isDefaultAvatar =
-      !currentPhoto ||
-      currentPhoto.includes("ui-avatars.com") ||
-      currentPhoto.includes("googleusercontent.com");
-    if (isDefaultAvatar) {
-      const newAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(newName)}&background=random`;
-      avatarEl.src = newAvatar;
-      await updateProfile(currentUser, { photoURL: newAvatar });
-    }
+  currentUser.displayName = newName;
+  currentUser.photoURL = avatarEl.src;
 
-    const cachedEmail = localStorage.getItem("cachedEmail") || currentUser.email;
-    if (cachedEmail) {
-      localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
-    }
-
-    userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-
-    exitEditMode();
-    showToast("Профиль успешно обновлён!");
-  } catch (error) {
-    console.error(error);
-    alert("Ошибка при обновлении профиля.");
+  const cachedEmail = localStorage.getItem("cachedEmail") || currentUser.email;
+  if (cachedEmail) {
+    localStorage.setItem("cachedName", newName);
+    localStorage.setItem("cachedPhotoURL", avatarEl.src);
+    localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
   }
+
+  userNameEl.textContent = newName;
+  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+
+  exitEditMode();
+  showToast("Профиль успешно обновлён!");
+} catch (error) {
+  console.error(error);
+  alert("Ошибка при обновлении профиля.");
+}
 });
 
 cancelEditBtn.addEventListener("click", () => {
