@@ -377,29 +377,37 @@ userBioEl.style.visibility = "visible";
 </script>
  
  <script type="module">
-   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-   import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
-   const firebaseConfig = {
-     apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
-     authDomain: "imastudy-631ec.firebaseapp.com",
-     projectId: "imastudy-631ec",
-     storageBucket: "imastudy-631ec.appspot.com",
-     messagingSenderId: "301505972939",
-     appId: "1:301505972939:web:061de2a898044090dae94e",
-     measurementId: "G-305V13PQ4Q"
-   };
+const firebaseConfig = {
+  apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+  authDomain: "imastudy-631ec.firebaseapp.com",
+  projectId: "imastudy-631ec",
+  storageBucket: "imastudy-631ec.appspot.com",
+  messagingSenderId: "301505972939",
+  appId: "1:301505972939:web:061de2a898044090dae94e",
+  measurementId: "G-305V13PQ4Q"
+};
 
-  const app = initializeApp(firebaseConfig); 
-  const auth = getAuth(app); 
-  const storage = getStorage(app);
-  
-import { updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const storage = getStorage(app);
 
 const editProfileBtn = document.getElementById("editProfileBtn");
-const cancelEditBtn  = document.getElementById("cancelEditBtn");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
+const userNameEl = document.getElementById("user-name");
+const userEmailEl = document.getElementById("user-email");
+const userBioEl = document.getElementById("user-bio");
+const avatarEl = document.getElementById("profile-avatar");
+
 cancelEditBtn.style.display = "none";
+
+let currentUser = null;
+let oldName = "";
+let oldBio = "";
+let justUpdatedProfile = false;
 
 const nameInput = document.createElement("input");
 nameInput.type = "text";
@@ -412,25 +420,25 @@ bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
 
 function showToast(message) {
- const toast = document.getElementById("toast");
- toast.textContent = message;
- toast.classList.add("show");
- setTimeout(() => {
-   toast.classList.remove("show");
- }, 3000);
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
-let currentUser = null;
-let justUpdatedProfile = false;
-let oldName = "";
-let oldBio  = "";
+function autoResizeTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+bioInput.addEventListener('input', () => autoResizeTextarea(bioInput));
 
 function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
-  oldBio  = (userBioEl.textContent || "").trim();
+  oldBio = (userBioEl.textContent || "").trim();
 
   nameInput.value = oldName;
-  bioInput.value  = (oldBio === "Расскажите немного о себе..." ? "" : oldBio);
+  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
@@ -439,40 +447,29 @@ function enterEditMode() {
   userBioEl.appendChild(bioInput);
 
   cancelEditBtn.style.display = "inline-block";
-
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
 }
 
-
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
-  cancelEditBtn.style.display = "none"; 
+  cancelEditBtn.style.display = "none";
 
   userNameEl.textContent = oldName;
-  userBioEl.textContent  = oldBio || "Расскажите немного о себе...";
+  userBioEl.textContent = oldBio || "Расскажите немного о себе...";
 }
-
-
-  function autoResizeTextarea(el) {
-  el.style.height = 'auto';
-  el.style.height = el.scrollHeight + 'px';
-}
-
-bioInput.addEventListener('input', () => autoResizeTextarea(bioInput));
 
 editProfileBtn.addEventListener("click", async () => {
   if (!currentUser) return;
 
-  const isView = editProfileBtn.dataset.mode !== "edit";
-  if (isView) {
+  if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
   }
 
   const newName = nameInput.value.trim();
-  const newBio  = bioInput.value.trim();
+  const newBio = bioInput.value.trim();
 
   if (newName.length < 2) {
     showToast("Имя должно быть не короче 2 символов");
@@ -484,65 +481,59 @@ editProfileBtn.addEventListener("click", async () => {
   }
 
   try {
-  await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
+    await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
 
-  currentUser.displayName = newName;
-  currentUser.photoURL = avatarEl.src;
+    currentUser.displayName = newName;
+    currentUser.photoURL = avatarEl.src;
 
-  const cachedEmail = localStorage.getItem("cachedEmail") || currentUser.email;
-  if (cachedEmail) {
-    localStorage.setItem("cachedName", newName);
-    localStorage.setItem("cachedPhotoURL", avatarEl.src);
-    localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
-  }
-
-  userNameEl.textContent = newName;
-  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-  justUpdatedProfile = true;
-
-  exitEditMode();
-  showToast("Профиль успешно обновлён!");
-} catch (error) {
-  console.error(error);
-  alert("Ошибка при обновлении профиля.");
-}
-});
-
-cancelEditBtn.addEventListener("click", () => {
-  userNameEl.textContent = oldName || "Пользователь";
-  userBioEl.textContent  = oldBio || "Расскажите немного о себе...";
-  exitEditMode();
-});
-
-
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUser = user;
-
-    const name = user.displayName || "Пользователь";
-    const email = user.email;
-    const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
-
-    avatarEl.src = photo;
-    userEmailEl.textContent = email;
-
-    localStorage.setItem("cachedName", name);
-    localStorage.setItem("cachedEmail", email);
-    localStorage.setItem("cachedPhotoURL", photo);
-
-    if (!justUpdatedProfile) {
-      const savedBio = localStorage.getItem(`cachedBio_${email}`) || "Расскажите немного о себе...";
-      userNameEl.textContent = name;
-      userBioEl.textContent = savedBio;
-    } else {
-      justUpdatedProfile = false;
+    const cachedEmail = currentUser.email;
+    if (cachedEmail) {
+      localStorage.setItem("cachedName", newName);
+      localStorage.setItem("cachedPhotoURL", avatarEl.src);
+      localStorage.setItem(`cachedBio_${cachedEmail}`, newBio);
     }
 
-    userBioEl.style.visibility = "visible";
-  } else {
-    setTimeout(() => window.location.href = "/login/", 1500);
+    userNameEl.textContent = newName;
+    userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+
+    justUpdatedProfile = true;
+    exitEditMode();
+    showToast("Профиль успешно обновлён!");
+  } catch (error) {
+    console.error(error);
+    alert("Ошибка при обновлении профиля.");
   }
+});
+
+cancelEditBtn.addEventListener("click", () => exitEditMode());
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    setTimeout(() => window.location.href = "/login/", 1500);
+    return;
+  }
+
+  currentUser = user;
+  const name = user.displayName || "Пользователь";
+  const email = user.email;
+  const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+
+  avatarEl.src = photo;
+  userEmailEl.textContent = email;
+
+  localStorage.setItem("cachedName", name);
+  localStorage.setItem("cachedEmail", email);
+  localStorage.setItem("cachedPhotoURL", photo);
+
+  if (!justUpdatedProfile) {
+    const savedBio = localStorage.getItem(`cachedBio_${email}`) || "Расскажите немного о себе...";
+    userNameEl.textContent = name;
+    userBioEl.textContent = savedBio;
+  } else {
+    justUpdatedProfile = false;
+  }
+
+  userBioEl.style.visibility = "visible";
 });
 
 const avatarInput = document.getElementById("avatar-upload");
