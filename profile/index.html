@@ -421,6 +421,7 @@ function showToast(message) {
 }
 
 let currentUser = null;
+let justUpdatedProfile = false;
 let oldName = "";
 let oldBio  = "";
 
@@ -497,6 +498,7 @@ editProfileBtn.addEventListener("click", async () => {
 
   userNameEl.textContent = newName;
   userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+  justUpdatedProfile = true;
 
   exitEditMode();
   showToast("Профиль успешно обновлён!");
@@ -514,28 +516,33 @@ cancelEditBtn.addEventListener("click", () => {
 
 
 
-   onAuthStateChanged(auth, (user) => {
- if (user) {
-   currentUser = user;
-   const name = user.displayName || "Пользователь";
-   const email = user.email;
-   userNameEl.textContent = name;
-   userEmailEl.textContent = email;
-   avatarEl.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    currentUser = user;
 
-localStorage.setItem("cachedName", name);
-localStorage.setItem("cachedEmail", email);
-localStorage.setItem("cachedPhotoURL", avatarEl.src);
+    const name = user.displayName || "Пользователь";
+    const email = user.email;
+    const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 
- const savedBio = localStorage.getItem(`cachedBio_${email}`) || "Расскажите немного о себе...";
-    userBioEl.textContent = savedBio;
+    avatarEl.src = photo;
+    userEmailEl.textContent = email;
 
-  userBioEl.style.visibility = "visible";
+    localStorage.setItem("cachedName", name);
+    localStorage.setItem("cachedEmail", email);
+    localStorage.setItem("cachedPhotoURL", photo);
 
- } else {
-   setTimeout(() => window.location.href = "/login/", 1500);
- }
+    if (!justUpdatedProfile) {
+      const savedBio = localStorage.getItem(`cachedBio_${email}`) || "Расскажите немного о себе...";
+      userNameEl.textContent = name;
+      userBioEl.textContent = savedBio;
+    } else {
+      justUpdatedProfile = false;
+    }
 
+    userBioEl.style.visibility = "visible";
+  } else {
+    setTimeout(() => window.location.href = "/login/", 1500);
+  }
 });
 
 const avatarInput = document.getElementById("avatar-upload");
