@@ -208,16 +208,16 @@ nav button.active {
 }
 
 .input-error {
- border: 2px solid #e74c3c !important;
+  border: 2px solid #e74c3c;
 }
 
 .error-message {
- color: #e74c3c;
- font-size: 13px;
- margin-top: -10px;
- margin-bottom: 10px;
- display: none;
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: 5px;
+  display: none;
 }
+
 
 #user-bio {
   word-wrap: break-word;
@@ -328,12 +328,18 @@ nav button.active {
      </div>
    </div>
   
-   <div class="profile-bio">
-     <h3>О себе</h3>
-     <p id="user-bio">Расскажите немного о себе...</p>
-     <button id="editProfileBtn">Редактировать профиль</button>
-     <button id="cancelEditBtn">Отмена</button>
-   </div>
+  <div class="profile-bio">
+  <h3>О себе</h3>
+  <p id="user-bio">Расскажите немного о себе...</p>
+  <textarea id="bio-input" class="inline-textarea" style="display:none;"></textarea>
+
+  <p id="bio-error" class="error-message">
+    Текст должен содержать минимум 10 символов (или оставьте поле пустым)
+  </p>
+
+  <button id="editProfileBtn">Редактировать профиль</button>
+  <button id="cancelEditBtn" class="hidden">Отмена</button>
+</div>
  </section>
 </main>
 
@@ -482,10 +488,14 @@ editProfileBtn.addEventListener("click", async () => {
     showToast("Имя должно быть не короче 2 символов");
     return;
   }
-  if (newBio !== "" && newBio.length < 10) {
-    showToast("Текст должен содержать минимум 10 символов (или оставьте поле пустым)");
-    return;
-  }
+ if (newBio !== "" && newBio.length < 10) {
+  bioInput.classList.add("input-error");
+  document.getElementById("bio-error").style.display = "block";
+  return;
+} else {
+  bioInput.classList.remove("input-error");
+  document.getElementById("bio-error").style.display = "none";
+}
 
   try {
     await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
