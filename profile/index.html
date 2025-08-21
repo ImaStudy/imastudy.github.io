@@ -446,19 +446,21 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
-  cancelEditBtn.style.display = "inline-block";
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
+
+  cancelEditBtn.classList.remove("hidden");
 }
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
-  cancelEditBtn.style.display = "none";
 
   userNameEl.textContent = currentUser.displayName || oldName;
   const savedBio = localStorage.getItem(`cachedBio_${currentUser.email}`) || "Расскажите немного о себе...";
   userBioEl.textContent = savedBio;
+
+  cancelEditBtn.classList.add("hidden");
 }
 
 
