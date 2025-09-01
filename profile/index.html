@@ -211,11 +211,6 @@ nav button.active {
   background-color: #2ecc71;
 }
 
-.toast.error {
-  background-color: #e74c3c;
-}
-
-
 .input-error {
   border: 2px solid #e74c3c;
 }
@@ -267,6 +262,26 @@ nav button.active {
   resize: none;
   overflow: hidden;
 }
+
+ .inline-input.input-error {
+  border-color: #e74c3c;
+}
+
+#name-error {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: 5px;
+  opacity: 0;
+  height: 0;
+  transition: opacity 0.3s ease, height 0.3s ease;
+  overflow: hidden;
+}
+
+#name-error.show {
+  opacity: 1;
+  height: auto;
+}
+ 
 
 #editProfileBtn, #cancelEditBtn {
   display: inline-block;
@@ -340,6 +355,7 @@ nav button.active {
      </div>
      <div>
        <h2 id="user-name"></h2>
+       <p id="name-error">Имя должно быть не короче 2 символов</p>
        <p id="user-email"></p>
      </div>
    </div>
@@ -434,6 +450,8 @@ nameInput.type = "text";
 nameInput.className = "inline-input";
 nameInput.placeholder = "Никнейм";
 
+const nameErrorEl = document.getElementById("name-error");
+
 const bioInput = document.createElement("textarea");
 bioInput.rows = 4;
 bioInput.className = "inline-textarea";
@@ -511,10 +529,14 @@ editProfileBtn.addEventListener("click", async () => {
   const newName = nameInput.value.trim();
   const newBio = bioInput.value.trim();
 
-  if (newName.length < 2) {
-    showToast("Имя должно быть не короче 2 символов", "error");
-    return;
-  }
+if (newName.length < 2) {
+  nameInput.classList.add("input-error");
+  nameErrorEl.classList.add("show");
+  return;
+} else {
+  nameInput.classList.remove("input-error");
+  nameErrorEl.classList.remove("show");
+}
 
   const bioErrorEl = document.getElementById("bio-error");
   if (newBio !== "" && newBio.length < 10) {
