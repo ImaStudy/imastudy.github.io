@@ -207,6 +207,15 @@ nav button.active {
  pointer-events: auto;
 }
 
+  .toast.success {
+  background-color: #2ecc71;
+}
+
+.toast.error {
+  background-color: #e74c3c;
+}
+
+
 .input-error {
   border: 2px solid #e74c3c;
 }
@@ -430,12 +439,16 @@ bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
   
-function showToast(message) {
+function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
   toast.textContent = message;
-  toast.classList.add("show");
+
+  toast.className = "toast";
+  toast.classList.add("show", type);
+
   setTimeout(() => toast.classList.remove("show"), 3000);
 }
+
 
 function autoResizeTextarea(el) {
   el.style.height = 'auto';
@@ -499,7 +512,7 @@ editProfileBtn.addEventListener("click", async () => {
   const newBio = bioInput.value.trim();
 
   if (newName.length < 2) {
-    showToast("Имя должно быть не короче 2 символов");
+    showToast("Имя должно быть не короче 2 символов", "error");
     return;
   }
 
@@ -536,7 +549,7 @@ editProfileBtn.addEventListener("click", async () => {
 
     justUpdatedProfile = true;
     exitEditMode();
-    showToast("Профиль успешно обновлён!");
+    showToast("Профиль успешно обновлён!", "success");
   } catch (error) {
     console.error(error);
     alert("Ошибка при обновлении профиля.");
