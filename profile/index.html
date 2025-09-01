@@ -215,27 +215,18 @@ nav button.active {
   border: 2px solid #e74c3c;
 }
 
-#name-error-container {
-  height: 0;
-  overflow: hidden;
-  transition: height 0.3s ease;
-}
-
 #name-error {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
   color: #e74c3c;
+  font-weight: 600;
+  font-size: 13px;
+  margin-top: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 #name-error.show {
-  display: block;
+  opacity: 1;
 }
-
-#name-error-container.show {
-  height: 18px; 
-}
-
 
 #user-bio {
   word-wrap: break-word;
@@ -360,13 +351,11 @@ nav button.active {
        <label for="avatar-upload" class="avatar-edit">📷</label>
        <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
      </div>
-   <div>
-  <h2 id="user-name"></h2>
-  <div id="name-error-container">
-    <p id="name-error">Имя должно быть не короче 2 символов</p>
-  </div>
-  <p id="user-email"></p>
-</div>
+     <div>
+       <h2 id="user-name"></h2>
+       <p id="name-error">Имя должно быть не короче 2 символов</p>
+       <p id="user-email"></p>
+     </div>
    </div>
   
   <div class="profile-bio">
@@ -545,11 +534,10 @@ editProfileBtn.addEventListener("click", async () => {
 if (newName.length < 2) {
   nameInput.classList.add("input-error");
   nameErrorEl.classList.add("show");
-  nameErrorEl.parentElement.classList.add("show");
+  return;
 } else {
   nameInput.classList.remove("input-error");
   nameErrorEl.classList.remove("show");
-  nameErrorEl.parentElement.classList.remove("show");
 }
 
   const bioErrorEl = document.getElementById("bio-error");
