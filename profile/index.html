@@ -371,15 +371,18 @@ nav button.active {
 const userNameEl = document.getElementById("user-name");
 const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
+const userBioEl = document.getElementById("user-bio");
 
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
+const cachedBio = localStorage.getItem("cachedBio");
 
 if (cachedName) userNameEl.textContent = cachedName;
 if (cachedEmail) userEmailEl.textContent = cachedEmail;
 if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-
+userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+  
 </script>
  
  <script type="module">
@@ -529,6 +532,8 @@ editProfileBtn.addEventListener("click", async () => {
     userNameEl.textContent = newName;
     userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
+    localStorage.setItem("cachedBio", newBio);
+
     justUpdatedProfile = true;
     exitEditMode();
     showToast("Профиль успешно обновлён!");
@@ -576,6 +581,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   userBioEl.textContent = oldBio !== "" ? oldBio : "Расскажите немного о себе...";
+  localStorage.setItem("cachedBio", oldBio !== "" ? oldBio : "");
   userBioEl.style.visibility = "visible";
 });
 
