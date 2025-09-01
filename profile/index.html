@@ -215,20 +215,19 @@ nav button.active {
   border: 2px solid #e74c3c;
 }
 
-#user-name-container {
-  position: relative;
+#name-error-container {
+  height: 18px;
+  overflow: hidden;
+  transition: height 0.3s ease;
 }
 
 #name-error {
-  position: absolute;
-  top: 100%; 
-  left: 0;
+  margin: 0;
   font-size: 13px;
   font-weight: 600;
   color: #e74c3c;
   opacity: 0;
   transition: opacity 0.3s ease;
-  pointer-events: none; 
 }
 
 #name-error.show {
@@ -358,10 +357,12 @@ nav button.active {
        <label for="avatar-upload" class="avatar-edit">📷</label>
        <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
      </div>
-     <div>
-  <div id="user-name-container" style="position: relative;">
+    <div>
+  <div id="user-name-container">
     <h2 id="user-name"></h2>
-    <p id="name-error">Имя должно быть не короче 2 символов</p>
+    <div id="name-error-container">
+      <p id="name-error">Имя должно быть не короче 2 символов</p>
+    </div>
   </div>
   <p id="user-email"></p>
 </div>
