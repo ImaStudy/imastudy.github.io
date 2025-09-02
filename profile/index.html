@@ -502,52 +502,39 @@ function autoResizeTextarea(el) {
 }
 
 function enterEditMode() {
-  oldName = (userNameEl.textContent || "").trim();
-  oldBio = (userBioEl.textContent || "").trim();
+oldName = (userNameEl.textContent || "").trim();
+oldBio = (userBioEl.textContent || "").trim();
 
-  nameInput.value = oldName;
-  nameInput.addEventListener("input", () => {
-  nameInput.classList.remove("input-error");
-  nameErrorEl.classList.remove("show");
-});
-  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+nameInput.value = oldName;
+bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
-  userNameEl.innerHTML = "";
-  userNameEl.appendChild(nameInput);
+userNameEl.innerHTML = "";
+userNameEl.appendChild(nameInput);
 
-  userBioEl.innerHTML = "";
-  userBioEl.appendChild(bioInput);
+userBioEl.innerHTML = "";
+userBioEl.appendChild(bioInput);
 
-  editProfileBtn.textContent = "Сохранить профиль";
-  editProfileBtn.dataset.mode = "edit";
+editProfileBtn.textContent = "Сохранить профиль";
+editProfileBtn.dataset.mode = "edit";
 
-  cancelEditBtn.style.display = "inline-block";
+cancelEditBtn.style.display = "inline-block";
 }
 
 function exitEditMode() {
-  editProfileBtn.textContent = "Редактировать профиль";
-  editProfileBtn.dataset.mode = "view";
+editProfileBtn.textContent = "Редактировать профиль";
+editProfileBtn.dataset.mode = "view";
 
-  userNameEl.textContent = currentUser.displayName || oldName;
-  userBioEl.textContent = (oldBio && oldBio.trim() !== "")
-    ? oldBio
-    : "Расскажите немного о себе...";
+userNameEl.textContent = currentUser.displayName || oldName;
+userBioEl.textContent = (oldBio && oldBio.trim() !== "") ? oldBio : "Расскажите немного о себе...";
 
-  cancelEditBtn.style.display = "none";
+cancelEditBtn.style.display = "none";
 }
 
 
 const bioErrorEl = document.getElementById("bio-error");
 
 editProfileBtn.addEventListener("click", async () => {
-  if (!currentUser) {
-    let attempts = 0;
-    while (!currentUser && attempts < 10) {
-      await new Promise(res => setTimeout(res, 100));
-      attempts++;
-    }
-    if (!currentUser) return;
-  }
+  if (!currentUser) return;
 
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
@@ -639,8 +626,6 @@ onAuthStateChanged(auth, async (user) => {
   localStorage.setItem("cachedBio", oldBio !== "" ? oldBio : "");
   userBioEl.style.visibility = "visible";
  
-  editProfileBtn.disabled = false;
-  cancelEditBtn.disabled = false;
 });
 
 const avatarInput = document.getElementById("avatar-upload");
