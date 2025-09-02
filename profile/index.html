@@ -502,15 +502,17 @@ function autoResizeTextarea(el) {
 }
 
 function enterEditMode() {
-  oldName = (userNameEl.textContent || "").trim();
-  oldBio = (userBioEl.textContent || "").trim();
+  oldName = userNameEl.textContent.trim() || "";
+  oldBio = userBioEl.textContent.trim() || "";
 
   nameInput.value = oldName;
-  nameInput.addEventListener("input", () => {
   nameInput.classList.remove("input-error");
   nameErrorEl.classList.remove("show");
-});
-  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+
+  bioInput.value = (oldBio === "Расскажите немного о себе...") ? "" : oldBio;
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
+  autoResizeTextarea(bioInput);
 
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
