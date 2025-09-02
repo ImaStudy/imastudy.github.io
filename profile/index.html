@@ -231,11 +231,6 @@ nav button.active {
   height: auto;
 }
 
-.inline-input.input-error,
-.inline-textarea.input-error {
-  border-color: #e74c3c;
-}
-
 #user-bio {
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -273,11 +268,6 @@ nav button.active {
   border-color: #e74c3c;
 }
 
-.inline-input.input-error:focus,
-.inline-textarea.input-error:focus {
-  border-color: #e74c3c; 
-}
-
 #name-error {
   color: #e74c3c;
   font-size: 13px;
@@ -293,10 +283,7 @@ nav button.active {
   height: auto;
 }
  
-#bio-error {
-  color: #e74c3c;
-}
-  
+
 #editProfileBtn, #cancelEditBtn {
   display: inline-block;
   padding: 10px 22px;
@@ -369,7 +356,7 @@ nav button.active {
      </div>
      <div>
        <h2 id="user-name"></h2>
-       <p id="name-error" class="error-message">Имя должно быть не короче 2 символов</p>
+       <p id="name-error">Имя должно быть не короче 2 символов</p>
        <p id="user-email"></p>
      </div>
    </div>
@@ -377,9 +364,10 @@ nav button.active {
   <div class="profile-bio">
   <h3>О себе</h3>
   <p id="user-bio">Расскажите немного о себе...</p>
-<p id="bio-error" class="error-message">
-  Текст должен содержать минимум 10 символов
-</p>
+
+  <p id="bio-error" class="error-message">
+    Текст должен содержать минимум 10 символов (или оставьте поле пустым)
+  </p>
 
   <button id="editProfileBtn">Редактировать профиль</button>
   <button id="cancelEditBtn" class="hidden">Отмена</button>
@@ -469,13 +457,6 @@ const bioInput = document.createElement("textarea");
 bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
-
-bioInput.addEventListener("input", () => {
-  autoResizeTextarea(bioInput);
-
-  bioInput.classList.remove("input-error");
-  bioErrorEl.classList.remove("show");
-});  
   
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
@@ -492,6 +473,19 @@ function autoResizeTextarea(el) {
   el.style.height = 'auto';
   el.style.height = el.scrollHeight + 'px';
 }
+
+bioInput.addEventListener("input", () => {
+  autoResizeTextarea(bioInput);
+
+  const bioErrorEl = document.getElementById("bio-error");
+  if (bioInput.value.trim() !== "" && bioInput.value.trim().length < 10) {
+    bioInput.classList.add("input-error");
+    bioErrorEl.classList.add("show");
+  } else {
+    bioInput.classList.remove("input-error");
+    bioErrorEl.classList.remove("show"); 
+  }
+});
 
 function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
@@ -529,8 +523,6 @@ function exitEditMode() {
 }
 
 
-const bioErrorEl = document.getElementById("bio-error");
-
 editProfileBtn.addEventListener("click", async () => {
   if (!currentUser) return;
 
@@ -542,15 +534,16 @@ editProfileBtn.addEventListener("click", async () => {
   const newName = nameInput.value.trim();
   const newBio = bioInput.value.trim();
 
-  if (newName.length < 2) {
-    nameInput.classList.add("input-error");
-    nameErrorEl.classList.add("show");
-    return;
-  } else {
-    nameInput.classList.remove("input-error");
-    nameErrorEl.classList.remove("show");
-  }
+if (newName.length < 2) {
+  nameInput.classList.add("input-error");
+  nameErrorEl.classList.add("show");
+  return;
+} else {
+  nameInput.classList.remove("input-error");
+  nameErrorEl.classList.remove("show");
+}
 
+  const bioErrorEl = document.getElementById("bio-error");
   if (newBio !== "" && newBio.length < 10) {
     bioInput.classList.add("input-error");
     bioErrorEl.classList.add("show");
@@ -562,10 +555,17 @@ editProfileBtn.addEventListener("click", async () => {
 
   try {
     await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-    await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
+
+   await setDoc(
+  doc(db, "users", currentUser.uid),
+  { bio: newBio },
+  { merge: true }
+);
 
     currentUser.displayName = newName;
     currentUser.photoURL = avatarEl.src;
+
+
     oldName = newName;
     oldBio = newBio;
 
