@@ -207,10 +207,6 @@ nav button.active {
  pointer-events: auto;
 }
 
-  .toast.success {
-  background-color: #2ecc71;
-}
-
 .input-error {
   border: 2px solid #e74c3c;
 }
@@ -218,7 +214,6 @@ nav button.active {
 .error-message {
   color: #e74c3c;
   font-size: 13px;
-  font-weight: 600;
   margin-top: 5px;
   opacity: 0;
   height: 0;
@@ -263,26 +258,6 @@ nav button.active {
   resize: none;
   overflow: hidden;
 }
-
- .inline-input.input-error {
-  border-color: #e74c3c;
-}
-
-#name-error {
-  color: #e74c3c;
-  font-size: 13px;
-  margin-top: 5px;
-  opacity: 0;
-  height: 0;
-  transition: opacity 0.3s ease, height 0.3s ease;
-  overflow: hidden;
-}
-
-#name-error.show {
-  opacity: 1;
-  height: auto;
-}
- 
 
 #editProfileBtn, #cancelEditBtn {
   display: inline-block;
@@ -356,7 +331,6 @@ nav button.active {
      </div>
      <div>
        <h2 id="user-name"></h2>
-       <p id="name-error">Имя должно быть не короче 2 символов</p>
        <p id="user-email"></p>
      </div>
    </div>
@@ -397,18 +371,15 @@ nav button.active {
 const userNameEl = document.getElementById("user-name");
 const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
-const userBioEl = document.getElementById("user-bio");
 
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
-const cachedBio = localStorage.getItem("cachedBio");
 
 if (cachedName) userNameEl.textContent = cachedName;
 if (cachedEmail) userEmailEl.textContent = cachedEmail;
 if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
-  
+
 </script>
  
  <script type="module">
@@ -451,23 +422,17 @@ nameInput.type = "text";
 nameInput.className = "inline-input";
 nameInput.placeholder = "Никнейм";
 
-const nameErrorEl = document.getElementById("name-error");
-
 const bioInput = document.createElement("textarea");
 bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
   
-function showToast(message, type = "success") {
+function showToast(message) {
   const toast = document.getElementById("toast");
   toast.textContent = message;
-
-  toast.className = "toast";
-  toast.classList.add("show", type);
-
+  toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 3000);
 }
-
 
 function autoResizeTextarea(el) {
   el.style.height = 'auto';
@@ -492,10 +457,6 @@ function enterEditMode() {
   oldBio = (userBioEl.textContent || "").trim();
 
   nameInput.value = oldName;
-  nameInput.addEventListener("input", () => {
-  nameInput.classList.remove("input-error");
-  nameErrorEl.classList.remove("show");
-});
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
   userNameEl.innerHTML = "";
@@ -534,14 +495,10 @@ editProfileBtn.addEventListener("click", async () => {
   const newName = nameInput.value.trim();
   const newBio = bioInput.value.trim();
 
-if (newName.length < 2) {
-  nameInput.classList.add("input-error");
-  nameErrorEl.classList.add("show");
-  return;
-} else {
-  nameInput.classList.remove("input-error");
-  nameErrorEl.classList.remove("show");
-}
+  if (newName.length < 2) {
+    showToast("Имя должно быть не короче 2 символов");
+    return;
+  }
 
   const bioErrorEl = document.getElementById("bio-error");
   if (newBio !== "" && newBio.length < 10) {
@@ -572,11 +529,9 @@ if (newName.length < 2) {
     userNameEl.textContent = newName;
     userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
-    localStorage.setItem("cachedBio", newBio);
-
     justUpdatedProfile = true;
     exitEditMode();
-    showToast("Профиль успешно обновлён!", "success");
+    showToast("Профиль успешно обновлён!");
   } catch (error) {
     console.error(error);
     alert("Ошибка при обновлении профиля.");
@@ -621,7 +576,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   userBioEl.textContent = oldBio !== "" ? oldBio : "Расскажите немного о себе...";
-  localStorage.setItem("cachedBio", oldBio !== "" ? oldBio : "");
   userBioEl.style.visibility = "visible";
 });
 
