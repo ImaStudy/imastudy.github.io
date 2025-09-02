@@ -540,7 +540,6 @@ function exitEditMode() {
 const bioErrorEl = document.getElementById("bio-error");
 
 editProfileBtn.addEventListener("click", async () => {
-
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
@@ -581,7 +580,6 @@ editProfileBtn.addEventListener("click", async () => {
 
     localStorage.setItem("cachedBio", newBio);
 
-    justUpdatedProfile = true;
     exitEditMode();
     showToast("Профиль успешно обновлён!", "success");
   } catch (error) {
