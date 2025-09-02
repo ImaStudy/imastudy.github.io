@@ -478,19 +478,6 @@ function autoResizeTextarea(el) {
   el.style.height = el.scrollHeight + 'px';
 }
 
-bioInput.addEventListener("input", () => {
-  autoResizeTextarea(bioInput);
-
-  const bioErrorEl = document.getElementById("bio-error");
-  if (bioInput.value.trim() !== "" && bioInput.value.trim().length < 10) {
-    bioInput.classList.add("input-error");
-    bioErrorEl.classList.add("show");
-  } else {
-    bioInput.classList.remove("input-error");
-    bioErrorEl.classList.remove("show"); 
-  }
-});
-
 function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
   oldBio = (userBioEl.textContent || "").trim();
@@ -527,6 +514,8 @@ function exitEditMode() {
 }
 
 
+const bioErrorEl = document.getElementById("bio-error");
+
 editProfileBtn.addEventListener("click", async () => {
   if (!currentUser) return;
 
@@ -538,16 +527,15 @@ editProfileBtn.addEventListener("click", async () => {
   const newName = nameInput.value.trim();
   const newBio = bioInput.value.trim();
 
-if (newName.length < 2) {
-  nameInput.classList.add("input-error");
-  nameErrorEl.classList.add("show");
-  return;
-} else {
-  nameInput.classList.remove("input-error");
-  nameErrorEl.classList.remove("show");
-}
+  if (newName.length < 2) {
+    nameInput.classList.add("input-error");
+    nameErrorEl.classList.add("show");
+    return;
+  } else {
+    nameInput.classList.remove("input-error");
+    nameErrorEl.classList.remove("show");
+  }
 
-  const bioErrorEl = document.getElementById("bio-error");
   if (newBio !== "" && newBio.length < 10) {
     bioInput.classList.add("input-error");
     bioErrorEl.classList.add("show");
@@ -559,17 +547,10 @@ if (newName.length < 2) {
 
   try {
     await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-
-   await setDoc(
-  doc(db, "users", currentUser.uid),
-  { bio: newBio },
-  { merge: true }
-);
+    await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
 
     currentUser.displayName = newName;
     currentUser.photoURL = avatarEl.src;
-
-
     oldName = newName;
     oldBio = newBio;
 
