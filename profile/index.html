@@ -592,9 +592,6 @@ editProfileBtn.addEventListener("click", async () => {
 });
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
-
-editProfileBtn.disabled = true;
-cancelEditBtn.disabled = true;
   
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
