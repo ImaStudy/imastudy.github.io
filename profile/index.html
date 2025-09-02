@@ -207,6 +207,10 @@ nav button.active {
  pointer-events: auto;
 }
 
+  .toast.success {
+  background-color: #2ecc71;
+}
+
 .input-error {
   border: 2px solid #e74c3c;
 }
@@ -214,6 +218,7 @@ nav button.active {
 .error-message {
   color: #e74c3c;
   font-size: 13px;
+  font-weight: 600;
   margin-top: 5px;
   opacity: 0;
   height: 0;
@@ -224,6 +229,11 @@ nav button.active {
 .error-message.show {
   opacity: 1;
   height: auto;
+}
+
+.inline-input.input-error,
+.inline-textarea.input-error {
+  border-color: #e74c3c;
 }
 
 #user-bio {
@@ -259,6 +269,34 @@ nav button.active {
   overflow: hidden;
 }
 
+ .inline-input.input-error {
+  border-color: #e74c3c;
+}
+
+.inline-input.input-error:focus,
+.inline-textarea.input-error:focus {
+  border-color: #e74c3c; 
+}
+
+#name-error {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: 5px;
+  opacity: 0;
+  height: 0;
+  transition: opacity 0.3s ease, height 0.3s ease;
+  overflow: hidden;
+}
+
+#name-error.show {
+  opacity: 1;
+  height: auto;
+}
+ 
+#bio-error {
+  color: #e74c3c;
+}
+  
 #editProfileBtn, #cancelEditBtn {
   display: inline-block;
   padding: 10px 22px;
@@ -331,6 +369,7 @@ nav button.active {
      </div>
      <div>
        <h2 id="user-name"></h2>
+       <p id="name-error" class="error-message">Имя должно быть не короче 2 символов</p>
        <p id="user-email"></p>
      </div>
    </div>
@@ -338,10 +377,9 @@ nav button.active {
   <div class="profile-bio">
   <h3>О себе</h3>
   <p id="user-bio">Расскажите немного о себе...</p>
-
-  <p id="bio-error" class="error-message">
-    Текст должен содержать минимум 10 символов (или оставьте поле пустым)
-  </p>
+<p id="bio-error" class="error-message">
+  Текст должен содержать минимум 10 символов
+</p>
 
   <button id="editProfileBtn">Редактировать профиль</button>
   <button id="cancelEditBtn" class="hidden">Отмена</button>
@@ -371,15 +409,18 @@ nav button.active {
 const userNameEl = document.getElementById("user-name");
 const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
+const userBioEl = document.getElementById("user-bio");
 
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
+const cachedBio = localStorage.getItem("cachedBio");
 
 if (cachedName) userNameEl.textContent = cachedName;
 if (cachedEmail) userEmailEl.textContent = cachedEmail;
 if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-
+userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+  
 </script>
  
  <script type="module">
@@ -422,41 +463,45 @@ nameInput.type = "text";
 nameInput.className = "inline-input";
 nameInput.placeholder = "Никнейм";
 
+const nameErrorEl = document.getElementById("name-error");
+
 const bioInput = document.createElement("textarea");
 bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
+
+bioInput.addEventListener("input", () => {
+  autoResizeTextarea(bioInput);
+
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
+});  
   
-function showToast(message) {
+function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
   toast.textContent = message;
-  toast.classList.add("show");
+
+  toast.className = "toast";
+  toast.classList.add("show", type);
+
   setTimeout(() => toast.classList.remove("show"), 3000);
 }
+
 
 function autoResizeTextarea(el) {
   el.style.height = 'auto';
   el.style.height = el.scrollHeight + 'px';
 }
 
-bioInput.addEventListener("input", () => {
-  autoResizeTextarea(bioInput);
-
-  const bioErrorEl = document.getElementById("bio-error");
-  if (bioInput.value.trim() !== "" && bioInput.value.trim().length < 10) {
-    bioInput.classList.add("input-error");
-    bioErrorEl.classList.add("show");
-  } else {
-    bioInput.classList.remove("input-error");
-    bioErrorEl.classList.remove("show"); 
-  }
-});
-
 function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
   oldBio = (userBioEl.textContent || "").trim();
 
   nameInput.value = oldName;
+  nameInput.addEventListener("input", () => {
+  nameInput.classList.remove("input-error");
+  nameErrorEl.classList.remove("show");
+});
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
   userNameEl.innerHTML = "";
@@ -484,6 +529,8 @@ function exitEditMode() {
 }
 
 
+const bioErrorEl = document.getElementById("bio-error");
+
 editProfileBtn.addEventListener("click", async () => {
   if (!currentUser) return;
 
@@ -496,11 +543,14 @@ editProfileBtn.addEventListener("click", async () => {
   const newBio = bioInput.value.trim();
 
   if (newName.length < 2) {
-    showToast("Имя должно быть не короче 2 символов");
+    nameInput.classList.add("input-error");
+    nameErrorEl.classList.add("show");
     return;
+  } else {
+    nameInput.classList.remove("input-error");
+    nameErrorEl.classList.remove("show");
   }
 
-  const bioErrorEl = document.getElementById("bio-error");
   if (newBio !== "" && newBio.length < 10) {
     bioInput.classList.add("input-error");
     bioErrorEl.classList.add("show");
@@ -512,26 +562,21 @@ editProfileBtn.addEventListener("click", async () => {
 
   try {
     await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-
-   await setDoc(
-  doc(db, "users", currentUser.uid),
-  { bio: newBio },
-  { merge: true }
-);
+    await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
 
     currentUser.displayName = newName;
     currentUser.photoURL = avatarEl.src;
-
-
     oldName = newName;
     oldBio = newBio;
 
     userNameEl.textContent = newName;
     userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
+    localStorage.setItem("cachedBio", newBio);
+
     justUpdatedProfile = true;
     exitEditMode();
-    showToast("Профиль успешно обновлён!");
+    showToast("Профиль успешно обновлён!", "success");
   } catch (error) {
     console.error(error);
     alert("Ошибка при обновлении профиля.");
@@ -540,6 +585,9 @@ editProfileBtn.addEventListener("click", async () => {
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
 
+editProfileBtn.disabled = true;
+cancelEditBtn.disabled = true;
+  
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     setTimeout(() => window.location.href = "/login/", 1500);
@@ -576,7 +624,11 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   userBioEl.textContent = oldBio !== "" ? oldBio : "Расскажите немного о себе...";
+  localStorage.setItem("cachedBio", oldBio !== "" ? oldBio : "");
   userBioEl.style.visibility = "visible";
+ 
+  editProfileBtn.disabled = false;
+  cancelEditBtn.disabled = false;
 });
 
 const avatarInput = document.getElementById("avatar-upload");
