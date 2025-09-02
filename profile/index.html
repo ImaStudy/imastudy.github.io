@@ -502,17 +502,15 @@ function autoResizeTextarea(el) {
 }
 
 function enterEditMode() {
-  oldName = userNameEl.textContent.trim() || "";
-  oldBio = userBioEl.textContent.trim() || "";
+  oldName = (userNameEl.textContent || "").trim();
+  oldBio = (userBioEl.textContent || "").trim();
 
   nameInput.value = oldName;
+  nameInput.addEventListener("input", () => {
   nameInput.classList.remove("input-error");
   nameErrorEl.classList.remove("show");
-
-  bioInput.value = (oldBio === "Расскажите немного о себе...") ? "" : oldBio;
-  bioInput.classList.remove("input-error");
-  bioErrorEl.classList.remove("show");
-  autoResizeTextarea(bioInput);
+});
+  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
@@ -542,6 +540,8 @@ function exitEditMode() {
 const bioErrorEl = document.getElementById("bio-error");
 
 editProfileBtn.addEventListener("click", async () => {
+  if (!currentUser) return;
+
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
@@ -582,6 +582,7 @@ editProfileBtn.addEventListener("click", async () => {
 
     localStorage.setItem("cachedBio", newBio);
 
+    justUpdatedProfile = true;
     exitEditMode();
     showToast("Профиль успешно обновлён!", "success");
   } catch (error) {
@@ -591,6 +592,9 @@ editProfileBtn.addEventListener("click", async () => {
 });
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
+
+editProfileBtn.disabled = true;
+cancelEditBtn.disabled = true;
   
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -630,7 +634,9 @@ onAuthStateChanged(auth, async (user) => {
   userBioEl.textContent = oldBio !== "" ? oldBio : "Расскажите немного о себе...";
   localStorage.setItem("cachedBio", oldBio !== "" ? oldBio : "");
   userBioEl.style.visibility = "visible";
-
+ 
+  editProfileBtn.disabled = false;
+  cancelEditBtn.disabled = false;
 });
 
 const avatarInput = document.getElementById("avatar-upload");
