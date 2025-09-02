@@ -231,6 +231,11 @@ nav button.active {
   height: auto;
 }
 
+.inline-input.input-error,
+.inline-textarea.input-error {
+  border-color: #e74c3c;
+}
+
 #user-bio {
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -356,7 +361,7 @@ nav button.active {
      </div>
      <div>
        <h2 id="user-name"></h2>
-       <p id="name-error">Имя должно быть не короче 2 символов</p>
+       <p id="name-error" class="error-message">Имя должно быть не короче 2 символов</p>
        <p id="user-email"></p>
      </div>
    </div>
@@ -364,10 +369,9 @@ nav button.active {
   <div class="profile-bio">
   <h3>О себе</h3>
   <p id="user-bio">Расскажите немного о себе...</p>
-
-  <p id="bio-error" class="error-message">
-    Текст должен содержать минимум 10 символов (или оставьте поле пустым)
-  </p>
+<p id="bio-error" class="error-message">
+  Текст должен содержать минимум 10 символов
+</p>
 
   <button id="editProfileBtn">Редактировать профиль</button>
   <button id="cancelEditBtn" class="hidden">Отмена</button>
