@@ -461,6 +461,13 @@ const bioInput = document.createElement("textarea");
 bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
+
+bioInput.addEventListener("input", () => {
+  autoResizeTextarea(bioInput);
+
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
+});  
   
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
