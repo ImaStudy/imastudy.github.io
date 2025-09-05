@@ -528,12 +528,9 @@ function exitEditMode() {
   cancelEditBtn.style.display = "none";
 }
 
-// Кнопки доступны сразу, но действия выполняются только если есть текущий пользователь
-editProfileBtn.addEventListener("click", async () => {
-  if (!currentUser) {
-    showToast("Пожалуйста, войдите, чтобы редактировать профиль", "error");
-    return;
-  }
+editProfileBtn.addEventListener("click", () => {
+  enterEditMode();
+});
 
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
