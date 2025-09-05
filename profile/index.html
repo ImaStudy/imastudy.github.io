@@ -531,7 +531,8 @@ function exitEditMode() {
 
 const bioErrorEl = document.getElementById("bio-error");
 
-if (editProfileBtn.dataset.mode !== "edit") {
+editProfileBtn.addEventListener("click", async () => {
+  if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
 }
