@@ -502,10 +502,14 @@ function autoResizeTextarea(el) {
 }
 
 function enterEditMode() {
-  oldName = userNameEl.textContent.trim();
-  oldBio = userBioEl.textContent.trim();
+  oldName = (userNameEl.textContent || "").trim();
+  oldBio = (userBioEl.textContent || "").trim();
 
   nameInput.value = oldName;
+  nameInput.addEventListener("input", () => {
+  nameInput.classList.remove("input-error");
+  nameErrorEl.classList.remove("show");
+});
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
   userNameEl.innerHTML = "";
@@ -516,28 +520,28 @@ function enterEditMode() {
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
-  cancelEditBtn.style.display = "inline-block";
 
-  setTimeout(() => {
-    nameInput.focus();
-    autoResizeTextarea(bioInput);
-    bioInput.selectionStart = bioInput.value.length;
-  }, 0);
+  cancelEditBtn.style.display = "inline-block";
 }
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
 
-  userNameEl.textContent = oldName;
-  userBioEl.textContent = oldBio || "Расскажите немного о себе...";
+  userNameEl.textContent = currentUser.displayName || oldName;
+  userBioEl.textContent = (oldBio && oldBio.trim() !== "")
+    ? oldBio
+    : "Расскажите немного о себе...";
 
   cancelEditBtn.style.display = "none";
 }
 
+
 const bioErrorEl = document.getElementById("bio-error");
 
 editProfileBtn.addEventListener("click", async () => {
+  if (!currentUser) return;
+
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
@@ -564,29 +568,33 @@ editProfileBtn.addEventListener("click", async () => {
     bioErrorEl.classList.remove("show");
   }
 
-  userNameEl.textContent = newName;
-  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-  exitEditMode();
-  showToast("Профиль обновлён!", "success");
-
-  if (!currentUser) return;
-
   try {
     await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
     await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
-    localStorage.setItem("cachedName", newName);
-    localStorage.setItem("cachedBio", newBio);
-    localStorage.setItem("cachedPhotoURL", avatarEl.src);
 
-    showToast("Профиль успешно сохранён в базе!");
-  } catch (err) {
-    console.error("Ошибка при сохранении профиля:", err);
-    showToast("Не удалось сохранить профиль", "error");
+    currentUser.displayName = newName;
+    currentUser.photoURL = avatarEl.src;
+    oldName = newName;
+    oldBio = newBio;
+
+    userNameEl.textContent = newName;
+    userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+
+    localStorage.setItem("cachedBio", newBio);
+
+    justUpdatedProfile = true;
+    exitEditMode();
+    showToast("Профиль успешно обновлён!", "success");
+  } catch (error) {
+    console.error(error);
+    alert("Ошибка при обновлении профиля.");
   }
 });
 
-
 cancelEditBtn.addEventListener("click", () => exitEditMode());
+
+editProfileBtn.disabled = true;
+cancelEditBtn.disabled = true;
   
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -604,14 +612,31 @@ onAuthStateChanged(auth, async (user) => {
   userEmailEl.textContent = email;
   userNameEl.textContent = name;
 
+  localStorage.setItem("cachedName", name);
+  localStorage.setItem("cachedEmail", email);
+  localStorage.setItem("cachedPhotoURL", photo);
+
   try {
-    const docSnap = await getDoc(doc(db, "users", user.uid));
-    const bioFromDB = docSnap.exists() ? docSnap.data().bio : "";
-    userBioEl.textContent = bioFromDB || "Расскажите немного о себе...";
-  } catch (err) {
-    console.error("Ошибка при получении bio:", err);
-    userBioEl.textContent = "Расскажите немного о себе...";
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
+
+    if (snap.exists()) {
+      const data = snap.data();
+      oldBio = (data.bio || "").trim();
+    } else {
+      oldBio = "";
+    }
+  } catch (e) {
+    console.error("Ошибка загрузки bio из Firestore:", e);
+    oldBio = "";
   }
+
+  userBioEl.textContent = oldBio !== "" ? oldBio : "Расскажите немного о себе...";
+  localStorage.setItem("cachedBio", oldBio !== "" ? oldBio : "");
+  userBioEl.style.visibility = "visible";
+ 
+  editProfileBtn.disabled = false;
+  cancelEditBtn.disabled = false;
 });
 
 const avatarInput = document.getElementById("avatar-upload");
