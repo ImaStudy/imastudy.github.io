@@ -536,10 +536,10 @@ const bioErrorEl = document.getElementById("bio-error");
 
 editProfileBtn.addEventListener("click", async () => {
 
-  if (editProfileBtn.dataset.mode !== "edit") {
+if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
-  }
+}
  
   const newName = nameInput.value.trim();
   const newBio = bioInput.value.trim();
@@ -627,9 +627,6 @@ onAuthStateChanged(auth, async (user) => {
   userBioEl.textContent = oldBio !== "" ? oldBio : "Расскажите немного о себе...";
   localStorage.setItem("cachedBio", oldBio !== "" ? oldBio : "");
   userBioEl.style.visibility = "visible";
- 
-  editProfileBtn.disabled = false;
-  cancelEditBtn.disabled = false;
 });
 
 const avatarInput = document.getElementById("avatar-upload");
