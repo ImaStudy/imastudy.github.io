@@ -514,6 +514,9 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
+  nameInput.focus();
+  autoResizeTextarea(bioInput);
+
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
   cancelEditBtn.style.display = "inline-block";
