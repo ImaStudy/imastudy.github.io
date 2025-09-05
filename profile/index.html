@@ -514,13 +514,16 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
-  nameInput.focus();
-  autoResizeTextarea(bioInput);
-
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
   cancelEditBtn.style.display = "inline-block";
+
+  requestAnimationFrame(() => {
+    nameInput.focus();
+    autoResizeTextarea(bioInput);
+  });
 }
+
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
