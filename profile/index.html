@@ -567,16 +567,19 @@ userBioEl.textContent = newBio === "" ? "Расскажите немного о 
 exitEditMode();
 showToast("Профиль обновлён!", "success");
 
-  if (currentUser) {
-    (async () => {
-      try {
-        await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-        await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
-      } catch (err) {
-        console.error("Ошибка при сохранении в Firebase:", err);
-      }
-    })();
+
+if (currentUser) {
+  try {
+    await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
+    await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
+
+    showToast("Профиль успешно сохранён в базе!");
+  } catch (err) {
+    console.error("Ошибка при сохранении в Firebase:", err);
+    showToast("Не удалось сохранить профиль на сервере", "error");
   }
+}
+
 });
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
