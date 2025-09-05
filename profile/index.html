@@ -594,16 +594,18 @@ onAuthStateChanged(auth, async (user) => {
   userEmailEl.textContent = email;
   userNameEl.textContent = name;
 
-  localStorage.setItem("cachedName", name);
-  localStorage.setItem("cachedEmail", email);
-  localStorage.setItem("cachedPhotoURL", photo);
-
   const userDoc = await getDoc(doc(db, "users", user.uid));
   let bio = "Расскажите немного о себе...";
   if (userDoc.exists()) bio = userDoc.data().bio || bio;
 
   userBioEl.textContent = bio;
+
+  oldName = name;
   oldBio = bio;
+
+  localStorage.setItem("cachedName", name);
+  localStorage.setItem("cachedEmail", email);
+  localStorage.setItem("cachedPhotoURL", photo);
   localStorage.setItem("cachedBio", bio);
 
   editProfileBtn.dataset.mode = "view";
