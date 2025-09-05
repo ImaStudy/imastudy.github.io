@@ -528,8 +528,12 @@ function exitEditMode() {
   cancelEditBtn.style.display = "none";
 }
 
+// Кнопки доступны сразу, но действия выполняются только если есть текущий пользователь
 editProfileBtn.addEventListener("click", async () => {
-  if (!currentUser) return;
+  if (!currentUser) {
+    showToast("Пожалуйста, войдите, чтобы редактировать профиль", "error");
+    return;
+  }
 
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
@@ -572,10 +576,10 @@ editProfileBtn.addEventListener("click", async () => {
   }
 });
 
-cancelEditBtn.addEventListener("click", () => exitEditMode());
-
-editProfileBtn.disabled = true;
-cancelEditBtn.disabled = true;
+cancelEditBtn.addEventListener("click", () => {
+  if (!currentUser) return;
+  exitEditMode();
+});
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -618,9 +622,6 @@ onAuthStateChanged(auth, async (user) => {
     console.error("Ошибка загрузки bio из Firestore:", e);
     oldBio = cachedBio;
   }
-
-  editProfileBtn.disabled = false;
-  cancelEditBtn.disabled = false;
 });
 
 const avatarInput = document.getElementById("avatar-upload");
