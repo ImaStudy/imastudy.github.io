@@ -521,10 +521,9 @@ function enterEditMode() {
   setTimeout(() => {
     nameInput.focus();
     autoResizeTextarea(bioInput);
+    bioInput.selectionStart = bioInput.value.length;
   }, 0);
 }
-
-
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
