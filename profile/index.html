@@ -531,37 +531,40 @@ function exitEditMode() {
 
 const bioErrorEl = document.getElementById("bio-error");
 
-editProfileBtn.addEventListener("click", async () => {
-  if (editProfileBtn.dataset.mode !== "edit") {
+if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
-  }
+}
 
-  const newName = nameInput.value.trim();
-  const newBio = bioInput.value.trim();
+const newName = nameInput.value.trim();
+const newBio = bioInput.value.trim();
 
-  if (newName.length < 2) {
+if (newName.length < 2) {
     nameInput.classList.add("input-error");
     nameErrorEl.classList.add("show");
     return;
-  } else {
+} else {
     nameInput.classList.remove("input-error");
     nameErrorEl.classList.remove("show");
-  }
+}
 
-  if (newBio !== "" && newBio.length < 10) {
+if (newBio !== "" && newBio.length < 10) {
     bioInput.classList.add("input-error");
     bioErrorEl.classList.add("show");
     return;
-  } else {
+} else {
     bioInput.classList.remove("input-error");
     bioErrorEl.classList.remove("show");
-  }
+}
 
-  userNameEl.textContent = newName;
-  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-  exitEditMode();
-  showToast("Профиль обновлён!", "success");
+localStorage.setItem("cachedName", newName);
+localStorage.setItem("cachedBio", newBio === "" ? "Расскажите немного о себе..." : newBio);
+
+userNameEl.textContent = newName;
+userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+
+exitEditMode();
+showToast("Профиль обновлён!", "success");
 
   if (currentUser) {
     (async () => {
