@@ -535,55 +535,50 @@ editProfileBtn.addEventListener("click", async () => {
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
-}
+  }
 
-const newName = nameInput.value.trim();
-const newBio = bioInput.value.trim();
+  const newName = nameInput.value.trim();
+  const newBio = bioInput.value.trim();
 
-if (newName.length < 2) {
+  if (newName.length < 2) {
     nameInput.classList.add("input-error");
     nameErrorEl.classList.add("show");
     return;
-} else {
+  } else {
     nameInput.classList.remove("input-error");
     nameErrorEl.classList.remove("show");
-}
+  }
 
-if (newBio !== "" && newBio.length < 10) {
+  if (newBio !== "" && newBio.length < 10) {
     bioInput.classList.add("input-error");
     bioErrorEl.classList.add("show");
     return;
-} else {
+  } else {
     bioInput.classList.remove("input-error");
     bioErrorEl.classList.remove("show");
-}
-
-localStorage.setItem("cachedName", newName);
-localStorage.setItem("cachedBio", newBio === "" ? "Расскажите немного о себе..." : newBio);
-
-userNameEl.textContent = newName;
-userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-
-exitEditMode();
-showToast("Профиль обновлён!", "success");
-
-
-if (currentUser) {
-  try {
-    await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-    await setDoc(doc(db, "users", currentUser.uid), {
-      displayName: newName,
-      bio: newBio === "" ? "Расскажите немного о себе..." : newBio,
-      photoURL: avatarEl.src
-    }, { merge: true });
-
-    showToast("Профиль успешно сохранён в базе!");
-  } catch (err) {
-    console.error("Ошибка при сохранении в Firebase:", err);
-    showToast("Не удалось сохранить профиль на сервере", "error");
   }
-}
 
+  userNameEl.textContent = newName;
+  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+
+  exitEditMode();
+  showToast("Профиль обновлён!", "success");
+
+  if (currentUser) {
+    try {
+      await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
+      await setDoc(doc(db, "users", currentUser.uid), {
+        displayName: newName,
+        bio: newBio === "" ? "Расскажите немного о себе..." : newBio,
+        photoURL: avatarEl.src
+      }, { merge: true });
+
+      showToast("Профиль успешно сохранён в базе!");
+    } catch (err) {
+      console.error("Ошибка при сохранении в Firebase:", err);
+      showToast("Не удалось сохранить профиль на сервере", "error");
+    }
+  }
 });
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
