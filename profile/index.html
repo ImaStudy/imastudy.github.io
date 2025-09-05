@@ -598,12 +598,14 @@ onAuthStateChanged(auth, async (user) => {
   userEmailEl.textContent = email;
   userNameEl.textContent = name;
 
-  localStorage.setItem("cachedName", name);
-  localStorage.setItem("cachedEmail", email);
-  localStorage.setItem("cachedPhotoURL", photo);
-
-  const cachedBio = localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
-  userBioEl.textContent = cachedBio;
+  try {
+    const docSnap = await getDoc(doc(db, "users", user.uid));
+    const bioFromDB = docSnap.exists() ? docSnap.data().bio : "";
+    userBioEl.textContent = bioFromDB || "Расскажите немного о себе...";
+  } catch (err) {
+    console.error("Ошибка при получении bio:", err);
+    userBioEl.textContent = "Расскажите немного о себе...";
+  }
 });
 
 const avatarInput = document.getElementById("avatar-upload");
