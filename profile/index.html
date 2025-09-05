@@ -529,6 +529,7 @@ function exitEditMode() {
 }
 
 editProfileBtn.addEventListener("click", async () => {
+
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
@@ -541,18 +542,12 @@ editProfileBtn.addEventListener("click", async () => {
     nameInput.classList.add("input-error");
     nameErrorEl.classList.add("show");
     return;
-  } else {
-    nameInput.classList.remove("input-error");
-    nameErrorEl.classList.remove("show");
   }
 
   if (newBio !== "" && newBio.length < 10) {
     bioInput.classList.add("input-error");
     bioErrorEl.classList.add("show");
     return;
-  } else {
-    bioInput.classList.remove("input-error");
-    bioErrorEl.classList.remove("show");
   }
 
   try {
@@ -564,6 +559,7 @@ editProfileBtn.addEventListener("click", async () => {
 
     oldName = newName;
     oldBio = newBio;
+
     userNameEl.textContent = newName;
     userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
 
@@ -574,7 +570,7 @@ editProfileBtn.addEventListener("click", async () => {
     alert("Ошибка при обновлении профиля.");
   }
 });
-
+ 
 cancelEditBtn.addEventListener("click", () => {
   if (!currentUser) return;
   exitEditMode();
