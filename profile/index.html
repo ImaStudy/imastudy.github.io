@@ -506,10 +506,6 @@ function enterEditMode() {
   oldBio = (userBioEl.textContent || "").trim();
 
   nameInput.value = oldName;
-  nameInput.addEventListener("input", () => {
-  nameInput.classList.remove("input-error");
-  nameErrorEl.classList.remove("show");
-});
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
   userNameEl.innerHTML = "";
@@ -540,13 +536,12 @@ function exitEditMode() {
 const bioErrorEl = document.getElementById("bio-error");
 
 editProfileBtn.addEventListener("click", async () => {
-  if (!currentUser) return;
 
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
   }
-
+ 
   const newName = nameInput.value.trim();
   const newBio = bioInput.value.trim();
 
@@ -568,33 +563,32 @@ editProfileBtn.addEventListener("click", async () => {
     bioErrorEl.classList.remove("show");
   }
 
-  try {
-    await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-    await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
+  if (currentUser) {
+    try {
+      await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
+      await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
 
-    currentUser.displayName = newName;
-    currentUser.photoURL = avatarEl.src;
-    oldName = newName;
-    oldBio = newBio;
-
-    userNameEl.textContent = newName;
-    userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-
-    localStorage.setItem("cachedBio", newBio);
-
-    justUpdatedProfile = true;
-    exitEditMode();
-    showToast("Профиль успешно обновлён!", "success");
-  } catch (error) {
-    console.error(error);
-    alert("Ошибка при обновлении профиля.");
+      currentUser.displayName = newName;
+      currentUser.photoURL = avatarEl.src;
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при обновлении профиля.");
+    }
   }
+
+  oldName = newName;
+  oldBio = newBio;
+  userNameEl.textContent = newName;
+  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+
+  localStorage.setItem("cachedBio", newBio);
+
+  justUpdatedProfile = true;
+  exitEditMode();
+  showToast("Профиль успешно обновлён!", "success");
 });
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
-
-editProfileBtn.disabled = true;
-cancelEditBtn.disabled = true;
   
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
