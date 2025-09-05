@@ -584,33 +584,30 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-currentUser = user;
+  currentUser = user;
 
-const name  = user.displayName || "Пользователь";
-const email = user.email;
-const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+  const name  = user.displayName || "Пользователь";
+  const email = user.email;
+  const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 
-avatarEl.src = photo;
-userEmailEl.textContent = email;
-userNameEl.textContent = name;
+  avatarEl.src = photo;
+  userEmailEl.textContent = email;
+  userNameEl.textContent = name;
 
-localStorage.setItem("cachedName", name);
-localStorage.setItem("cachedEmail", email);
-localStorage.setItem("cachedPhotoURL", photo);
+  localStorage.setItem("cachedName", name);
+  localStorage.setItem("cachedEmail", email);
+  localStorage.setItem("cachedPhotoURL", photo);
 
-// Bio из Firestore
-const userDoc = await getDoc(doc(db, "users", user.uid));
-let bio = "Расскажите немного о себе...";
-if (userDoc.exists()) {
-  bio = userDoc.data().bio || bio;
-}
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+  let bio = "Расскажите немного о себе...";
+  if (userDoc.exists()) bio = userDoc.data().bio || bio;
 
-userBioEl.textContent = bio;
-oldBio = bio;
+  userBioEl.textContent = bio;
+  oldBio = bio;
+  localStorage.setItem("cachedBio", bio);
 
-localStorage.setItem("cachedBio", bio);
-
-userBioEl.style.visibility = "visible";
+  editProfileBtn.dataset.mode = "view";
+  userBioEl.style.visibility = "visible";
 });
 
 const avatarInput = document.getElementById("avatar-upload");
