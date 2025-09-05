@@ -563,16 +563,17 @@ editProfileBtn.addEventListener("click", async () => {
   exitEditMode();
   showToast("Профиль обновлён!", "success");
 
-  if (currentUser) {
-    (async () => {
-      try {
-        await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-        await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
-      } catch (err) {
-        console.error("Ошибка при сохранении в Firebase:", err);
-      }
-    })();
+if (currentUser) {
+  try {
+    await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
+    await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
+
+    localStorage.setItem("cachedName", newName);
+    localStorage.setItem("cachedBio", newBio);
+  } catch (err) {
+    console.error("Ошибка при сохранении в Firebase:", err);
   }
+}
 });
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
@@ -583,24 +584,33 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  currentUser = user;
+currentUser = user;
 
-  const name  = user.displayName || "Пользователь";
-  const email = user.email;
-  const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
+const name  = user.displayName || "Пользователь";
+const email = user.email;
+const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 
-  avatarEl.src = photo;
-  userEmailEl.textContent = email;
-  userNameEl.textContent = name;
+avatarEl.src = photo;
+userEmailEl.textContent = email;
+userNameEl.textContent = name;
 
-  localStorage.setItem("cachedName", name);
-  localStorage.setItem("cachedEmail", email);
-  localStorage.setItem("cachedPhotoURL", photo);
-  localStorage.setItem("cachedBio", newBio);
+localStorage.setItem("cachedName", name);
+localStorage.setItem("cachedEmail", email);
+localStorage.setItem("cachedPhotoURL", photo);
 
-oldBio = userBioEl.textContent || "Расскажите немного о себе...";
+// Bio из Firestore
+const userDoc = await getDoc(doc(db, "users", user.uid));
+let bio = "Расскажите немного о себе...";
+if (userDoc.exists()) {
+  bio = userDoc.data().bio || bio;
+}
 
-  userBioEl.style.visibility = "visible";
+userBioEl.textContent = bio;
+oldBio = bio;
+
+localStorage.setItem("cachedBio", bio);
+
+userBioEl.style.visibility = "visible";
 });
 
 const avatarInput = document.getElementById("avatar-upload");
