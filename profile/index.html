@@ -518,11 +518,12 @@ function enterEditMode() {
   editProfileBtn.dataset.mode = "edit";
   cancelEditBtn.style.display = "inline-block";
 
-  requestAnimationFrame(() => {
+  setTimeout(() => {
     nameInput.focus();
     autoResizeTextarea(bioInput);
-  });
+  }, 0);
 }
+
 
 
 function exitEditMode() {
