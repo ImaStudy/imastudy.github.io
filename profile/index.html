@@ -564,15 +564,10 @@ editProfileBtn.addEventListener("click", async () => {
   exitEditMode();
   showToast("Профиль обновлён!", "success");
 
-  if (currentUser) {
+ if (currentUser) {
     try {
       await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
-      await setDoc(doc(db, "users", currentUser.uid), {
-        displayName: newName,
-        bio: newBio === "" ? "Расскажите немного о себе..." : newBio,
-        photoURL: avatarEl.src
-      }, { merge: true });
-
+      await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
       showToast("Профиль успешно сохранён в базе!");
     } catch (err) {
       console.error("Ошибка при сохранении в Firebase:", err);
@@ -591,27 +586,20 @@ onAuthStateChanged(auth, async (user) => {
 
   currentUser = user;
 
-   const docSnap = await getDoc(doc(db, "users", user.uid));
-   const userData = docSnap.exists() ? docSnap.data() : {};
-
   const name  = user.displayName || "Пользователь";
   const email = user.email;
   const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
-  const bio   = userData.bio || "Расскажите немного о себе...";
 
   avatarEl.src = photo;
   userEmailEl.textContent = email;
   userNameEl.textContent = name;
-  userBioEl.textContent = bio;
 
   localStorage.setItem("cachedName", name);
   localStorage.setItem("cachedEmail", email);
   localStorage.setItem("cachedPhotoURL", photo);
-  localStorage.setItem("cachedBio", bio);
 
-oldBio = userBioEl.textContent || "Расскажите немного о себе...";
-
-  userBioEl.style.visibility = "visible";
+  const cachedBio = localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
+  userBioEl.textContent = cachedBio;
 });
 
 const avatarInput = document.getElementById("avatar-upload");
