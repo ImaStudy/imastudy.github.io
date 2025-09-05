@@ -535,12 +535,11 @@ function exitEditMode() {
 const bioErrorEl = document.getElementById("bio-error");
 
 editProfileBtn.addEventListener("click", async () => {
-
-if (editProfileBtn.dataset.mode !== "edit") {
+  if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
     return;
-}
- 
+  }
+
   const newName = nameInput.value.trim();
   const newBio = bioInput.value.trim();
 
@@ -562,29 +561,19 @@ if (editProfileBtn.dataset.mode !== "edit") {
     bioErrorEl.classList.remove("show");
   }
 
+  userNameEl.textContent = newName;
+  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
+  exitEditMode();
+  showToast("Профиль обновлён!", "success");
+
   if (currentUser) {
     try {
       await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
       await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
-
-      currentUser.displayName = newName;
-      currentUser.photoURL = avatarEl.src;
-    } catch (error) {
-      console.error(error);
-      alert("Ошибка при обновлении профиля.");
+    } catch (err) {
+      console.error("Ошибка при сохранении в Firebase:", err);
     }
   }
-
-  oldName = newName;
-  oldBio = newBio;
-  userNameEl.textContent = newName;
-  userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-
-  localStorage.setItem("cachedBio", newBio);
-
-  justUpdatedProfile = true;
-  exitEditMode();
-  showToast("Профиль успешно обновлён!", "success");
 });
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
