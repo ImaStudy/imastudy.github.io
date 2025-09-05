@@ -560,27 +560,25 @@ editProfileBtn.addEventListener("click", async () => {
 
   userNameEl.textContent = newName;
   userBioEl.textContent = newBio === "" ? "Расскажите немного о себе..." : newBio;
-
   exitEditMode();
   showToast("Профиль обновлён!", "success");
 
-if (currentUser) {
+  if (!currentUser) return;
+
   try {
     await updateProfile(currentUser, { displayName: newName, photoURL: avatarEl.src });
     await setDoc(doc(db, "users", currentUser.uid), { bio: newBio }, { merge: true });
-
     localStorage.setItem("cachedName", newName);
     localStorage.setItem("cachedBio", newBio);
     localStorage.setItem("cachedPhotoURL", avatarEl.src);
 
-    showToast("Профиль успешно сохранён!");
+    showToast("Профиль успешно сохранён в базе!");
   } catch (err) {
-    console.error("Ошибка при сохранении в Firebase:", err);
-    showToast("Не удалось сохранить профиль на сервере", "error");
+    console.error("Ошибка при сохранении профиля:", err);
+    showToast("Не удалось сохранить профиль", "error");
   }
-}
-
 });
+
 
 cancelEditBtn.addEventListener("click", () => exitEditMode());
   
