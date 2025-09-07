@@ -346,6 +346,48 @@ nav button.active {
   background: none;
 }
 
+
+
+.skeleton {
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+  border-radius: 6px;
+  color: transparent;
+}
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.skeleton-name {
+  width: 160px;
+  height: 22px;
+  margin-bottom: 6px;
+}
+
+.skeleton-email {
+  width: 200px;
+  height: 16px;
+}
+
+.skeleton-bio {
+  width: 100%;
+  max-width: 520px;
+  height: 60px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+  
+
    footer {
    text-align: center;
    font-size: 14px;
@@ -371,33 +413,47 @@ nav button.active {
 </header>
 <hr />
 
- <main>
- <section class="profile-card">
-   <div class="profile-header">
-     <div style="position: relative;">
-       <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
-       <label for="avatar-upload" class="avatar-edit">📷</label>
-       <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
-     </div>
-     <div>
-       <h2 id="user-name"></h2>
-       <p id="name-error" class="error-message">Имя должно быть не короче 2 символов</p>
-       <p id="user-email"></p>
-     </div>
-   </div>
-  
-  <div class="profile-bio">
-  <h3>О себе</h3>
-  <p id="user-bio">Расскажите немного о себе...</p>
-<p id="bio-error" class="error-message">
-  Текст должен содержать минимум 10 символов
-</p>
 
-  <button id="editProfileBtn">Редактировать профиль</button>
-  <button id="cancelEditBtn" class="hidden">Отмена</button>
+<div id="profile-skeleton">
+  <div class="profile-header">
+    <div class="skeleton skeleton-avatar"></div>
+    <div>
+      <div class="skeleton skeleton-name"></div>
+      <div class="skeleton skeleton-email"></div>
+    </div>
+  </div>
+
+  <div class="profile-bio">
+    <div class="skeleton skeleton-bio"></div>
+  </div>
 </div>
- </section>
+
+<main id="profile-content" style="display:none;">
+  <section class="profile-card">
+    <div class="profile-header">
+      <div style="position: relative;">
+        <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
+        <label for="avatar-upload" class="avatar-edit">📷</label>
+        <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
+      </div>
+      <div>
+        <h2 id="user-name"></h2>
+        <p id="name-error" class="error-message">Имя должно быть не короче 2 символов</p>
+        <p id="user-email"></p>
+      </div>
+    </div>
+
+    <div class="profile-bio">
+      <h3>О себе</h3>
+      <p id="user-bio">Расскажите немного о себе...</p>
+      <p id="bio-error" class="error-message">Текст должен содержать минимум 10 символов</p>
+
+      <button id="editProfileBtn">Редактировать профиль</button>
+      <button id="cancelEditBtn" class="hidden">Отмена</button>
+    </div>
+  </section>
 </main>
+
 
  <div id="cropModal" class="modal">
  <div class="modal-content">
@@ -592,6 +648,9 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
+
+ document.getElementById("profile-skeleton").style.display = "none";
+document.getElementById("profile-content").style.display = "block";
 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
