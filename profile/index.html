@@ -385,9 +385,6 @@ nav button.active {
   margin-top: 10px;
   border-radius: 8px;
 }
-
-  
-
    footer {
    text-align: center;
    font-size: 14px;
@@ -397,6 +394,23 @@ nav button.active {
  </style>
 </head>
 <body> 
+
+<script>
+  const cachedName = localStorage.getItem("cachedName");
+  const cachedEmail = localStorage.getItem("cachedEmail");
+
+  if (cachedName && cachedEmail) {
+    document.addEventListener("DOMContentLoaded", () => {
+      const skeleton = document.getElementById("profile-skeleton");
+      const content = document.getElementById("profile-content");
+      if (skeleton && content) {
+        skeleton.style.display = "none";
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
+ 
 <header>
  <div class="header-left">
    <h1>ImaStudy</h1>
@@ -412,7 +426,6 @@ nav button.active {
 </nav>
 </header>
 <hr />
-
 
 <section id="profile-skeleton" class="profile-card">
   <div class="profile-header">
@@ -453,7 +466,6 @@ nav button.active {
     </div>
   </section>
 </main>
-
 
  <div id="cropModal" class="modal">
  <div class="modal-content">
