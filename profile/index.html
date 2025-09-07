@@ -530,10 +530,10 @@ function exitEditMode() {
 
 editProfileBtn.addEventListener("click", async () => {
 
-   if (!currentUser) {
-    showToast("Пожалуйста, войдите, чтобы редактировать профиль", "error");
-    return;
-  }
+if (!currentUser) {
+  showToast("Загрузка профиля...", "info");
+  return;
+}
 
   if (editProfileBtn.dataset.mode !== "edit") {
     enterEditMode();
