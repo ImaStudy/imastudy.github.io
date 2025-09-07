@@ -356,6 +356,13 @@ nav button.active {
   color: transparent;
 }
 
+#profile-skeleton {
+  display: none;
+}
+#profile-content {
+  display: block;
+}
+  
 @keyframes shimmer {
   0% { background-position: -400px 0; }
   100% { background-position: 400px 0; }
@@ -394,22 +401,6 @@ nav button.active {
  </style>
 </head>
 <body> 
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const skeleton = document.getElementById("profile-skeleton");
-  const content = document.getElementById("profile-content");
-
-  if (performance.getEntriesByType("navigation")[0].type === "reload") {
-    skeleton.style.display = "block";
-    content.style.display = "none";
-  } else {
-    skeleton.style.display = "none";
-    content.style.display = "block";
-  }
-});
-</script>
-
  
 <header>
  <div class="header-left">
@@ -490,7 +481,7 @@ const userNameEl = document.getElementById("user-name");
 const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
 const userBioEl = document.getElementById("user-bio");
-
+  
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
