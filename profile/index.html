@@ -396,20 +396,20 @@ nav button.active {
 <body> 
 
 <script>
-  const cachedName = localStorage.getItem("cachedName");
-  const cachedEmail = localStorage.getItem("cachedEmail");
+document.addEventListener("DOMContentLoaded", () => {
+  const skeleton = document.getElementById("profile-skeleton");
+  const content = document.getElementById("profile-content");
 
-  if (cachedName && cachedEmail) {
-    document.addEventListener("DOMContentLoaded", () => {
-      const skeleton = document.getElementById("profile-skeleton");
-      const content = document.getElementById("profile-content");
-      if (skeleton && content) {
-        skeleton.style.display = "none";
-        content.style.display = "block";
-      }
-    });
+  if (performance.getEntriesByType("navigation")[0].type === "reload") {
+    skeleton.style.display = "block";
+    content.style.display = "none";
+  } else {
+    skeleton.style.display = "none";
+    content.style.display = "block";
   }
+});
 </script>
+
  
 <header>
  <div class="header-left">
