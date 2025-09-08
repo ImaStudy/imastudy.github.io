@@ -483,7 +483,12 @@ const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
 const cachedBio = localStorage.getItem("cachedBio");
 
-if (cachedName && cachedEmail) {
+const isFirstVisit = !sessionStorage.getItem("profileVisited");
+if (isFirstVisit) {
+  sessionStorage.setItem("profileVisited", "true");
+  profileSkeleton.style.display = "block";
+  profileContent.style.display = "none";
+} else if (cachedName && cachedEmail) {
   profileSkeleton.style.display = "none";
   profileContent.style.display = "block";
 
@@ -652,9 +657,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
-
- document.getElementById("profile-skeleton").style.display = "none";
-document.getElementById("profile-content").style.display = "block";
 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
