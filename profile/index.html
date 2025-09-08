@@ -658,6 +658,10 @@ onAuthStateChanged(auth, async (user) => {
 
   currentUser = user;
 
+ document.getElementById("profile-skeleton").style.display = "none";
+ document.getElementById("profile-content").style.display = "block";
+
+
   const name  = user.displayName || "Пользователь";
   const email = user.email;
   const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
@@ -691,9 +695,6 @@ onAuthStateChanged(auth, async (user) => {
     console.error("Ошибка загрузки bio из Firestore:", e);
     oldBio = cachedBio;
   }
-
- profileSkeleton.style.display = "none";
-profileContent.style.display = "block";
 });
 
 const avatarInput = document.getElementById("avatar-upload");
