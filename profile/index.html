@@ -637,6 +637,23 @@ cancelEditBtn.addEventListener("click", () => {
   exitEditMode();
 });
 
+
+const profileSkeleton = document.getElementById("profile-skeleton");
+const profileContent = document.getElementById("profile-content");
+
+const hasVisited = sessionStorage.getItem("visitedProfile");
+
+if (hasVisited && localStorage.getItem("cachedName")) {
+  profileSkeleton.style.display = "none";
+  profileContent.style.display = "block";
+} else {
+  profileSkeleton.style.display = "block";
+  profileContent.style.display = "none";
+  sessionStorage.setItem("visitedProfile", "true");
+}
+
+
+ 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     setTimeout(() => window.location.href = "/login/", 1500);
