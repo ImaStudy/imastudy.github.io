@@ -638,20 +638,15 @@ cancelEditBtn.addEventListener("click", () => {
 });
 
 
-const profileSkeleton = document.getElementById("profile-skeleton");
-const profileContent = document.getElementById("profile-content");
-
-const navEntries = performance.getEntriesByType("navigation");
-const isReload = navEntries.length && navEntries[0].type === "reload";
-
-if (isReload || !sessionStorage.getItem("visitedProfile")) {
-  profileSkeleton.style.display = "block";
-  profileContent.style.display = "none";
-  sessionStorage.setItem("visitedProfile", "true");
-} else if (localStorage.getItem("cachedName")) {
+const cachedName = localStorage.getItem("cachedName");
+if (cachedName) {
   profileSkeleton.style.display = "none";
   profileContent.style.display = "block";
+} else {
+  profileSkeleton.style.display = "block";
+  profileContent.style.display = "none";
 }
+sessionStorage.setItem("visitedProfile", "true");
 
 
  
@@ -696,6 +691,9 @@ onAuthStateChanged(auth, async (user) => {
     console.error("Ошибка загрузки bio из Firestore:", e);
     oldBio = cachedBio;
   }
+
+ profileSkeleton.style.display = "none";
+profileContent.style.display = "block";
 });
 
 const avatarInput = document.getElementById("avatar-upload");
