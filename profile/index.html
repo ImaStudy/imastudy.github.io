@@ -469,7 +469,7 @@ nav button.active {
 
  <div id="toast" class="toast"></div>
 
- <script>
+<script>
 const userNameEl = document.getElementById("user-name");
 const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
@@ -477,17 +477,24 @@ const userBioEl = document.getElementById("user-bio");
 
 const profileSkeleton = document.getElementById("profile-skeleton");
 const profileContent = document.getElementById("profile-content");
-  
+
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
 const cachedBio = localStorage.getItem("cachedBio");
 
-const isFirstVisit = !sessionStorage.getItem("profileVisited");
-if (isFirstVisit) {
-  sessionStorage.setItem("profileVisited", "true");
+const navType = performance.getEntriesByType("navigation")[0]?.type;
+
+const hasVisitedProfile = sessionStorage.getItem("profileVisited") === "true";
+
+if (navType === "reload") {
   profileSkeleton.style.display = "block";
   profileContent.style.display = "none";
+  sessionStorage.setItem("profileVisited", "true");
+} else if (!hasVisitedProfile) {
+  profileSkeleton.style.display = "block";
+  profileContent.style.display = "none";
+  sessionStorage.setItem("profileVisited", "true");
 } else if (cachedName && cachedEmail) {
   profileSkeleton.style.display = "none";
   profileContent.style.display = "block";
@@ -496,9 +503,12 @@ if (isFirstVisit) {
   userEmailEl.textContent = cachedEmail;
   avatarEl.src = cachedPhotoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(cachedName)}&background=random`;
   userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+} else {
+  profileSkeleton.style.display = "block";
+  profileContent.style.display = "none";
 }
-  
 </script>
+
  
 <script type="module">
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
