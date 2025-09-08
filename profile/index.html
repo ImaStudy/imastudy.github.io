@@ -641,15 +641,16 @@ cancelEditBtn.addEventListener("click", () => {
 const profileSkeleton = document.getElementById("profile-skeleton");
 const profileContent = document.getElementById("profile-content");
 
-const hasVisited = sessionStorage.getItem("visitedProfile");
+const navEntries = performance.getEntriesByType("navigation");
+const isReload = navEntries.length && navEntries[0].type === "reload";
 
-if (hasVisited && localStorage.getItem("cachedName")) {
-  profileSkeleton.style.display = "none";
-  profileContent.style.display = "block";
-} else {
+if (isReload || !sessionStorage.getItem("visitedProfile")) {
   profileSkeleton.style.display = "block";
   profileContent.style.display = "none";
   sessionStorage.setItem("visitedProfile", "true");
+} else if (localStorage.getItem("cachedName")) {
+  profileSkeleton.style.display = "none";
+  profileContent.style.display = "block";
 }
 
 
@@ -661,9 +662,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   currentUser = user;
-
- document.getElementById("profile-skeleton").style.display = "none";
-document.getElementById("profile-content").style.display = "block";
 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
