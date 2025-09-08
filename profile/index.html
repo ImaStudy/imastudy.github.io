@@ -637,22 +637,6 @@ cancelEditBtn.addEventListener("click", () => {
   exitEditMode();
 });
 
-
-const cachedName = localStorage.getItem("cachedName");
-if (cachedName) {
-  profileSkeleton.style.display = "none";
-  profileContent.style.display = "block";
-} else {
-  profileSkeleton.style.display = "block";
-  profileContent.style.display = "none";
-}
-sessionStorage.setItem("visitedProfile", "true");
-
-
- 
-const profileSkeleton = document.getElementById("profile-skeleton");
-const profileContent = document.getElementById("profile-content");
-
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     setTimeout(() => window.location.href = "/login/", 1500);
@@ -661,8 +645,8 @@ onAuthStateChanged(auth, async (user) => {
 
   currentUser = user;
 
-  profileSkeleton.style.display = "none";
-  profileContent.style.display = "block";
+ document.getElementById("profile-skeleton").style.display = "none";
+document.getElementById("profile-content").style.display = "block";
 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
