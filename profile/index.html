@@ -658,6 +658,9 @@ onAuthStateChanged(auth, async (user) => {
 
   currentUser = user;
 
+ profileSkeleton.style.display = "none";
+ profileContent.style.display = "block";
+
   const name  = user.displayName || "Пользователь";
   const email = user.email;
   const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
