@@ -474,16 +474,24 @@ const userNameEl = document.getElementById("user-name");
 const userEmailEl = document.getElementById("user-email");
 const avatarEl = document.getElementById("profile-avatar");
 const userBioEl = document.getElementById("user-bio");
+
+const profileSkeleton = document.getElementById("profile-skeleton");
+const profileContent = document.getElementById("profile-content");
   
 const cachedName = localStorage.getItem("cachedName");
 const cachedEmail = localStorage.getItem("cachedEmail");
 const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
 const cachedBio = localStorage.getItem("cachedBio");
 
-if (cachedName) userNameEl.textContent = cachedName;
-if (cachedEmail) userEmailEl.textContent = cachedEmail;
-if (cachedPhotoURL) avatarEl.src = cachedPhotoURL;
-userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+if (cachedName && cachedEmail) {
+  profileSkeleton.style.display = "none";
+  profileContent.style.display = "block";
+
+  userNameEl.textContent = cachedName;
+  userEmailEl.textContent = cachedEmail;
+  avatarEl.src = cachedPhotoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(cachedName)}&background=random`;
+  userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+}
   
 </script>
  
