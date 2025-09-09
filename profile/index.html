@@ -227,21 +227,23 @@ nav button.active {
   border: 2px solid #e74c3c;
 }
 
+.name-wrapper {
+  min-height: 18px;
+}
+
 .error-message {
   color: #e74c3c;
   font-size: 13px;
   font-weight: 600;
-  margin-top: 5px;
+  margin: 0;
   opacity: 0;
-  height: 0;
-  transition: opacity 0.3s ease, height 0.3s ease;
-  overflow: hidden;
+  transition: opacity 0.3s ease;
 }
 
 .error-message.show {
   opacity: 1;
-  height: auto;
 }
+
 
 .inline-input.input-error,
 .inline-textarea.input-error {
@@ -433,11 +435,13 @@ nav button.active {
         <label for="avatar-upload" class="avatar-edit">📷</label>
         <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
       </div>
-      <div>
-        <h2 id="user-name"></h2>
-        <p id="name-error" class="error-message">Имя должно быть не короче 2 символов</p>
-        <p id="user-email"></p>
-      </div>
+     <div>
+  <h2 id="user-name"></h2>
+  <div class="name-wrapper">
+    <p id="name-error" class="error-message">Имя должно быть не короче 2 символов</p>
+  </div>
+  <p id="user-email"></p>
+</div>
     </div>
 
     <div class="profile-bio">
