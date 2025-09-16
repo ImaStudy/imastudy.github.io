@@ -617,11 +617,15 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
+  bioInput.style.height = 'auto';
+  bioInput.style.height = bioInput.scrollHeight + 'px';
+
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
 
   cancelEditBtn.style.display = "inline-block";
 }
+
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
