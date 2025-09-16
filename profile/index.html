@@ -635,6 +635,12 @@ function exitEditMode() {
   userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
 
   cancelEditBtn.style.display = "none";
+
+  nameInput.classList.remove("input-error");
+  nameErrorEl.classList.remove("show");
+
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
 }
 
 editProfileBtn.addEventListener("click", async () => {
