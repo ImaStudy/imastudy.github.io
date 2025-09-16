@@ -305,16 +305,27 @@ nav button.active {
 
 @media (max-width: 600px) {
   .name-wrapper {
-    min-height: 0;     /* убираем лишнюю высоту */
+    min-height: 0;
+    overflow: hidden;
   }
 
   #name-error {
+    display: block;
+    max-height: 0;
+    opacity: 0;
     font-size: 12px;
-    margin-top: 2px;   /* компактно под именем */
+    margin-top: 2px;
+    transition: all 0.25s ease;
+  }
+
+  #name-error.show {
+    max-height: 40px;
+    opacity: 1;
   }
 
   #user-email {
-    margin-top: 4px;   /* возвращаем ближе к имени */
+    margin-top: 4px; 
+    font-size: 13px;
   }
 }
 
