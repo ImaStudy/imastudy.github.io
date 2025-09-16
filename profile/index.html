@@ -302,7 +302,23 @@ nav button.active {
 .name-wrapper {
   min-height: 18px; 
 }
- 
+
+@media (max-width: 600px) {
+  .name-wrapper {
+    min-height: 0;     /* убираем лишнюю высоту */
+  }
+
+  #name-error {
+    font-size: 12px;
+    margin-top: 2px;   /* компактно под именем */
+  }
+
+  #user-email {
+    margin-top: 4px;   /* возвращаем ближе к имени */
+  }
+}
+
+  
 #bio-error {
   color: #e74c3c;
 }
