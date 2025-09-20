@@ -17,18 +17,19 @@ header {
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
-  min-height: 72px;
 }
 
-#login-btn,
-#login-btn-mobile,
+nav {
+  position: relative;
+}
+
 #profile,
 #profile-mobile {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 40px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  display: flex;
 }
 
 .header-left {
