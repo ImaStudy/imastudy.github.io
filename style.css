@@ -17,6 +17,18 @@ header {
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  min-height: 72px;
+}
+
+#login-btn,
+#login-btn-mobile,
+#profile,
+#profile-mobile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 40px;
 }
 
 .header-left {
