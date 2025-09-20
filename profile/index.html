@@ -90,6 +90,10 @@ nav button.active {
 
 #user-name {
   margin-bottom: 2px;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #user-email {
@@ -574,6 +578,7 @@ const nameInput = document.createElement("input");
 nameInput.type = "text";
 nameInput.className = "inline-input";
 nameInput.placeholder = "Никнейм";
+nameInput.maxLength = 20;
 
 const nameErrorEl = document.getElementById("name-error");
 
@@ -663,6 +668,13 @@ if (!currentUser) {
     nameErrorEl.classList.add("show");
     return;
   }
+
+ if (newName.length > 20) {
+  nameInput.classList.add("input-error");
+  nameErrorEl.textContent = "Имя не должно превышать 20 символов";
+  nameErrorEl.classList.add("show");
+  return;
+}
 
   if (newBio !== "" && newBio.length < 10) {
     bioInput.classList.add("input-error");
