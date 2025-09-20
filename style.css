@@ -19,18 +19,29 @@ header {
   gap: 10px;
 }
 
-nav {
-  position: relative;
+#login-btn, #profile, #profile-mobile {
+  width: 80px;
+  min-width: 80px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; 
 }
 
-#profile,
-#profile-mobile {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #bbb;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .header-left {
   text-align: left;
