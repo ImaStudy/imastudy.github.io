@@ -720,26 +720,14 @@ onAuthStateChanged(auth, async (user) => {
   const lastUid = sessionStorage.getItem("lastProfileUid");
   const isSameAccount = lastUid === user.uid;
 
-  const cachedName = localStorage.getItem("cachedName");
-  const cachedEmail = localStorage.getItem("cachedEmail");
-  const cachedPhotoURL = localStorage.getItem("cachedPhotoURL");
-  const cachedBio = localStorage.getItem("cachedBio") || "";
-
-  const navType = performance.getEntriesByType("navigation")[0]?.type;
-  const hasVisitedProfile = sessionStorage.getItem("profileVisited") === "true";
-
-  if (isSameAccount && hasVisitedProfile && cachedName && cachedEmail && navType !== "reload") {
-    profileSkeleton.style.display = "none";
-    profileContent.style.display = "block";
-
-    userNameEl.textContent = cachedName;
-    userEmailEl.textContent = cachedEmail;
-    avatarEl.src = cachedPhotoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(cachedName)}&background=random`;
-    userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
-  } else {
-
+  if (!isSameAccount) {
     profileSkeleton.style.display = "block";
     profileContent.style.display = "none";
+
+    userNameEl.textContent = "";
+    userEmailEl.textContent = "";
+    avatarEl.src = "";
+    userBioEl.textContent = "";
   }
 
   const name  = user.displayName || "Пользователь";
@@ -763,12 +751,12 @@ onAuthStateChanged(auth, async (user) => {
     avatarEl.src = photo;
     userEmailEl.textContent = email;
     userNameEl.textContent = name;
-    userBioEl.textContent = bioFromDB || cachedBio || "Расскажите немного о себе...";
-    oldBio = bioFromDB || cachedBio;
+    userBioEl.textContent = bioFromDB || localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
+    oldBio = bioFromDB || localStorage.getItem("cachedBio");
   } catch (e) {
     console.error("Ошибка загрузки bio из Firestore:", e);
-    userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
-    oldBio = cachedBio;
+    userBioEl.textContent = localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
+    oldBio = localStorage.getItem("cachedBio");
   }
 
   sessionStorage.setItem("profileVisited", "true");
@@ -777,6 +765,7 @@ onAuthStateChanged(auth, async (user) => {
   profileSkeleton.style.display = "none";
   profileContent.style.display = "block";
 });
+
 
 
 const avatarInput = document.getElementById("avatar-upload");
