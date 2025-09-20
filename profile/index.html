@@ -710,60 +710,63 @@ cancelEditBtn.addEventListener("click", () => {
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    sessionStorage.removeItem("lastProfileUid");
     setTimeout(() => window.location.href = "/login/", 1500);
     return;
   }
 
+  const prevUID = sessionStorage.getItem("currentUID");
+  const isUserChanged = prevUID && prevUID !== user.uid;
+
   currentUser = user;
 
-  const lastUid = sessionStorage.getItem("lastProfileUid");
-  const isSameAccount = lastUid === user.uid;
-
-  if (!isSameAccount) {
-    profileSkeleton.style.display = "block";
+  if (isUserChanged) {
     profileContent.style.display = "none";
-
-    userNameEl.textContent = "";
-    userEmailEl.textContent = "";
-    avatarEl.src = "";
-    userBioEl.textContent = "";
+    profileSkeleton.style.display = "block";
+  } else {
+    profileSkeleton.style.display = "none";
+    profileContent.style.display = "block";
   }
 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
   const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 
+  avatarEl.src = photo;
+  userEmailEl.textContent = email;
+  userNameEl.textContent = name;
+
   localStorage.setItem("cachedName", name);
   localStorage.setItem("cachedEmail", email);
   localStorage.setItem("cachedPhotoURL", photo);
 
+  let cachedBio = localStorage.getItem("cachedBio") || "";
+  userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+
   try {
     const ref = doc(db, "users", user.uid);
     const snap = await getDoc(ref);
-    let bioFromDB = "";
     if (snap.exists()) {
       const data = snap.data();
-      bioFromDB = (data.bio || "").trim();
-      if (bioFromDB) localStorage.setItem("cachedBio", bioFromDB);
+      const bioFromDB = (data.bio || "").trim();
+      if (bioFromDB && bioFromDB !== cachedBio) {
+        userBioEl.textContent = bioFromDB;
+        localStorage.setItem("cachedBio", bioFromDB);
+      }
+      oldBio = bioFromDB;
+    } else {
+      oldBio = cachedBio;
     }
-
-    avatarEl.src = photo;
-    userEmailEl.textContent = email;
-    userNameEl.textContent = name;
-    userBioEl.textContent = bioFromDB || localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
-    oldBio = bioFromDB || localStorage.getItem("cachedBio");
   } catch (e) {
     console.error("Ошибка загрузки bio из Firestore:", e);
-    userBioEl.textContent = localStorage.getItem("cachedBio") || "Расскажите немного о себе...";
-    oldBio = localStorage.getItem("cachedBio");
+    oldBio = cachedBio;
   }
 
-  sessionStorage.setItem("profileVisited", "true");
-  sessionStorage.setItem("lastProfileUid", user.uid);
+  if (isUserChanged) {
+    profileSkeleton.style.display = "none";
+    profileContent.style.display = "block";
+  }
 
-  profileSkeleton.style.display = "none";
-  profileContent.style.display = "block";
+  sessionStorage.setItem("currentUID", user.uid);
 });
 
 
