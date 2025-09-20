@@ -219,7 +219,6 @@ html {
   overflow-y: scroll;
 }
 
-/* Мобильная адаптивность */
 @media (max-width: 600px) {
   input,
   textarea,
@@ -235,21 +234,19 @@ hr {
   margin: 0 20px 20px 20px;
 }
 
-/* Скрываем мобильное меню на больших экранах */
 .desktop-nav {
-  display: flex; /* показываем */
+  display: flex;
 }
 
 .mobile-nav {
-  display: none; /* скрываем */
+  display: none;
 }
 
-/* При ширине экрана <= 600px наоборот */
 @media (max-width: 600px) {
   .desktop-nav {
-    display: none; /* скрываем */
+    display: none;
   }
   .mobile-nav {
-    display: flex; /* показываем */
+    display: flex;
   }
 }
