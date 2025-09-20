@@ -37,19 +37,6 @@ html, body {
       flex-wrap: wrap;
       gap: 10px;
     }
-
-.profile-space {
-  width: 50px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#profile, #login-btn {
-  display: block;
-}
-
     
     .header-left {
       text-align: left;
@@ -144,22 +131,18 @@ nav button.active {
       <h1>ImaStudy</h1>
       <p>Размести задание — получи помощь</p>
     </div>
-   <nav class="desktop-nav">
-  <button id="homeTab" class="tab-button active">Главная</button>
-  <button id="tasksTab" class="tab-button">Активные задания</button>
-
-  <div class="profile-space">
-    <button id="login-btn">Войти</button>
-    <div id="profile" style="display: none;">
-      <button id="profile-icon"></button>
-      <div id="profile-menu">
-        <button id="profile-btn">Профиль</button>
-        <button id="logout-btn">Выйти</button>
-      </div>
-    </div>
+    <nav class="desktop-nav">
+      <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
+      <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
+      <div id="profile" style="position: relative; display: none;">
+  <button id="profile-icon" style="background: none; border: none; font-size: 20px; cursor: pointer;"></button>
+  <div id="profile-menu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); min-width: 140px; z-index: 1000;">
+    <button id="profile-btn" style="width: 100%; padding: 10px; border: none; background: none; text-align: left;">Профиль</button>
+    <button id="logout-btn" style="width: 100%; padding: 10px; border: none; background: none; text-align: left;">Выйти</button>
   </div>
-</nav>
-    
+</div>
+<button id="login-btn">Войти</button>
+    </nav>
     <nav class="mobile-nav">
       <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
       <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
@@ -453,4 +436,4 @@ document.addEventListener('click', (e) => {
     taskForm.style.display = "none";
   </script>
 </body>
-</html>
+</html> сейчас скину style.css
