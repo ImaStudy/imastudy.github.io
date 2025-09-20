@@ -709,17 +709,15 @@ cancelEditBtn.addEventListener("click", () => {
 });
 
 onAuthStateChanged(auth, async (user) => {
+  profileSkeleton.style.display = "block";
+  profileContent.style.display = "none";
+
   if (!user) {
-    profileSkeleton.style.display = "block";
-    profileContent.style.display = "none";
     setTimeout(() => window.location.href = "/login/", 1500);
     return;
   }
 
   currentUser = user;
-
-  profileSkeleton.style.display = "block";
-  profileContent.style.display = "none";
 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
@@ -758,6 +756,7 @@ onAuthStateChanged(auth, async (user) => {
   profileSkeleton.style.display = "none";
   profileContent.style.display = "block";
 });
+
 
 const avatarInput = document.getElementById("avatar-upload");
 
