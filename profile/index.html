@@ -710,48 +710,61 @@ cancelEditBtn.addEventListener("click", () => {
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
+    localStorage.removeItem("cachedName");
+    localStorage.removeItem("cachedEmail");
+    localStorage.removeItem("cachedPhotoURL");
+    localStorage.removeItem("cachedBio");
+
+    profileSkeleton.style.display = "block";
+    profileContent.style.display = "none";
+
     setTimeout(() => window.location.href = "/login/", 1500);
     return;
   }
 
-  currentUser = user;
+  profileSkeleton.style.display = "block";
+  profileContent.style.display = "none";
 
- profileSkeleton.style.display = "none";
- profileContent.style.display = "block";
+  currentUser = user;
 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
   const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
 
-  avatarEl.src = photo;
-  userEmailEl.textContent = email;
-  userNameEl.textContent = name;
+  setTimeout(async () => {
+    profileSkeleton.style.display = "none";
+    profileContent.style.display = "block";
 
-  localStorage.setItem("cachedName", name);
-  localStorage.setItem("cachedEmail", email);
-  localStorage.setItem("cachedPhotoURL", photo);
+    avatarEl.src = photo;
+    userEmailEl.textContent = email;
+    userNameEl.textContent = name;
 
-  let cachedBio = localStorage.getItem("cachedBio") || "";
-  userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+    localStorage.setItem("cachedName", name);
+    localStorage.setItem("cachedEmail", email);
+    localStorage.setItem("cachedPhotoURL", photo);
 
-  try {
-    const ref = doc(db, "users", user.uid);
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-      const data = snap.data();
-      const bioFromDB = (data.bio || "").trim();
-      if (bioFromDB && bioFromDB !== cachedBio) {
-        userBioEl.textContent = bioFromDB;
-        localStorage.setItem("cachedBio", bioFromDB);
+    let cachedBio = localStorage.getItem("cachedBio") || "";
+    userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+
+    try {
+      const ref = doc(db, "users", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const data = snap.data();
+        const bioFromDB = (data.bio || "").trim();
+        if (bioFromDB && bioFromDB !== cachedBio) {
+          userBioEl.textContent = bioFromDB;
+          localStorage.setItem("cachedBio", bioFromDB);
+        }
+        oldBio = bioFromDB;
+      } else {
+        oldBio = cachedBio;
       }
-      oldBio = bioFromDB;
-    } else {
+    } catch (e) {
+      console.error("Ошибка загрузки bio из Firestore:", e);
       oldBio = cachedBio;
     }
-  } catch (e) {
-    console.error("Ошибка загрузки bio из Firestore:", e);
-    oldBio = cachedBio;
-  }
+  }, 500);
 });
 
 
