@@ -58,8 +58,10 @@ nav {
 }
 
 nav button {
+  width: auto; 
   padding: 10px 20px;
   font-size: 14px;
+  margin: 0;
   border: none;
   background-color: #ddd;
   cursor: pointer;
@@ -69,6 +71,7 @@ nav button {
   border-bottom: none;
   line-height: 1.5;
   transition: color 0.3s, background-color 0.3s;
+  display: inline-block;
 }
 
 nav button:hover,
