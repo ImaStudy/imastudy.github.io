@@ -7,20 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-* {
-  box-sizing: border-box;
-}
-
-form, .task-list {
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-}
-
-form input,
-form textarea,
+/* Стили только для кнопок внутри формы */
 form button {
   width: 100%;
   padding: 10px;
@@ -28,28 +15,23 @@ form button {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
-  box-sizing: border-box;
+  cursor: pointer;
 }
 
-.task-item {
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
+/* Кнопка "Разместить задание" */
+#showFormBtn {
+  width: auto;            /* не растягиваем на 100% */
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
 }
 
-.task-item:last-child {
-  border-bottom: none;
-}
-
-.task-item strong {
-  display: block;
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
+#showFormBtn:hover {
+  background-color: #2980b9;
 }
 
 .avatar-circle {
