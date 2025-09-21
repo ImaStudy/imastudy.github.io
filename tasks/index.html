@@ -117,6 +117,19 @@
   background-color: #2980b9;
 }
 
+#task-count {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  color: #2c3e50;
+  margin: 10px 0 15px 0;
+}
+
+#task-count strong {
+  margin-left: 5px;
+  font-weight: 600;
+}
 
 
     .avatar-circle {
@@ -311,8 +324,19 @@ function renderTasks(tasks) {
 
     tasksContainer.appendChild(div);
   });
+
+ const taskCount = tasks.length;
+let countEl = document.getElementById("task-count");
+if (!countEl) {
+  countEl = document.createElement("div");
+  countEl.id = "task-count";
+  const taskListDiv = document.getElementById("taskList");
+  taskListDiv.insertBefore(countEl, tasksContainer);
 }
 
+countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
+
+}
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
@@ -395,7 +419,7 @@ function renderTasks(tasks) {
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 
   onSnapshot(q, (snapshot) => {
-  renderTasks(snapshot.docs);
+  renderTasks(snapshot.docs);    
   });
 }
 });
