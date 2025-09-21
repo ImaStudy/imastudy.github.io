@@ -152,6 +152,51 @@
   object-fit: cover;
 }
 
+
+    
+#profile,
+#profile-mobile {
+  position: relative;
+}
+
+#profile-icon,
+#profile-icon-mobile {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#profile-menu,
+#profile-menu-mobile {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+  z-index: 1000;
+}
+
+#profile-menu button,
+#profile-menu-mobile button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+#profile-menu button:hover,
+#profile-menu-mobile button:hover {
+  background-color: #f4f4f4;
+}
+
+    
     
     footer {
       text-align: center;
@@ -185,25 +230,25 @@
     <nav class="desktop-nav">
       <button id="homeTab" onclick="window.location.href='/'">Главная</button>
       <button id="tasksTab" class="active">Активные задания</button>
-      <div id="profile" style="position: relative; display: none;">
-       <button id="profile-icon" style="background: none; border: none; font-size: 20px; cursor: pointer;"></button>
-        <div id="profile-menu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); min-width: 140px; z-index: 1000;">
-          <button id="profile-btn" style="width: 100%; padding: 10px; border: none; background: none; text-align: left;">Профиль</button>
-          <button id="logout-btn" style="width: 100%; padding: 10px; border: none; background: none; text-align: left;">Выйти</button>
-        </div>
-      </div>
+     <div id="profile" style="display: none;">
+  <button id="profile-icon"></button>
+  <div id="profile-menu">
+    <button id="profile-btn">Профиль</button>
+    <button id="logout-btn">Выйти</button>
+  </div>
+</div>
       <button id="login-btn">Войти</button>
     </nav>
 
     <nav class="mobile-nav" style="display: none;">
       <button id="homeTabMobile">Главная</button>
-      <button id="tasksTabMobile" class="active">Активные задания</button>
-      
-       <div id="profile-mobile" style="position: relative; display: none;">
-  <button id="profile-icon-mobile" style="background: none; border: none; font-size: 20px; cursor: pointer;"></button>
-  <div id="profile-menu-mobile" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); min-width: 140px; z-index: 1000;">
-    <button id="profile-btn-mobile" style="width: 100%; padding: 10px; border: none; background: none; text-align: left;">Профиль</button>
-    <button id="logout-btn-mobile" style="width: 100%; padding: 10px; border: none; background: none; text-align: left;">Выйти</button>
+      <button id="tasksTabMobile" class="active">Активные задания</button>   
+     
+<div id="profile-mobile" style="display: none;">
+  <button id="profile-icon-mobile"></button>
+  <div id="profile-menu-mobile">
+    <button id="profile-btn-mobile">Профиль</button>
+    <button id="logout-btn-mobile">Выйти</button>
   </div>
 </div>
 <button id="login-btn-mobile">Войти</button>
