@@ -1,17 +1,11 @@
-/* Общие стили для ImaStudy */
+/* Основной стиль для ImaStudy */
 
-* {
-  box-sizing: border-box;
-}
-
-html, body {
+body {
+  font-family: 'Noto Sans', sans-serif;
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans', sans-serif;
   background-color: #f4f4f4;
   color: #333;
-  overflow-x: hidden;
-  overflow-y: scroll;
 }
 
 header {
@@ -53,6 +47,7 @@ nav button {
   border-radius: 5px;
   font-weight: 600;
   color: #3498db;
+  border-bottom: none;
   line-height: 1.5;
   transition: color 0.3s, background-color 0.3s;
 }
@@ -61,6 +56,8 @@ nav button:hover,
 nav button.active {
   background-color: transparent;
   color: #2980b9;
+  border-bottom: none;
+  font-weight: 600;
 }
 
 .container {
@@ -86,6 +83,7 @@ button {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 textarea {
@@ -105,50 +103,84 @@ button:hover {
   background-color: #2980b9;
 }
 
-.avatar-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+#showFormBtn {
   background-color: #3498db;
-  color: #fff;
-  font-weight: bold;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.avatar-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-#profile-menu, #profile-menu-mobile {
-  display: none;
-  position: absolute;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 10px 0;
-  z-index: 100;
-}
-
-#profile-menu button, #profile-menu-mobile button {
-  display: block;
-  background: none;
+  color: white;
   border: none;
-  padding: 10px 20px;
-  width: 100%;
-  text-align: left;
+  padding: 14px 40px;
+  font-size: 20px;
   cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#showFormBtn:hover {
+  background-color: #2980b9;
+}
+
+#taskForm {
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-list {
+  background: transparent;
+  padding: 0 10px;
+  border-radius: 0;
+  box-shadow: none;
+  max-height: none;
+  overflow-y: visible;
+}
+
+.task-item {
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+  background: transparent;
+  margin: 0;
+  box-shadow: none;
+  border-radius: 0;
+  width: 100%;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-item strong {
+  display: block;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.task-date {
+  color: #555;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 10px;
   font-size: 14px;
 }
 
-#profile-menu button:hover, #profile-menu-mobile button:hover {
-  background: #f0f0f0;
+.task-item p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.task-item a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.task-item a:hover {
+  text-decoration: underline;
 }
 
 footer {
@@ -156,6 +188,50 @@ footer {
   font-size: 14px;
   color: #777;
   margin-top: 40px;
+}
+
+textarea#description {
+  resize: none !important;
+  height: 120px;
+  overflow: auto;
+}
+
+.site-info {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  text-align: left;
+}
+
+.site-info h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.site-info {
+  max-width: 600px;
+  margin: 40px 20px 0 20px;
+  padding: 0;
+  text-align: left;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+@media (max-width: 600px) {
+  input,
+  textarea,
+  button {
+    font-size: 16px;
+  }
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin: 0 20px 20px 20px;
 }
 
 .desktop-nav {
@@ -172,8 +248,5 @@ footer {
   }
   .mobile-nav {
     display: flex;
-  }
-  input, textarea, button {
-    font-size: 16px;
   }
 }
