@@ -700,10 +700,8 @@ onAuthStateChanged(auth, async (user) => {
   let cachedBio = localStorage.getItem("cachedBio") || "";
   userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
 
-  else {
     profileSkeleton.style.display = "none";
     profileContent.style.display = "block";
-  }
 
   try {
     const ref = doc(db, "users", user.uid);
