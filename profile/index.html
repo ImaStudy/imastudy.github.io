@@ -679,14 +679,12 @@ onAuthStateChanged(auth, async (user) => {
 
   currentUser = user;
 
-  if (isUserChanged) {
+
+   if (isUserChanged) {
     profileContent.style.display = "none";
     profileSkeleton.style.display = "block";
-  } else {
-    profileSkeleton.style.display = "none";
-    profileContent.style.display = "block";
   }
-
+ 
   const name  = user.displayName || "Пользователь";
   const email = user.email;
   const photo = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random`;
@@ -701,6 +699,11 @@ onAuthStateChanged(auth, async (user) => {
 
   let cachedBio = localStorage.getItem("cachedBio") || "";
   userBioEl.textContent = cachedBio || "Расскажите немного о себе...";
+
+  else {
+    profileSkeleton.style.display = "none";
+    profileContent.style.display = "block";
+  }
 
   try {
     const ref = doc(db, "users", user.uid);
