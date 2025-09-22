@@ -80,7 +80,7 @@ nav button:hover {
 
 nav button.active {
   background-color: #aaa;
-  color: #2980b9;
+  color: white;
   border-bottom: none;
   font-weight: 600;
 }
