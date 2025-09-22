@@ -72,9 +72,14 @@ nav button {
   display: inline-block;
 }
 
-nav button:hover,
-nav button.active {
+nav button:hover {
   background-color: transparent;
+  color: #2980b9;
+  font-weight: 600;
+}
+
+nav button.active {
+  background-color: #aaa;
   color: #2980b9;
   border-bottom: none;
   font-weight: 600;
