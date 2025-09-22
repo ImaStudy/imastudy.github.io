@@ -161,7 +161,7 @@ button:hover {
   box-shadow: none;
   max-height: none;
   overflow-y: visible;
-  margin-bottom: 30px
+  margin-bottom: 30px;
 }
 
 .task-item {
