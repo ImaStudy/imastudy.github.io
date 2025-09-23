@@ -82,16 +82,6 @@
     .tab-content.active {
       display: block;
     }
-
-.profile-icon-wrapper {
-  display: flex;              /* как и кнопка по сути */
-  align-items: center;        /* центрируем кружок по вертикали */
-  justify-content: center;    /* центрируем по горизонтали */
-  height: 40px;               /* высота как у кнопки */
-  padding: 0 20px;            /* чтобы ширина совпадала */
-  box-sizing: border-box;     /* учитываем padding в размерах */
-}
-
   
     .avatar-circle {
   width: 32px;
@@ -130,9 +120,7 @@
       <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
       <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
      <div id="profile" style="display: none;">
-   <div class="profile-icon-wrapper">
   <button id="profile-icon"></button>
-   </div>
    <div id="profile-menu">
     <button id="profile-btn">Профиль</button>
     <button id="logout-btn">Выйти</button>
@@ -145,9 +133,7 @@
       <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
  
     <div id="profile-mobile" style="display: none;">
-  <div class="profile-icon-wrapper">
   <button id="profile-icon-mobile"></button>
-   </div>
   <div id="profile-menu-mobile">
     <button id="profile-btn-mobile">Профиль</button>
     <button id="logout-btn-mobile">Выйти</button>
