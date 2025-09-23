@@ -83,6 +83,14 @@
       display: block;
     }
 
+.profile-icon-wrapper {
+  width: 80px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+    
     .avatar-circle {
   width: 32px;
   height: 32px;
@@ -120,7 +128,9 @@
       <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
       <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
      <div id="profile" style="display: none;">
+   <div class="profile-icon-wrapper">
   <button id="profile-icon"></button>
+   </div>
    <div id="profile-menu">
     <button id="profile-btn">Профиль</button>
     <button id="logout-btn">Выйти</button>
@@ -133,7 +143,9 @@
       <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
  
     <div id="profile-mobile" style="display: none;">
+  <div class="profile-icon-wrapper">
   <button id="profile-icon-mobile"></button>
+   </div>
   <div id="profile-menu-mobile">
     <button id="profile-btn-mobile">Профиль</button>
     <button id="logout-btn-mobile">Выйти</button>
