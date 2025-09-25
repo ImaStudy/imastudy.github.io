@@ -575,7 +575,7 @@ const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
   bioInput.style.height = 'auto';
-  bioInput.style.height = bioInput.scrollHeight + 'px';
+  bioInput.style.height = (bioInput.scrollHeight + 2) + 'px';
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
