@@ -229,7 +229,6 @@
 .inline-input.input-error,
 .inline-textarea.input-error {
   border-color: #e74c3c;
-  box-sizing: border-box;
 }
 
 #user-bio {
@@ -263,6 +262,7 @@
 .inline-textarea {
   resize: none;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
  .inline-input.input-error {
@@ -576,7 +576,7 @@ const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
   bioInput.style.height = 'auto';
-  bioInput.style.height = (bioInput.scrollHeight + 2) + 'px';
+  bioInput.style.height = (bioInput.scrollHeight + 4) + 'px';
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
