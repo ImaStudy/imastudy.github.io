@@ -60,15 +60,24 @@
   margin-top: 0;
 }
   
-.avatar-edit {
-  position: absolute;
-  bottom: 0;
-  right: 0;
+#avatar-edit-btn {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 8px 18px;
   background: #3498db;
   color: white;
-  border-radius: 50%;
-  padding: 6px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+#avatar-edit-btn:hover {
+  background: #2980b9;
+}
+
+#avatar-edit-wrapper.hidden {
+  display: none;
 }
   
 .profile-bio h3 {
@@ -418,8 +427,10 @@
     <div class="profile-header">
       <div style="position: relative;">
         <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
-        <label for="avatar-upload" class="avatar-edit">Изменить фото</label>
-        <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
+       <div id="avatar-edit-wrapper" class="hidden">
+    <label for="avatar-upload" id="avatar-edit-btn">Изменить фото</label>
+    <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
+  </div>
       </div>
      <div>
   <h2 id="user-name"></h2>
@@ -573,6 +584,8 @@ function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
   oldBio = (userBioEl.textContent || "").trim();
 
+  document.getElementById("avatar-edit-wrapper").classList.remove("hidden");
+ 
   nameInput.value = oldName;
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
@@ -595,6 +608,8 @@ function enterEditMode() {
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
+
+  document.getElementById("avatar-edit-wrapper").classList.add("hidden");
 
   userNameEl.textContent = currentUser.displayName || oldName;
   userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
