@@ -59,42 +59,17 @@
 #user-email {
   margin-top: 0;
 }
-
-
   
-.avatar-wrapper {
-  position: relative;
-  display: inline-block;
-  text-align: center;
-}
-
-.avatar-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ddd;
-  display: block;
-  margin: 0 auto 10px;
-}
-
-.change-photo-btn {
-  display: inline-block;
-  padding: 6px 14px;
-  background: #4f46e5;
+.avatar-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #3498db;
   color: white;
-  font-size: 14px;
-  border-radius: 20px;
+  border-radius: 50%;
+  padding: 6px;
   cursor: pointer;
-  transition: background 0.3s;
 }
-
-.change-photo-btn:hover {
-  background: #4338ca;
-}
-
-
-  
   
 .profile-bio h3 {
   margin-bottom: 10px;
@@ -441,12 +416,11 @@
 <main id="profile-content" style="display:none;">
   <section class="profile-card">
     <div class="profile-header">
-<div class="avatar-wrapper" style="text-align: center;">
-  <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" class="avatar-preview" />
-
-  <input type="file" id="avatar-upload" accept="image/*" style="display:none;" />
-  <label for="avatar-upload" id="changePhotoBtn" class="change-photo-btn" style="display: none; margin-top: 8px;">Изменить фото</label>
-</div>
+      <div style="position: relative;">
+        <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
+        <label for="avatar-upload" class="avatar-edit">📷</label>
+        <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
+      </div>
      <div>
   <h2 id="user-name"></h2>
   <div class="name-wrapper">
@@ -599,8 +573,6 @@ function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
   oldBio = (userBioEl.textContent || "").trim();
 
- document.getElementById("edit-avatar-section").style.display = "block";
-
   nameInput.value = oldName;
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
@@ -624,8 +596,6 @@ function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
 
-document.getElementById("edit-avatar-section").style.display = "none";
- 
   userNameEl.textContent = currentUser.displayName || oldName;
   userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
 
