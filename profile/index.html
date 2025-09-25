@@ -441,9 +441,12 @@
 <main id="profile-content" style="display:none;">
   <section class="profile-card">
     <div class="profile-header">
-      <div style="position: relative;">
-        <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
-      </div>
+<div class="avatar-wrapper" style="position: relative;">
+  <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
+
+  <input type="file" id="avatar-upload" accept="image/*" style="display:none;" />
+  <label for="avatar-upload" class="change-photo-btn" style="position: absolute; bottom: 0; right: 0;">Изменить фото</label>
+</div>
      <div>
   <h2 id="user-name"></h2>
   <div class="name-wrapper">
@@ -457,17 +460,6 @@
       <h3>О себе</h3>
       <p id="user-bio">Расскажите немного о себе...</p>
       <p id="bio-error" class="error-message">Текст должен содержать минимум 10 символов</p>
-
-<div id="edit-avatar-section" class="avatar-section" style="display: none;">
-  <div class="avatar-wrapper">
-    <img id="edit-avatar-preview" src="https://ui-avatars.com/api/?name=User" alt="Avatar" class="avatar-preview" />
-
-    <input type="file" id="avatar-upload" accept="image/*" style="display:none;" />
-
-    <label for="avatar-upload" class="change-photo-btn">Изменить фото</label>
-  </div>
-</div>
-
 
       <button id="editProfileBtn">Редактировать профиль</button>
       <button id="cancelEditBtn" class="hidden">Отмена</button>
