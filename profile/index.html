@@ -756,7 +756,14 @@ onAuthStateChanged(auth, async (user) => {
 
 
 const avatarInput = document.getElementById("avatar-upload");
+const avatarWrapper = document.querySelector(".avatar-wrapper");
 
+ avatarWrapper.addEventListener("click", () => {
+  if (avatarWrapper.classList.contains("editing")) {
+    avatarInput.click();
+  }
+});
+ 
    let cropper;
 const cropModal = document.getElementById("cropModal");
 const cropImage = document.getElementById("crop-image");
