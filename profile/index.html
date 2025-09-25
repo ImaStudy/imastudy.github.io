@@ -607,6 +607,8 @@ function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
   oldBio = (userBioEl.textContent || "").trim();
 
+ document.getElementById("edit-avatar-section").style.display = "block";
+
   nameInput.value = oldName;
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
@@ -630,6 +632,8 @@ function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
 
+document.getElementById("edit-avatar-section").style.display = "none";
+ 
   userNameEl.textContent = currentUser.displayName || oldName;
   userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
 
