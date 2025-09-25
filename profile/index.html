@@ -59,17 +59,28 @@
 #user-email {
   margin-top: 0;
 }
+
+
   
-.avatar-edit {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #3498db;
-  color: white;
-  border-radius: 50%;
-  padding: 6px;
-  cursor: pointer;
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
+
+.avatar-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+#avatar-upload {
+  text-align: center;
+}
+
+  
   
 .profile-bio h3 {
   margin-bottom: 10px;
@@ -418,8 +429,6 @@
     <div class="profile-header">
       <div style="position: relative;">
         <img id="profile-avatar" src="https://ui-avatars.com/api/?name=User" alt="Avatar" />
-        <label for="avatar-upload" class="avatar-edit">📷</label>
-        <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
       </div>
      <div>
   <h2 id="user-name"></h2>
@@ -434,6 +443,11 @@
       <h3>О себе</h3>
       <p id="user-bio">Расскажите немного о себе...</p>
       <p id="bio-error" class="error-message">Текст должен содержать минимум 10 символов</p>
+
+     <div class="avatar-section">
+  <img id="edit-avatar-preview" src="https://ui-avatars.com/api/?name=User" alt="Avatar" class="avatar-preview" />
+  <input type="file" id="avatar-upload" accept="image/*" />
+</div>
 
       <button id="editProfileBtn">Редактировать профиль</button>
       <button id="cancelEditBtn" class="hidden">Отмена</button>
