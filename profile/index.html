@@ -357,8 +357,6 @@
   background: none;
 }
 
-
-
 .skeleton {
   background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
   background-size: 400% 100%;
@@ -583,6 +581,7 @@ bioInput.addEventListener("input", () => {
 
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
+  bioInput.setSelectionRange(start, end);
 });
 
 nameInput.addEventListener("input", () => {
