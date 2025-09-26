@@ -576,8 +576,13 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
+  const scrollY = window.scrollY;
+
   bioInput.style.height = 'auto';
-  bioInput.style.height = (bioInput.scrollHeight) + 'px';
+  bioInput.style.height = bioInput.scrollHeight + 'px';
+
+  window.scrollTo(0, scrollY);
+
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
