@@ -604,8 +604,6 @@ function enterEditMode() {
   nameInput.value = oldName;
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
-  const scrollY = window.scrollY;
-
   if (!userNameEl.contains(nameInput)) {
     userNameEl.textContent = "";
     userNameEl.appendChild(nameInput);
@@ -626,8 +624,6 @@ function enterEditMode() {
   cancelEditBtn.style.display = "inline-block";
 
   bioInput.focus({ preventScroll: true });
-
-  window.scrollTo(0, scrollY);
 }
 
 
