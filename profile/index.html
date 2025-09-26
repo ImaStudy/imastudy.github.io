@@ -261,10 +261,17 @@
 
 .inline-textarea {
   resize: none;
-  overflow-y: auto;
+  overflow-y: hidden;
   max-height: 200px;
   padding-bottom: 4px;
   box-sizing: border-box;
+}
+
+  @media (max-width: 768px) {
+  .inline-textarea {
+    overflow-y: auto;
+    max-height: 200px;
+  }
 }
 
  .inline-input.input-error {
