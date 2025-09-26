@@ -579,9 +579,14 @@ const bioErrorEl = document.getElementById("bio-error");
 bioInput.addEventListener("input", () => {
     const currentScrollTop = bioInput.scrollTop;
 
+    const currentScrollY = window.scrollY;
+    document.body.style.overflow = 'hidden'; 
+
     bioInput.style.height = 'auto';
     bioInput.style.height = bioInput.scrollHeight + 'px';
 
+    document.body.style.overflow = '';
+    window.scrollTo(0, currentScrollY);
     bioInput.scrollTop = currentScrollTop; 
 
     bioInput.classList.remove("input-error");
@@ -623,6 +628,7 @@ function enterEditMode() {
   editProfileBtn.dataset.mode = "edit";
 
   cancelEditBtn.style.display = "inline-block";
+     bioInput.focus({ preventScroll: true }); 
 }
 
 
