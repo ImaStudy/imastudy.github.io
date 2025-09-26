@@ -600,11 +600,13 @@ function enterEditMode() {
   oldBio = (userBioEl.textContent || "").trim();
 
   document.querySelector(".avatar-wrapper").classList.add("editing");
- 
+
   nameInput.value = oldName;
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
-if (!userNameEl.contains(nameInput)) {
+  const scrollY = window.scrollY;
+
+  if (!userNameEl.contains(nameInput)) {
     userNameEl.textContent = "";
     userNameEl.appendChild(nameInput);
   }
@@ -621,7 +623,10 @@ if (!userNameEl.contains(nameInput)) {
   editProfileBtn.dataset.mode = "edit";
 
   cancelEditBtn.style.display = "inline-block";
+
   bioInput.focus({ preventScroll: true });
+
+  window.scrollTo(0, scrollY);
 }
 
 
