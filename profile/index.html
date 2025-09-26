@@ -579,27 +579,27 @@ const bioErrorEl = document.getElementById("bio-error");
 bioInput.addEventListener("input", () => {
     const lineHeight = parseInt(getComputedStyle(bioInput).lineHeight) || 20;
     const minHeight = lineHeight * 4;
+    const maxHeight = lineHeight * 9;
 
     bioInput.style.height = 'auto';
 
-    bioInput.style.height = Math.max(bioInput.scrollHeight, minHeight) + 'px';
+    const newHeight = Math.min(Math.max(bioInput.scrollHeight, minHeight), maxHeight);
+    bioInput.style.height = newHeight + 'px';
 
     const cursorPosition = bioInput.selectionStart;
-    const linesBeforeCursor = bioInput.value.substr(0, cursorPosition).split("\n").length;
-    const visibleLines = Math.floor(bioInput.clientHeight / lineHeight);
+    const textareaLineHeight = lineHeight;
+    const textBeforeCursor = bioInput.value.substr(0, cursorPosition);
+    const linesBeforeCursor = textBeforeCursor.split("\n").length;
 
+    const visibleLines = Math.floor(newHeight / textareaLineHeight);
     if (linesBeforeCursor > visibleLines) {
         bioInput.scrollTop = bioInput.scrollHeight;
+    } else {
+        bioInput.scrollTop = 0;
     }
 
     bioInput.classList.remove("input-error");
     bioErrorEl.classList.remove("show");
-});
-
-
-nameInput.addEventListener("input", () => {
-  nameInput.classList.remove("input-error");
-  nameErrorEl.classList.remove("show");
 });
 
 function showToast(message, type = "success") {
