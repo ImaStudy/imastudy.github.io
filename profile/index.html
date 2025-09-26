@@ -582,8 +582,11 @@ bioInput.addEventListener("input", () => {
 
     const cursorPosition = bioInput.selectionStart; 
 
+    const lineHeight = parseInt(getComputedStyle(bioInput).lineHeight) || 20;
+    const minHeight = lineHeight * 4;
+
     bioInput.style.height = 'auto';
-    bioInput.style.height = (bioInput.scrollHeight, 200) + 'px';
+    bioInput.style.height = Math.max(bioInput.scrollHeight, minHeight) + 'px';
 
     const newHeight = bioInput.clientHeight;
     const heightDifference = newHeight - initialHeight;
@@ -591,6 +594,7 @@ bioInput.addEventListener("input", () => {
     if (heightDifference !== 0) {
         window.scrollTo(0, currentScrollY + heightDifference);
     }
+
     if (cursorPosition >= bioInput.value.length - 1) {
         requestAnimationFrame(() => {
             bioInput.scrollTop = bioInput.scrollHeight;
