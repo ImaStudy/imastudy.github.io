@@ -576,14 +576,12 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-    const currentScrollTop = bioInput.scrollTop;
-    
-    requestAnimationFrame(() => {
-        bioInput.style.height = 'auto';
-        bioInput.style.height = bioInput.scrollHeight + 'px';
-        
-        bioInput.scrollTop = currentScrollTop;
-    });
+    const pageScrollY = window.scrollY;
+    bioInput.style.height = 'auto';
+    bioInput.style.height = bioInput.scrollHeight + 'px';
+    setTimeout(() => {
+        window.scrollTo(0, pageScrollY);
+    }, 0);
 });
 
 nameInput.addEventListener("input", () => {
