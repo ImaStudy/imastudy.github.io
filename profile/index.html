@@ -577,33 +577,25 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-    const currentScrollY = window.scrollY;
-    const initialHeight = bioInput.clientHeight;
-
-    const cursorPosition = bioInput.selectionStart; 
-
     const lineHeight = parseInt(getComputedStyle(bioInput).lineHeight) || 20;
     const minHeight = lineHeight * 4;
 
     bioInput.style.height = 'auto';
+
     bioInput.style.height = Math.max(bioInput.scrollHeight, minHeight) + 'px';
 
-    const newHeight = bioInput.clientHeight;
-    const heightDifference = newHeight - initialHeight;
+    const cursorPosition = bioInput.selectionStart;
+    const linesBeforeCursor = bioInput.value.substr(0, cursorPosition).split("\n").length;
+    const visibleLines = Math.floor(bioInput.clientHeight / lineHeight);
 
-    if (heightDifference !== 0) {
-        window.scrollTo(0, currentScrollY + heightDifference);
+    if (linesBeforeCursor > visibleLines) {
+        bioInput.scrollTop = bioInput.scrollHeight;
     }
-
-    if (cursorPosition >= bioInput.value.length - 1) {
-        requestAnimationFrame(() => {
-            bioInput.scrollTop = bioInput.scrollHeight;
-        });
-    } 
 
     bioInput.classList.remove("input-error");
     bioErrorEl.classList.remove("show");
 });
+
 
 nameInput.addEventListener("input", () => {
   nameInput.classList.remove("input-error");
