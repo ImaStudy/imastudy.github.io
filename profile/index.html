@@ -261,12 +261,10 @@
 
 .inline-textarea {
   resize: none;
-  overflow-y: hidden;
+  overflow-y: auto;
   max-height: 200px;
   padding-bottom: 4px;
-  box-sizing: border-box; 
-  min-height: 5em;
-  scrollbar-gutter: stable both-sides;
+  box-sizing: border-box;
 }
 
  .inline-input.input-error {
@@ -572,6 +570,7 @@ nameInput.maxLength = 20;
 const nameErrorEl = document.getElementById("name-error");
 
 const bioInput = document.createElement("textarea");
+bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
 
@@ -591,9 +590,6 @@ bioInput.addEventListener("input", () => {
 
     if (heightDifference !== 0) {
         window.scrollTo(0, currentScrollY + heightDifference);
-    }
-    if (heightDifference === 0 && window.scrollY !== currentScrollY) {
-        window.scrollTo(0, currentScrollY);
     }
     if (cursorPosition >= bioInput.value.length - 1) {
         requestAnimationFrame(() => {
