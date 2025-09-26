@@ -612,11 +612,17 @@ function enterEditMode() {
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
 
-  userBioEl.innerHTML = "";
-  userBioEl.appendChild(bioInput);
+const scrollY = window.scrollY;
 
-  bioInput.style.height = 'auto';
-  bioInput.style.height = bioInput.scrollHeight + 'px';
+userBioEl.innerHTML = "";
+userBioEl.appendChild(bioInput);
+
+bioInput.focus({ preventScroll: true });
+
+window.scrollTo(0, scrollY);
+
+bioInput.style.height = 'auto';
+bioInput.style.height = bioInput.scrollHeight + 'px';
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
