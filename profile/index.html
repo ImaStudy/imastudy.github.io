@@ -265,7 +265,6 @@
   max-height: 200px;
   padding-bottom: 4px;
   box-sizing: border-box;
-  scrollbar-gutter: stable both-sides; 
 }
 
  .inline-input.input-error {
@@ -591,6 +590,9 @@ bioInput.addEventListener("input", () => {
 
     if (heightDifference !== 0) {
         window.scrollTo(0, currentScrollY + heightDifference);
+    }
+    if (heightDifference === 0 && window.scrollY !== currentScrollY) {
+        window.scrollTo(0, currentScrollY);
     }
     if (cursorPosition >= bioInput.value.length - 1) {
         requestAnimationFrame(() => {
