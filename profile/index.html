@@ -576,16 +576,29 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-    const currentScrollY = window.scrollY;
     const initialHeight = bioInput.clientHeight;
+    
     bioInput.style.height = 'auto';
-    bioInput.style.height = bioInput.scrollHeight + 'px';
-    const newHeight = bioInput.clientHeight;
+    const newHeight = bioInput.scrollHeight;
+    
     const heightDifference = newHeight - initialHeight;
+
     if (heightDifference > 0) {
-        window.scrollTo(0, currentScrollY + heightDifference);
+
+        document.body.style.transform = `translateY(-${heightDifference}px)`;
+        document.body.style.transition = 'none'; 
     }
-    bioInput.scrollTop = bioInput.scrollHeight;
+
+    bioInput.style.height = newHeight + 'px';
+
+    if (heightDifference > 0) {
+        document.body.style.transform = '';
+        window.scrollTo(0, window.scrollY - heightDifference); 
+
+        requestAnimationFrame(() => {
+             document.body.style.transition = ''; 
+        });
+    }
 });
 
 nameInput.addEventListener("input", () => {
