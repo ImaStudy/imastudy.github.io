@@ -576,18 +576,8 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-  const scrollPos = window.pageYOffset;
-
-  const cursorPos = bioInput.selectionStart;
-
   bioInput.style.height = 'auto';
-  bioInput.style.height = bioInput.scrollHeight + 'px';
-
-  bioInput.selectionStart = cursorPos;
-  bioInput.selectionEnd = cursorPos;
-
-  window.scrollTo(0, scrollPos);
-
+  bioInput.style.height = (bioInput.scrollHeight) + 'px';
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
@@ -617,17 +607,11 @@ function enterEditMode() {
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
 
-const scrollY = window.scrollY;
+  userBioEl.innerHTML = "";
+  userBioEl.appendChild(bioInput);
 
-userBioEl.innerHTML = "";
-userBioEl.appendChild(bioInput);
-
-bioInput.focus({ preventScroll: true });
-
-window.scrollTo(0, scrollY);
-
-bioInput.style.height = 'auto';
-bioInput.style.height = bioInput.scrollHeight + 'px';
+  bioInput.style.height = 'auto';
+  bioInput.style.height = bioInput.scrollHeight + 'px';
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
