@@ -574,12 +574,19 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-  bioInput.style.height = 'auto';
-  bioInput.style.height = (bioInput.scrollHeight) + 'px';
+  const start = bioInput.selectionStart;
+  const end = bioInput.selectionEnd;
+  const scrollTop = bioInput.scrollTop;
+
+  bioInput.style.height = "auto";
+  bioInput.style.height = bioInput.scrollHeight + "px";
+
+  bioInput.selectionStart = start;
+  bioInput.selectionEnd = end;
+  bioInput.scrollTop = scrollTop;
 
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
-  bioInput.setSelectionRange(start, end);
 });
 
 nameInput.addEventListener("input", () => {
