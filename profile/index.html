@@ -611,10 +611,11 @@ function enterEditMode() {
     userNameEl.appendChild(nameInput);
   }
 
-  if (!userBioEl.contains(bioInput)) {
-    userBioEl.textContent = "";
-    userBioEl.appendChild(bioInput);
-  }
+ if (!userBioEl.querySelector("textarea")) {
+  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+
+  userBioEl.replaceWith(bioInput);
+}
 
   bioInput.style.height = 'auto';
   bioInput.style.height = bioInput.scrollHeight + 'px';
@@ -634,10 +635,20 @@ function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
 
-   document.querySelector(".avatar-wrapper").classList.remove("editing");
+  document.querySelector(".avatar-wrapper").classList.remove("editing");
+
+  const bioText = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
+  const newBioEl = document.createElement("p");
+  newBioEl.id = "user-bio";
+  newBioEl.textContent = bioText;
+
+  if (bioInput.parentNode) {
+    bioInput.replaceWith(newBioEl);
+  }
+
+  userBioEl = document.getElementById("user-bio");
 
   userNameEl.textContent = currentUser.displayName || oldName;
-  userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
 
   cancelEditBtn.style.display = "none";
 
