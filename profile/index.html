@@ -396,6 +396,11 @@
   margin-top: 10px;
   border-radius: 8px;
 }
+
+  .scroll-lock {
+    overflow: hidden;
+}
+  
    footer {
    text-align: center;
    font-size: 14px;
@@ -576,29 +581,18 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-    const initialHeight = bioInput.clientHeight;
-    
+    const currentScrollY = window.scrollY;
+
+    document.body.classList.add('scroll-lock');
+
     bioInput.style.height = 'auto';
-    const newHeight = bioInput.scrollHeight;
-    
-    const heightDifference = newHeight - initialHeight;
+    bioInput.style.height = bioInput.scrollHeight + 'px';
 
-    if (heightDifference > 0) {
+    document.body.classList.remove('scroll-lock');
 
-        document.body.style.transform = `translateY(-${heightDifference}px)`;
-        document.body.style.transition = 'none'; 
-    }
-
-    bioInput.style.height = newHeight + 'px';
-
-    if (heightDifference > 0) {
-        document.body.style.transform = '';
-        window.scrollTo(0, window.scrollY - heightDifference); 
-
-        requestAnimationFrame(() => {
-             document.body.style.transition = ''; 
-        });
-    }
+    setTimeout(() => {
+        window.scrollTo(0, currentScrollY);
+    }, 0);
 });
 
 nameInput.addEventListener("input", () => {
@@ -645,8 +639,6 @@ function enterEditMode() {
   cancelEditBtn.style.display = "inline-block";
 
   bioInput.focus({ preventScroll: true });
-
-    window.scrollTo(0, scrollYBeforeEdit);
 }
 
 
