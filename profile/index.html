@@ -357,6 +357,8 @@
   background: none;
 }
 
+
+
 .skeleton {
   background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
   background-size: 400% 100%;
@@ -574,17 +576,8 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-  const start = bioInput.selectionStart;
-  const end = bioInput.selectionEnd;
-  const scrollTop = bioInput.scrollTop;
-
-  bioInput.style.height = "auto";
-  bioInput.style.height = bioInput.scrollHeight + "px";
-
-  bioInput.selectionStart = start;
-  bioInput.selectionEnd = end;
-  bioInput.scrollTop = scrollTop;
-
+  bioInput.style.height = 'auto';
+  bioInput.style.height = (bioInput.scrollHeight) + 'px';
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
