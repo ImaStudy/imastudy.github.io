@@ -412,12 +412,12 @@
    <p>Размести задание — получи помощь</p>
  </div>
 <nav class="desktop-nav">
- <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
- <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
+<button type="button" class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
+<button type="button" class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
 </nav>
   <nav class="mobile-nav">
- <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
- <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
+ <button type="button" class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
+ <button type="button" class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
 </nav>
 </header>
 <hr />
@@ -461,8 +461,8 @@
       <p id="user-bio">Расскажите немного о себе...</p>
       <p id="bio-error" class="error-message">Текст должен содержать минимум 10 символов</p>
 
-      <button id="editProfileBtn">Редактировать профиль</button>
-      <button id="cancelEditBtn" class="hidden">Отмена</button>
+      <button type="button" id="editProfileBtn">Редактировать профиль</button>
+      <button type="button" id="cancelEditBtn" class="hidden">Отмена</button>
     </div>
   </section>
 </main>
@@ -472,8 +472,8 @@
    <h3>Обрезать фото</h3>
    <div><img id="crop-image" style="max-width: 100%; max-height: 300px;" /></div>
    <div class="modal-actions">
-     <button id="cropConfirmBtn">Сохранить</button>
-     <button onclick="cropModal.style.display = 'none'">Отмена</button>
+     <button type="button" id="cropConfirmBtn">Сохранить</button>
+     <button type="button" onclick="cropModal.style.display = 'none'">Отмена</button>
    </div>
  </div>
 </div>
