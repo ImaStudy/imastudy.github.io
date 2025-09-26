@@ -261,10 +261,9 @@
 
 .inline-textarea {
   resize: none;
-  overflow-y: auto;
-  max-height: 200px;
+  overflow: hidden;
   padding-bottom: 4px;
-  box-sizing: border-box;
+  box-sizing: border-box; 
 }
 
  .inline-input.input-error {
@@ -577,30 +576,16 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-    const lineHeight = parseInt(getComputedStyle(bioInput).lineHeight) || 20;
-    const minHeight = lineHeight * 4;
-    const maxHeight = lineHeight * 9;
-
-    bioInput.style.height = 'auto';
-    const newHeight = Math.min(Math.max(bioInput.scrollHeight, minHeight), maxHeight);
-    bioInput.style.height = newHeight + 'px';
-
-    const cursorPosition = bioInput.selectionStart;
-    const lines = bioInput.value.substr(0, cursorPosition).split("\n").length;
-
-    const visibleLines = Math.floor(newHeight / lineHeight);
-    const scrollTop = bioInput.scrollTop;
-
-    if (lines > visibleLines) {
-        bioInput.scrollTop = bioInput.scrollHeight - newHeight;
-    } else if (scrollTop > 0) {
-        bioInput.scrollTop = 0;
-    }
-
-    bioInput.classList.remove("input-error");
-    bioErrorEl.classList.remove("show");
+  bioInput.style.height = 'auto';
+  bioInput.style.height = (bioInput.scrollHeight) + 'px';
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
 });
 
+nameInput.addEventListener("input", () => {
+  nameInput.classList.remove("input-error");
+  nameErrorEl.classList.remove("show");
+});
 
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
@@ -632,7 +617,6 @@ function enterEditMode() {
   editProfileBtn.dataset.mode = "edit";
 
   cancelEditBtn.style.display = "inline-block";
-     bioInput.focus({ preventScroll: true }); 
 }
 
 
