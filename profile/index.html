@@ -266,13 +266,6 @@
   box-sizing: border-box; 
 }
 
-  @media (max-width: 768px) {
-  .inline-textarea {
-    overflow: auto;
-    max-height: 200px;
-  }
-}
-
  .inline-input.input-error {
   border-color: #e74c3c;
 }
@@ -585,6 +578,7 @@ const bioErrorEl = document.getElementById("bio-error");
 bioInput.addEventListener("input", () => {
   bioInput.style.height = 'auto';
   bioInput.style.height = (bioInput.scrollHeight) + 'px';
+  bioInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
  
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
