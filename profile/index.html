@@ -396,11 +396,6 @@
   margin-top: 10px;
   border-radius: 8px;
 }
-
-  .scroll-lock {
-    overflow: hidden;
-}
-  
    footer {
    text-align: center;
    font-size: 14px;
@@ -417,12 +412,12 @@
    <p>Размести задание — получи помощь</p>
  </div>
 <nav class="desktop-nav">
-<button type="button" class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
-<button type="button" class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
+ <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
+ <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
 </nav>
   <nav class="mobile-nav">
- <button type="button" class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
- <button type="button" class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
+ <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
+ <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
 </nav>
 </header>
 <hr />
@@ -466,8 +461,8 @@
       <p id="user-bio">Расскажите немного о себе...</p>
       <p id="bio-error" class="error-message">Текст должен содержать минимум 10 символов</p>
 
-      <button type="button" id="editProfileBtn">Редактировать профиль</button>
-      <button type="button" id="cancelEditBtn" class="hidden">Отмена</button>
+      <button id="editProfileBtn">Редактировать профиль</button>
+      <button id="cancelEditBtn" class="hidden">Отмена</button>
     </div>
   </section>
 </main>
@@ -477,8 +472,8 @@
    <h3>Обрезать фото</h3>
    <div><img id="crop-image" style="max-width: 100%; max-height: 300px;" /></div>
    <div class="modal-actions">
-     <button type="button" id="cropConfirmBtn">Сохранить</button>
-     <button type="button" onclick="cropModal.style.display = 'none'">Отмена</button>
+     <button id="cropConfirmBtn">Сохранить</button>
+     <button onclick="cropModal.style.display = 'none'">Отмена</button>
    </div>
  </div>
 </div>
@@ -581,18 +576,10 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-    const currentScrollY = window.scrollY;
-
-    document.body.classList.add('scroll-lock');
-
-    bioInput.style.height = 'auto';
-    bioInput.style.height = bioInput.scrollHeight + 'px';
-
-    document.body.classList.remove('scroll-lock');
-
-    setTimeout(() => {
-        window.scrollTo(0, currentScrollY);
-    }, 0);
+  bioInput.style.height = 'auto';
+  bioInput.style.height = (bioInput.scrollHeight) + 'px';
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
 });
 
 nameInput.addEventListener("input", () => {
@@ -609,36 +596,27 @@ function showToast(message, type = "success") {
 }
 
 function enterEditMode() {
-  oldName = (userNameEl.textContent || "").trim();
-  oldBio = (userBioEl.textContent || "").trim();
+  oldName = (userNameEl.textContent || "").trim();
+  oldBio = (userBioEl.textContent || "").trim();
 
-  document.querySelector(".avatar-wrapper").classList.add("editing");
+  document.querySelector(".avatar-wrapper").classList.add("editing");
+ 
+  nameInput.value = oldName;
+  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
-  nameInput.value = oldName;
-  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+  userNameEl.innerHTML = "";
+  userNameEl.appendChild(nameInput);
 
-  if (!userNameEl.contains(nameInput)) {
-    userNameEl.textContent = "";
-    userNameEl.appendChild(nameInput);
-  }
+  userBioEl.innerHTML = "";
+  userBioEl.appendChild(bioInput);
 
-    const scrollYBeforeEdit = window.scrollY;
+  bioInput.style.height = 'auto';
+  bioInput.style.height = bioInput.scrollHeight + 'px';
 
- if (!userBioEl.querySelector("textarea")) {
-  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+  editProfileBtn.textContent = "Сохранить профиль";
+  editProfileBtn.dataset.mode = "edit";
 
-  userBioEl.replaceWith(bioInput);
-}
-
-  bioInput.style.height = 'auto';
-  bioInput.style.height = bioInput.scrollHeight + 'px';
-
-  editProfileBtn.textContent = "Сохранить профиль";
-  editProfileBtn.dataset.mode = "edit";
-
-  cancelEditBtn.style.display = "inline-block";
-
-  bioInput.focus({ preventScroll: true });
+  cancelEditBtn.style.display = "inline-block";
 }
 
 
@@ -646,20 +624,10 @@ function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
 
-  document.querySelector(".avatar-wrapper").classList.remove("editing");
-
-  const bioText = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
-  const newBioEl = document.createElement("p");
-  newBioEl.id = "user-bio";
-  newBioEl.textContent = bioText;
-
-  if (bioInput.parentNode) {
-    bioInput.replaceWith(newBioEl);
-  }
-
-  userBioEl = document.getElementById("user-bio");
+   document.querySelector(".avatar-wrapper").classList.remove("editing");
 
   userNameEl.textContent = currentUser.displayName || oldName;
+  userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
 
   cancelEditBtn.style.display = "none";
 
