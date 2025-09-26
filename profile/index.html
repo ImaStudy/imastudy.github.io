@@ -261,9 +261,10 @@
 
 .inline-textarea {
   resize: none;
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: 200px;
   padding-bottom: 4px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
  .inline-input.input-error {
@@ -576,8 +577,11 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
+  const start = bioInput.scrollTop;
   bioInput.style.height = 'auto';
   bioInput.style.height = (bioInput.scrollHeight) + 'px';
+  bioInput.scrollTop = start;
+ 
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
