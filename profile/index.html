@@ -265,7 +265,6 @@
   max-height: 200px;
   padding-bottom: 4px;
   box-sizing: border-box;
-  min-height: 5.2em;
 }
 
  .inline-input.input-error {
@@ -571,7 +570,7 @@ nameInput.maxLength = 20;
 const nameErrorEl = document.getElementById("name-error");
 
 const bioInput = document.createElement("textarea");
- 
+bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
 
