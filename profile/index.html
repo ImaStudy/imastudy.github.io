@@ -576,12 +576,16 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-    const pageScrollY = window.scrollY;
+    const currentScrollY = window.scrollY;
+    const initialHeight = bioInput.clientHeight;
     bioInput.style.height = 'auto';
     bioInput.style.height = bioInput.scrollHeight + 'px';
-    setTimeout(() => {
-        window.scrollTo(0, pageScrollY);
-    }, 0);
+    const newHeight = bioInput.clientHeight;
+    const heightDifference = newHeight - initialHeight;
+    if (heightDifference > 0) {
+        window.scrollTo(0, currentScrollY + heightDifference);
+    }
+    bioInput.scrollTop = bioInput.scrollHeight;
 });
 
 nameInput.addEventListener("input", () => {
@@ -598,34 +602,38 @@ function showToast(message, type = "success") {
 }
 
 function enterEditMode() {
-  oldName = (userNameEl.textContent || "").trim();
-  oldBio = (userBioEl.textContent || "").trim();
+  oldName = (userNameEl.textContent || "").trim();
+  oldBio = (userBioEl.textContent || "").trim();
 
-  document.querySelector(".avatar-wrapper").classList.add("editing");
+  document.querySelector(".avatar-wrapper").classList.add("editing");
 
-  nameInput.value = oldName;
-  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+  nameInput.value = oldName;
+  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
-  if (!userNameEl.contains(nameInput)) {
-    userNameEl.textContent = "";
-    userNameEl.appendChild(nameInput);
-  }
+  if (!userNameEl.contains(nameInput)) {
+    userNameEl.textContent = "";
+    userNameEl.appendChild(nameInput);
+  }
 
- if (!userBioEl.querySelector("textarea")) {
-  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+    const scrollYBeforeEdit = window.scrollY;
 
-  userBioEl.replaceWith(bioInput);
+ if (!userBioEl.querySelector("textarea")) {
+  bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
+
+  userBioEl.replaceWith(bioInput);
 }
 
-  bioInput.style.height = 'auto';
-  bioInput.style.height = bioInput.scrollHeight + 'px';
+  bioInput.style.height = 'auto';
+  bioInput.style.height = bioInput.scrollHeight + 'px';
 
-  editProfileBtn.textContent = "Сохранить профиль";
-  editProfileBtn.dataset.mode = "edit";
+  editProfileBtn.textContent = "Сохранить профиль";
+  editProfileBtn.dataset.mode = "edit";
 
-  cancelEditBtn.style.display = "inline-block";
+  cancelEditBtn.style.display = "inline-block";
 
-  bioInput.focus({ preventScroll: true });
+  bioInput.focus({ preventScroll: true });
+
+    window.scrollTo(0, scrollYBeforeEdit);
 }
 
 
