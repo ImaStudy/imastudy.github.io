@@ -584,7 +584,7 @@ bioInput.addEventListener("input", () => {
     const cursorPosition = bioInput.selectionStart; 
 
     bioInput.style.height = 'auto';
-    bioInput.style.height = (bioInput.scrollHeight) + 'px';
+    bioInput.style.height = (bioInput.scrollHeight, 200) + 'px';
 
     const newHeight = bioInput.clientHeight;
     const heightDifference = newHeight - initialHeight;
