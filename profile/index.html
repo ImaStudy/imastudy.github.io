@@ -268,7 +268,7 @@
 
   @media (max-width: 768px) {
   .inline-textarea {
-    overflow-y: auto;
+    overflow: auto;
     max-height: 200px;
   }
 }
@@ -585,12 +585,6 @@ const bioErrorEl = document.getElementById("bio-error");
 bioInput.addEventListener("input", () => {
   bioInput.style.height = 'auto';
   bioInput.style.height = (bioInput.scrollHeight) + 'px';
-  
-   setTimeout(() => {
-    bioInput.selectionStart = bioInput.selectionEnd;
-    bioInput.scrollTop = bioInput.scrollHeight;
-    bioInput.scrollIntoView({ block: "center", behavior: "smooth" });
-  }, 0);
  
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
