@@ -566,6 +566,13 @@ nameInput.maxLength = 20;
 
 const nameErrorEl = document.getElementById("name-error");
 
+const bioInput = document.createElement("textarea");
+bioInput.rows = 4;
+bioInput.className = "inline-textarea";
+bioInput.placeholder = "О себе";
+
+const bioErrorEl = document.getElementById("bio-error");
+
 const bioMirror = document.createElement("div");
 bioMirror.style.visibility = "hidden";
 bioMirror.style.whiteSpace = "pre-wrap";
