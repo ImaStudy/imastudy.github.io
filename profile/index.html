@@ -600,20 +600,21 @@ const copyBioStyles = () => {
 };
 
 const updateHeight = () => {
-  bioInput.style.height = "auto";
+  copyBioStyles();
+  bioMirror.textContent = bioInput.value + "\n";
 
-  let newHeight = bioInput.scrollHeight;
-
-  const computed = window.getComputedStyle(bioInput);
-  const lineHeight = parseInt(computed.lineHeight) || 20;
+  const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
-  newHeight = Math.round(newHeight);
+  let newHeight = bioMirror.scrollHeight;
+
+  newHeight = Math.ceil(newHeight / lineHeight) * lineHeight;
 
   if (newHeight < minHeight) newHeight = minHeight;
 
-  bioInput.style.height = newHeight + "px";
+  bioInput.style.height = newHeight;
 };
+
 bioInput.addEventListener("input", () => {
   updateHeight();
   bioInput.classList.remove("input-error");
