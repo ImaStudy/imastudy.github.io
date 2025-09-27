@@ -580,6 +580,7 @@ bioMirror.style.wordWrap = "break-word";
 bioMirror.style.position = "absolute";
 bioMirror.style.top = "0";
 bioMirror.style.left = "-9999px";
+bioMirror.style.boxSizing = "border-box";
 document.body.appendChild(bioMirror);
 
 const copyBioStyles = () => {
@@ -587,18 +588,25 @@ const copyBioStyles = () => {
   bioMirror.style.font = styles.font;
   bioMirror.style.lineHeight = styles.lineHeight;
   bioMirror.style.padding = styles.padding;
-  bioMirror.style.width = styles.width;
+  bioMirror.style.width = bioInput.offsetWidth + "px";
+  bioMirror.style.border = styles.border;
+  bioMirror.style.letterSpacing = styles.letterSpacing;
 };
 
-copyBioStyles();
-
-bioInput.addEventListener("input", () => {
+const updateHeight = () => {
+  copyBioStyles();
   bioMirror.textContent = bioInput.value + "\n";
   bioInput.style.height = bioMirror.scrollHeight + "px";
+};
 
+bioInput.addEventListener("input", () => {
+  updateHeight();
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
+
+window.addEventListener("resize", updateHeight);
+
 
 
 
