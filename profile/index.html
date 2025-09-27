@@ -265,7 +265,8 @@
   padding: 0;
   line-height: 20px;
   box-sizing: border-box;
-  height: calc(20px * 4 + 2px);
+  min-height: calc(20px * 4 + 2px);
+  height: auto;
 }
 
 
@@ -602,7 +603,7 @@ const copyBioStyles = () => {
 const updateHeight = () => {
   copyBioStyles();
 
-  bioMirror.textContent = bioInput.value || " ";
+  bioMirror.textContent = bioInput.value + "\n";
 
   let newHeight = bioMirror.scrollHeight;
 
