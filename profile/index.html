@@ -599,7 +599,7 @@ let lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight);
 const updateHeight = () => {
   copyBioStyles();
   bioMirror.textContent = bioInput.value + "\n";
-  bioInput.style.height = Math.max(bioMirror.scrollHeight, lineHeight * minRows) + "px";
+  bioInput.style.height = bioMirror.scrollHeight + "px";
 };
 
 bioInput.addEventListener("input", () => {
