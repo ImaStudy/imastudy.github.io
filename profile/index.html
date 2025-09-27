@@ -609,7 +609,10 @@ const updateHeight = () => {
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
-  bioInput.style.height = Math.ceil(Math.max(newHeight, minHeight)) + "px";
+const newHeight = Math.max(bioInput.scrollHeight, minHeight);
+const roundedHeight = Math.ceil(newHeight / 20) * 20;
+bioInput.style.height = roundedHeight + "px";
+
 };
 
 bioInput.addEventListener("input", () => {
