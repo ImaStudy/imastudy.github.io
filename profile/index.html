@@ -567,9 +567,9 @@ nameInput.maxLength = 20;
 const nameErrorEl = document.getElementById("name-error");
 
 const bioInput = document.createElement("textarea");
-bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
+bioInput.style.overflow = "hidden";
 
 const bioErrorEl = document.getElementById("bio-error");
 
@@ -593,9 +593,6 @@ const copyBioStyles = () => {
   bioMirror.style.letterSpacing = styles.letterSpacing;
 };
 
- const minRows = 4;
-let lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight);
-
 const updateHeight = () => {
   copyBioStyles();
   bioMirror.textContent = bioInput.value + "\n";
@@ -608,9 +605,9 @@ bioInput.addEventListener("input", () => {
   bioErrorEl.classList.remove("show");
 });
 
- window.addEventListener("resize", updateHeight);
+window.addEventListener("resize", updateHeight);
 
- bioInput.style.height = lineHeight * minRows + "px";
+bioInput.style.height = "4em";
 
 
 
