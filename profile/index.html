@@ -264,9 +264,8 @@
   overflow: hidden;
   padding: 0;
   line-height: 20px;
-  box-sizing: border-box;
+  box-sizing: content-box;
   height: 80px;
-  vertical-align: top;
 }
 
 
@@ -604,11 +603,16 @@ const updateHeight = () => {
   copyBioStyles();
   bioMirror.textContent = bioInput.value + "\n";
 
-  let newHeight = bioMirror.scrollHeight;
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
-  bioInput.style.height = Math.max(newHeight, minHeight) + "px";
+  let newHeight = bioMirror.scrollHeight;
+
+  newHeight = Math.ceil(newHeight / lineHeight) * lineHeight;
+
+  if (newHeight < minHeight) newHeight = minHeight;
+
+  bioInput.style.height = newHeight + "px";
 };
 
 bioInput.addEventListener("input", () => {
