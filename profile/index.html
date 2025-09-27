@@ -567,10 +567,12 @@ nameInput.maxLength = 20;
 const nameErrorEl = document.getElementById("name-error");
 
 const bioInput = document.createElement("textarea");
-bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
-bioInput.style.minHeight = "4em";
+bioInput.rows = 4;
+bioInput.style.minHeight = "4em"; 
+bioInput.style.overflow = "hidden";
+bioInput.style.resize = "none";
 
 const bioErrorEl = document.getElementById("bio-error");
 
@@ -596,8 +598,10 @@ const copyBioStyles = () => {
 
 const updateHeight = () => {
   copyBioStyles();
+
   bioMirror.textContent = bioInput.value + "\n";
-   const newHeight = bioMirror.scrollHeight;
+
+  let newHeight = bioMirror.scrollHeight;
 
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
