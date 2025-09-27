@@ -262,8 +262,11 @@
 .inline-textarea {
   resize: none;
   overflow: hidden;
-  padding-bottom: 4px;
-  box-sizing: border-box; 
+  padding: 0;
+  line-height: 20px;
+  box-sizing: content-box;
+  min-height: calc(20px * 4);
+  max-height: calc(20px * 9);
 }
 
 
