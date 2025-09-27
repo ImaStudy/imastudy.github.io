@@ -602,7 +602,7 @@ const copyBioStyles = () => {
 const updateHeight = () => {
   copyBioStyles();
 
-  bioMirror.textContent = bioInput.value + "\n";
+  bioMirror.textContent = bioInput.value || " ";
 
   let newHeight = bioMirror.scrollHeight;
 
