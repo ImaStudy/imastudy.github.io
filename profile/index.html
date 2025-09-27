@@ -601,7 +601,7 @@ const copyBioStyles = () => {
 
 const updateHeight = () => {
   copyBioStyles();
-  bioMirror.textContent = bioInput.value + "\n";
+  bioMirror.textContent = bioInput.value;
 
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
