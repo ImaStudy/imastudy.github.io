@@ -356,12 +356,6 @@
   padding: 0;
   background: none;
 }
-#bioInput {
-  width: 100%;
-  overflow: hidden;
-  resize: none;
-}
-
 
 .skeleton {
   background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
@@ -579,18 +573,20 @@ bioInput.placeholder = "О себе";
 
 const bioErrorEl = document.getElementById("bio-error");
 
-const bioInput = document.querySelector('#bioInput');
-
-bioInput.addEventListener('input', () => {
+bioInput.addEventListener("input", () => {
   const scrollY = window.scrollY;
   const cursorPos = bioInput.selectionStart;
 
-  bioInput.style.height = 'auto';
-  bioInput.style.height = bioInput.scrollHeight + 'px';
+  bioInput.style.height = "auto";
+  bioInput.style.height = bioInput.scrollHeight + "px";
 
   window.scrollTo(0, scrollY);
   bioInput.setSelectionRange(cursorPos, cursorPos);
+
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
 });
+
 
 nameInput.addEventListener("input", () => {
   nameInput.classList.remove("input-error");
