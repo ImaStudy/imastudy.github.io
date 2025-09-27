@@ -262,12 +262,12 @@
 .inline-textarea {
   resize: none;
   overflow: hidden;
-  padding: 4px 0;
+  padding: 0;
   line-height: 20px;
-  box-sizing: content-box;
-  min-height: calc(20px * 4);
+  box-sizing: border-box;
+  min-height: calc(20px * 4 + 2px);
   height: auto;
-} 
+}
 
 
  .inline-input.input-error {
@@ -596,8 +596,7 @@ const copyBioStyles = () => {
   bioMirror.style.lineHeight = styles.lineHeight;
   bioMirror.style.padding = styles.padding;
   bioMirror.style.width = bioInput.offsetWidth + "px";
-  bioMirror.style.border = "none";
-  bioMirror.style.boxSizing = styles.boxSizing;
+  bioMirror.style.border = styles.border;
   bioMirror.style.letterSpacing = styles.letterSpacing;
 };
 
