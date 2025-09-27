@@ -573,16 +573,33 @@ bioInput.placeholder = "О себе";
 
 const bioErrorEl = document.getElementById("bio-error");
 
-bioInput.addEventListener("input", () => {
-  bioInput.style.height = "auto";
+const bioMirror = document.createElement("div");
+bioMirror.style.visibility = "hidden";
+bioMirror.style.whiteSpace = "pre-wrap";
+bioMirror.style.wordWrap = "break-word";
+bioMirror.style.position = "absolute";
+bioMirror.style.top = "0";
+bioMirror.style.left = "-9999px";
+document.body.appendChild(bioMirror);
 
-  requestAnimationFrame(() => {
-    bioInput.style.height = bioInput.scrollHeight + "px";
-  });
+const copyBioStyles = () => {
+  const styles = window.getComputedStyle(bioInput);
+  bioMirror.style.font = styles.font;
+  bioMirror.style.lineHeight = styles.lineHeight;
+  bioMirror.style.padding = styles.padding;
+  bioMirror.style.width = styles.width;
+};
+
+copyBioStyles();
+
+bioInput.addEventListener("input", () => {
+  bioMirror.textContent = bioInput.value + "\n";
+  bioInput.style.height = bioMirror.scrollHeight + "px";
 
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
+
 
 
 nameInput.addEventListener("input", () => {
