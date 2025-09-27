@@ -648,8 +648,11 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
-  bioInput.style.height = 'auto';
-  bioInput.style.height = bioInput.scrollHeight + 'px';
+  const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
+  const minHeight = lineHeight * 4;
+  bioInput.style.height = minHeight + "px";
+
+  updateHeight();
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
