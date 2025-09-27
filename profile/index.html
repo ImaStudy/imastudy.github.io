@@ -593,10 +593,13 @@ const copyBioStyles = () => {
   bioMirror.style.letterSpacing = styles.letterSpacing;
 };
 
+ const minRows = 4;
+let lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight);
+
 const updateHeight = () => {
   copyBioStyles();
   bioMirror.textContent = bioInput.value + "\n";
-  bioInput.style.height = bioMirror.scrollHeight + "px";
+  bioInput.style.height = Math.max(bioMirror.scrollHeight, lineHeight * minRows) + "px";
 };
 
 bioInput.addEventListener("input", () => {
@@ -605,7 +608,9 @@ bioInput.addEventListener("input", () => {
   bioErrorEl.classList.remove("show");
 });
 
-window.addEventListener("resize", updateHeight);
+ window.addEventListener("resize", updateHeight);
+
+ bioInput.style.height = lineHeight * minRows + "px";
 
 
 
