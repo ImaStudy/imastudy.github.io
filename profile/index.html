@@ -260,10 +260,22 @@
 }
 
 .inline-textarea {
+  font-family: inherit;
+  font-size: inherit;
+  width: 100%;
+  max-width: 520px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s;
   resize: none;
   overflow: hidden;
-  padding-bottom: 4px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
+  min-height: calc(1.5em * 4 + 12px);
+}
+.inline-textarea:focus {
+  border-color: #3498db;
 }
 
  .inline-input.input-error {
@@ -569,9 +581,8 @@ const nameErrorEl = document.getElementById("name-error");
 const bioInput = document.createElement("textarea");
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
-bioInput.style.overflow = "hidden";
-bioInput.style.minHeight = "4em";
-bioInput.style.resize = "none";
+bioInput.rows = 4;
+bioInput.style.resize = "vertical";
 
 const bioErrorEl = document.getElementById("bio-error");
 
