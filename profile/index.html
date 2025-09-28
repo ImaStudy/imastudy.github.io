@@ -598,6 +598,8 @@ if (window.innerWidth <= 600) {
     if (e.key === "Enter") {
       setTimeout(() => {
         bioInput.scrollTop = bioInput.scrollHeight;
+        const pos = bioInput.selectionStart;
+        bioInput.setSelectionRange(pos, pos);
       }, 0);
     }
   });
