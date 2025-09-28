@@ -262,12 +262,9 @@
 .inline-textarea {
   resize: none;
   overflow: hidden;
-  padding: 0;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  box-sizing: border-box;
   line-height: 20px;
-  box-sizing: content-box;
-  height: 80px;
+  min-height: calc(20px * 4);
 }
 
 
@@ -603,7 +600,7 @@ const copyBioStyles = () => {
 
 const updateHeight = () => {
   copyBioStyles();
-  bioMirror.textContent = bioInput.value + "\n";
+  bioMirror.textContent = bioInput.value || " ";
 
   let newHeight = bioMirror.scrollHeight;
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
