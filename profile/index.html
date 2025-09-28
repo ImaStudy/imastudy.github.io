@@ -595,11 +595,10 @@ function showToast(message, type = "success") {
   setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
-function saveScroll(fn) {
-  const scrollY = window.scrollY;
-  fn();
-  window.scrollTo(0, scrollY);
-}
+nameInput.style.display = "none";
+bioInput.style.display = "none";
+userNameEl.parentNode.appendChild(nameInput);
+userBioEl.parentNode.appendChild(bioInput);
 
 function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
@@ -610,13 +609,10 @@ function enterEditMode() {
   nameInput.value = oldName;
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
-  saveScroll(() => {
-    userNameEl.innerHTML = "";
-    userNameEl.appendChild(nameInput);
-
-    userBioEl.innerHTML = "";
-    userBioEl.appendChild(bioInput);
-  });
+  userNameEl.style.display = "none";
+  userBioEl.style.display = "none";
+  nameInput.style.display = "block";
+  bioInput.style.display = "block";
 
   bioInput.style.height = "auto";
   bioInput.style.height = bioInput.scrollHeight + "px";
@@ -636,12 +632,12 @@ function exitEditMode() {
   userBioEl.textContent =
     oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
 
-  cancelEditBtn.style.display = "none";
+  userNameEl.style.display = "block";
+  userBioEl.style.display = "block";
+  nameInput.style.display = "none";
+  bioInput.style.display = "none";
 
-  nameInput.classList.remove("input-error");
-  nameErrorEl.classList.remove("show");
-  bioInput.classList.remove("input-error");
-  bioErrorEl.classList.remove("show");
+  cancelEditBtn.style.display = "none";
 }
 
 editProfileBtn.addEventListener("click", async () => {
