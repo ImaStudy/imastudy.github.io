@@ -630,10 +630,16 @@ if (window.innerWidth <= 600) {
     bioInput.style.height = bioInput.scrollHeight + "px";
 
     setTimeout(() => {
-      bioInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }, 0);
+      const rect = bioInput.getBoundingClientRect();
+      const absoluteY = window.scrollY + rect.bottom;
+      window.scrollTo({
+        top: absoluteY - window.innerHeight + 80,
+        behavior: "smooth",
+      });
+    }, 50);
   });
 }
+
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
