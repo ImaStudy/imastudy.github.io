@@ -595,49 +595,47 @@ function showToast(message, type = "success") {
   setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
-nameInput.style.display = "none";
-bioInput.style.display = "none";
-userNameEl.parentNode.appendChild(nameInput);
-userBioEl.parentNode.appendChild(bioInput);
-
 function enterEditMode() {
   oldName = (userNameEl.textContent || "").trim();
   oldBio = (userBioEl.textContent || "").trim();
 
   document.querySelector(".avatar-wrapper").classList.add("editing");
-
+ 
   nameInput.value = oldName;
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
 
-  userNameEl.style.display = "none";
-  userBioEl.style.display = "none";
-  nameInput.style.display = "block";
-  bioInput.style.display = "block";
+  userNameEl.innerHTML = "";
+  userNameEl.appendChild(nameInput);
 
-  bioInput.style.height = "auto";
-  bioInput.style.height = bioInput.scrollHeight + "px";
+  userBioEl.innerHTML = "";
+  userBioEl.appendChild(bioInput);
+
+  bioInput.style.height = 'auto';
+  bioInput.style.height = bioInput.scrollHeight + 'px';
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
+
   cancelEditBtn.style.display = "inline-block";
 }
+
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
 
-  document.querySelector(".avatar-wrapper").classList.remove("editing");
+   document.querySelector(".avatar-wrapper").classList.remove("editing");
 
   userNameEl.textContent = currentUser.displayName || oldName;
-  userBioEl.textContent =
-    oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
-
-  userNameEl.style.display = "block";
-  userBioEl.style.display = "block";
-  nameInput.style.display = "none";
-  bioInput.style.display = "none";
+  userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
 
   cancelEditBtn.style.display = "none";
+
+  nameInput.classList.remove("input-error");
+  nameErrorEl.classList.remove("show");
+
+  bioInput.classList.remove("input-error");
+  bioErrorEl.classList.remove("show");
 }
 
 editProfileBtn.addEventListener("click", async () => {
