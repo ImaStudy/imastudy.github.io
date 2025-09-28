@@ -611,11 +611,14 @@ const updateHeight = () => {
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
+  const scrollY = window.scrollY;
+
   bioInput.style.height = "auto";
   bioInput.scrollTop = 0;
   const newHeight = Math.max(bioInput.scrollHeight, minHeight);
-
   bioInput.style.height = newHeight + "px";
+
+  window.scrollTo(window.scrollX, scrollY);
 };
 
 bioInput.addEventListener("input", () => {
