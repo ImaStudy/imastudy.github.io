@@ -598,7 +598,6 @@ const copyBioStyles = () => {
   bioMirror.style.border = styles.border;
   bioMirror.style.letterSpacing = styles.letterSpacing;
 };
-
 const updateHeight = () => {    
   copyBioStyles();
   bioMirror.textContent = bioInput.value || " ";
@@ -609,10 +608,12 @@ const updateHeight = () => {
   bioInput.style.height = "auto";
   bioInput.scrollTop = 0;
 
-  const newHeight = Math.max(bioMirror.scrollHeight, minHeight);
+  let newHeight = bioMirror.scrollHeight;
+  newHeight = Math.max(newHeight, minHeight);
 
   bioInput.style.height = (newHeight + 1) + "px";
 };
+
 bioInput.addEventListener("input", () => {
   updateHeight();
   bioInput.classList.remove("input-error");
