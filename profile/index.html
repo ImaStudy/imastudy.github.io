@@ -247,7 +247,7 @@
   color: inherit;
   width: 100%;
   max-width: 520px;
-  padding: 2px;
+  padding: 2px 0;
   border: none;
   border-bottom: 2px solid #ccc;
   background: transparent;
@@ -262,18 +262,9 @@
 .inline-textarea {
   resize: none;
   overflow: hidden;
-  line-height: 20px;
-  padding: 0; 
-  border: none;
-  outline: none;
-  box-sizing: content-box; 
+  padding-bottom: 4px;
+  box-sizing: border-box; 
 }
-
-.inline-textarea::placeholder {
-  line-height: 20px;
-}
-
-
 
  .inline-input.input-error {
   border-color: #e74c3c;
@@ -365,6 +356,8 @@
   padding: 0;
   background: none;
 }
+
+
 
 .skeleton {
   background: linear-gradient(90deg, #eee 25%, #f5f5f5 37%, #eee 63%);
@@ -576,56 +569,18 @@ nameInput.maxLength = 20;
 const nameErrorEl = document.getElementById("name-error");
 
 const bioInput = document.createElement("textarea");
+bioInput.rows = 4;
 bioInput.className = "inline-textarea";
 bioInput.placeholder = "О себе";
-bioInput.rows = 4;
-bioInput.style.minHeight = "4em"; 
-bioInput.style.overflow = "hidden";
-bioInput.style.resize = "none";
 
 const bioErrorEl = document.getElementById("bio-error");
 
-const bioMirror = document.createElement("div");
-bioMirror.style.visibility = "hidden";
-bioMirror.style.whiteSpace = "pre-wrap";
-bioMirror.style.wordWrap = "break-word";
-bioMirror.style.position = "absolute";
-bioMirror.style.top = "0";
-bioMirror.style.left = "-9999px";
-bioMirror.style.boxSizing = "border-box";
-document.body.appendChild(bioMirror);
-
-const copyBioStyles = () => {
-  const styles = window.getComputedStyle(bioInput);
-  bioMirror.style.font = styles.font;
-  bioMirror.style.lineHeight = styles.lineHeight;
-  bioMirror.style.padding = styles.padding;
-  bioMirror.style.width = bioInput.offsetWidth + "px";
-  bioMirror.style.border = styles.border;
-  bioMirror.style.letterSpacing = styles.letterSpacing;
-};
-
-const updateHeight = () => {
-  copyBioStyles();
-  bioMirror.textContent = bioInput.value + "\n";
-
-  let newHeight = bioMirror.scrollHeight;
-  const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
-  const minHeight = lineHeight * 4;
-
-  bioInput.style.height = Math.max(newHeight, minHeight) + "px";
-};
-
 bioInput.addEventListener("input", () => {
-  updateHeight();
+  bioInput.style.height = 'auto';
+  bioInput.style.height = (bioInput.scrollHeight) + 'px';
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 });
-
-window.addEventListener("resize", updateHeight);
-
-
-
 
 nameInput.addEventListener("input", () => {
   nameInput.classList.remove("input-error");
@@ -655,11 +610,8 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
-  const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
-  const minHeight = lineHeight * 4;
-  bioInput.style.height = minHeight + "px";
-
-  updateHeight();
+  bioInput.style.height = 'auto';
+  bioInput.style.height = bioInput.scrollHeight + 'px';
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
