@@ -593,6 +593,17 @@ bioInput.addEventListener("input", () => {
   const lineHeight = parseFloat(getComputedStyle(bioInput).lineHeight);
   const minHeight = lineHeight * 6;
 
+if (window.innerWidth <= 600) {
+  bioInput.addEventListener("input", () => {
+    const lineHeight = parseInt(getComputedStyle(bioInput).lineHeight) || 20;
+    const currentLines = Math.round(bioInput.scrollHeight / lineHeight);
+
+    if (currentLines > 1) {
+      bioInput.scrollTop = bioInput.scrollHeight;
+    }
+  });
+}
+ 
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 
@@ -623,12 +634,6 @@ function enterEditMode() {
 
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
-
- if (window.innerWidth <= 600) {
-    setTimeout(() => {
-      bioInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }, 50);
-  }
 
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
