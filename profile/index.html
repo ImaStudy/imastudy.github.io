@@ -263,6 +263,7 @@
   resize: none;
   overflow: hidden;
   box-sizing: border-box;
+  padding: 2px 0;
   line-height: 20px;
   min-height: calc(20px * 4);
 }
@@ -606,7 +607,7 @@ const updateHeight = () => {
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
-  const newHeight = Math.max(bioMirror.scrollHeight, minHeight);
+  const newHeight = Math.max(bioMirror.scrollHeight + lineHeight / 4, minHeight);
 
   bioInput.style.height = newHeight + "px";
 };
