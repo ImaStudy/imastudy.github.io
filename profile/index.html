@@ -596,11 +596,9 @@ bioInput.addEventListener("input", () => {
 if (window.innerWidth <= 600) {
   bioInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         bioInput.scrollTop = bioInput.scrollHeight;
-        const pos = bioInput.selectionStart;
-        bioInput.setSelectionRange(pos, pos);
-      }, 0);
+      });
     }
   });
 }
