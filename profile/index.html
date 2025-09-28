@@ -262,23 +262,21 @@
 .inline-textarea {
   padding: 2px 2px;
   line-height: 1.5em;
-  box-sizing: border-box;
-  resize: none;
-
-  min-height: calc(1.5em * 6);
-  max-height: calc(1.5em * 6);
+  height: calc(1.5em * 6 + 4px);
+  max-height: calc(1.5em * 6 + 4px);
+  min-height: calc(1.5em * 6 + 4px);
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 
 @media (max-width: 600px) {
   .inline-textarea {
     min-height: calc(1.5em * 6);
-    max-height: calc(1.5em * 6);
-    height: calc(1.5em * 6);
   }
 }
-  
+
+
  .inline-input.input-error {
   border-color: #e74c3c;
 }
@@ -590,11 +588,8 @@ const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
   const lineHeight = parseFloat(getComputedStyle(bioInput).lineHeight);
-  const maxHeight = lineHeight * 6;
+  const minHeight = lineHeight * 6;
 
-  bioInput.style.height = "auto";
-  bioInput.style.height = Math.min(bioInput.scrollHeight, maxHeight) + "px";
- 
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
  
