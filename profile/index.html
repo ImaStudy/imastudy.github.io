@@ -273,6 +273,10 @@
 @media (max-width: 600px) {
   .inline-textarea {
     min-height: calc(1.5em * 6);
+    max-height: none;
+    height: auto;
+    overflow-y: hidden;
+    resize: none;
   }
 }
 
@@ -621,8 +625,6 @@ function enterEditMode() {
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
 
-  userBioEl.innerHTML = "";
-  userBioEl.appendChild(bioInput);
 
 if (window.innerWidth <= 600) {
   bioInput.addEventListener("input", () => {
@@ -630,16 +632,17 @@ if (window.innerWidth <= 600) {
     bioInput.style.height = bioInput.scrollHeight + "px";
 
     setTimeout(() => {
-      const rect = bioInput.getBoundingClientRect();
-      const absoluteY = window.scrollY + rect.bottom;
-      window.scrollTo({
-        top: absoluteY - window.innerHeight + 80,
-        behavior: "smooth",
-      });
+      bioInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, 50);
   });
+
+  bioInput.style.height = "auto";
+  bioInput.style.height = bioInput.scrollHeight + "px";
 }
 
+
+  userBioEl.innerHTML = "";
+  userBioEl.appendChild(bioInput);
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
