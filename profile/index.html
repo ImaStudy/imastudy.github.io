@@ -581,6 +581,9 @@ bioInput.addEventListener("input", () => {
   const lineHeight = parseFloat(getComputedStyle(bioInput).lineHeight);
   const minHeight = lineHeight * 6;
 
+  bioInput.style.height = "auto";
+  bioInput.style.height = bioInput.scrollHeight + "px";
+ 
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
  
