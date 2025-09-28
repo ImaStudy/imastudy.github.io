@@ -593,8 +593,10 @@ bioInput.placeholder = "О себе";
 const bioErrorEl = document.getElementById("bio-error");
 
 bioInput.addEventListener("input", () => {
-  bioInput.classList.remove("input-error");
-  bioErrorEl.classList.remove("show");
+  const lineHeight = parseFloat(getComputedStyle(bioInput).lineHeight);
+  const minHeight = lineHeight * 6;
+  bioInput.style.height = 'auto';
+  bioInput.style.height = Math.max(bioInput.scrollHeight, minHeight) + 'px';
  
    if (window.innerWidth <= 600) {
     bioInput.scrollTop = bioInput.scrollHeight;
