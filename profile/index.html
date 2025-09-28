@@ -275,7 +275,6 @@
     min-height: calc(1.5em * 6);
     max-height: none;
     height: auto;
-    overflow-y: hidden;
     resize: none;
   }
 }
@@ -624,22 +623,6 @@ function enterEditMode() {
 
   userNameEl.innerHTML = "";
   userNameEl.appendChild(nameInput);
-
-
-if (window.innerWidth <= 600) {
-  bioInput.addEventListener("input", () => {
-    bioInput.style.height = "auto";
-    bioInput.style.height = bioInput.scrollHeight + "px";
-
-    setTimeout(() => {
-      bioInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
-    }, 50);
-  });
-
-  bioInput.style.height = "auto";
-  bioInput.style.height = bioInput.scrollHeight + "px";
-}
-
 
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
