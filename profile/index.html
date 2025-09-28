@@ -594,12 +594,11 @@ bioInput.addEventListener("input", () => {
   const minHeight = lineHeight * 6;
 
 if (window.innerWidth <= 600) {
-  bioInput.addEventListener("input", () => {
-    const lineHeight = parseInt(getComputedStyle(bioInput).lineHeight) || 20;
-    const currentLines = Math.round(bioInput.scrollHeight / lineHeight);
-
-    if (currentLines > 1) {
-      bioInput.scrollTop = bioInput.scrollHeight;
+  bioInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      setTimeout(() => {
+        bioInput.scrollTop = bioInput.scrollHeight;
+      }, 0);
     }
   });
 }
