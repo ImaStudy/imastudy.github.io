@@ -240,6 +240,18 @@
   margin-top: 30px;
 }
 
+#bio-mirror {
+  position: absolute;
+  top: 0;
+  left: -9999px;
+  height: auto;
+  overflow: hidden;
+  visibility: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  pointer-events: none;
+}
+  
 .inline-input, .inline-textarea {
   font-family: inherit;
   font-size: inherit;
@@ -580,14 +592,8 @@ bioInput.style.resize = "none";
 const bioErrorEl = document.getElementById("bio-error");
 
 const bioMirror = document.createElement("div");
-bioMirror.style.visibility = "hidden";
-bioMirror.style.whiteSpace = "pre-wrap";
-bioMirror.style.wordWrap = "break-word";
-bioMirror.style.position = "absolute";
-bioMirror.style.top = "0";
-bioMirror.style.left = "-9999px";
-bioMirror.style.boxSizing = "content-box";
-document.body.appendChild(bioMirror);
+bioMirror.id = "bio-mirror";
+document.getElementById("profile-content").appendChild(bioMirror);
 
 const copyBioStyles = () => {
   const styles = window.getComputedStyle(bioInput);
@@ -595,7 +601,6 @@ const copyBioStyles = () => {
   bioMirror.style.lineHeight = styles.lineHeight;
   bioMirror.style.padding = styles.padding;
   bioMirror.style.width = bioInput.offsetWidth + "px";
-  bioMirror.style.border = styles.border;
   bioMirror.style.letterSpacing = styles.letterSpacing;
 };
 
