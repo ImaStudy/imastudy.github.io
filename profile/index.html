@@ -606,9 +606,12 @@ const updateHeight = () => {
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
-  let rows = Math.max(4, Math.ceil(bioMirror.scrollHeight / lineHeight));
-  let newHeight = rows * lineHeight;
+  const realHeight = bioMirror.scrollHeight;
 
+  let rows = Math.round(realHeight / lineHeight);
+  rows = Math.max(4, rows);
+
+  const newHeight = rows * lineHeight;
   bioInput.style.height = Math.max(newHeight, minHeight) + "px";
 };
 
