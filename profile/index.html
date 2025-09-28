@@ -608,12 +608,16 @@ const updateHeight = () => {
   copyBioStyles();
   bioMirror.textContent = bioInput.value || "\u200b";
 
-  let newHeight = bioMirror.scrollHeight;
-
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
-  bioInput.style.height = Math.max(newHeight, minHeight) + "px";
+  const newHeight = Math.max(bioMirror.scrollHeight, minHeight);
+
+  const scrollY = window.scrollY;
+  bioInput.style.height = newHeight + "px";
+  bioInput.scrollTop = bioInput.scrollHeight;
+
+  window.scrollTo(window.scrollX, scrollY);
 };
 
 bioInput.addEventListener("input", () => {
