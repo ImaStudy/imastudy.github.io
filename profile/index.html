@@ -262,10 +262,10 @@
 .inline-textarea {
   resize: none;
   overflow: hidden;
-  padding: 2px;
   line-height: 20px;
-  box-sizing: content-box;
-  height: 80px;
+  box-sizing: border-box;
+  min-height: calc(20px * 4);
+  height: calc(20px * 4);
 }
 
 
@@ -601,14 +601,12 @@ const copyBioStyles = () => {
 
 const updateHeight = () => {
   copyBioStyles();
-  bioMirror.textContent = bioInput.value + "\n";
-
-  let newHeight = bioMirror.scrollHeight;
+  bioMirror.textContent = bioInput.value || " ";
 
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
-  const minHeight = lineHeight * 4;
+  const rows = Math.max(4, Math.ceil(bioMirror.scrollHeight / lineHeight));
 
-  bioInput.style.height = Math.max(newHeight + 1, minHeight) + "px";
+  bioInput.style.height = rows * lineHeight + "px";
 };
 
 bioInput.addEventListener("input", () => {
