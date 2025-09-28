@@ -595,9 +595,6 @@ const bioErrorEl = document.getElementById("bio-error");
 bioInput.addEventListener("input", () => {
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
-
-bioInput.style.height = 'auto';
-bioInput.style.height = (bioInput.scrollHeight + 2) + 'px';
  
    if (window.innerWidth <= 600) {
     bioInput.scrollTop = bioInput.scrollHeight;
