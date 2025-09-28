@@ -260,19 +260,13 @@
 }
 
 .inline-textarea {
-  resize: none;
-  overflow-y: auto;
-  min-height: calc(1.5em * 6);
-  max-height: calc(1.5em * 6);
-  padding: 4px 2px;
-  box-sizing: border-box;
-  border: none;
-  border-bottom: 2px solid #ccc;
-  background: transparent;
-  outline: none;
-  font-family: inherit;
-  font-size: 16px;
+  padding: 2px 2px;
   line-height: 1.5em;
+  height: calc(1.5em * 6 + 4px);
+  max-height: calc(1.5em * 6 + 4px);
+  min-height: calc(1.5em * 6 + 4px);
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 
