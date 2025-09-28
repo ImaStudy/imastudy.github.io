@@ -262,11 +262,14 @@
 .inline-textarea {
   padding: 2px 2px;
   line-height: 1.5em;
-  max-height: calc(1.5em * 6 + 4px);
-  min-height: calc(1.5em * 6 + 4px);
-  overflow-y: auto;
   box-sizing: border-box;
+  resize: none;
+
+  min-height: calc(1.5em * 6);
+  max-height: calc(1.5em * 6);
+  overflow-y: auto;
 }
+
 
 @media (max-width: 600px) {
   .inline-textarea {
