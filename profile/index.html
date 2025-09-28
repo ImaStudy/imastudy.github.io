@@ -624,12 +624,23 @@ function enterEditMode() {
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
 
+if (window.innerWidth <= 600) {
+  bioInput.addEventListener("input", () => {
+    bioInput.style.height = "auto";
+    bioInput.style.height = bioInput.scrollHeight + "px";
+
+    setTimeout(() => {
+      bioInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }, 0);
+  });
+}
+
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
 
   cancelEditBtn.style.display = "inline-block";
 }
-
+ 
 
 function exitEditMode() {
   editProfileBtn.textContent = "Редактировать профиль";
