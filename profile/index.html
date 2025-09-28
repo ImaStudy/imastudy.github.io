@@ -623,7 +623,6 @@ function enterEditMode() {
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
-
   cancelEditBtn.style.display = "inline-block";
 }
 
@@ -641,7 +640,6 @@ function exitEditMode() {
 
   nameInput.classList.remove("input-error");
   nameErrorEl.classList.remove("show");
-
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 }
