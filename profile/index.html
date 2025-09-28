@@ -601,14 +601,14 @@ const copyBioStyles = () => {
 
 const updateHeight = () => {
   copyBioStyles();
-  bioMirror.textContent = bioInput.value || "\u200B";
+  bioMirror.textContent = bioInput.value + "\n";
+
+  let newHeight = bioMirror.scrollHeight;
 
   const lineHeight = parseInt(window.getComputedStyle(bioInput).lineHeight) || 20;
   const minHeight = lineHeight * 4;
 
-  const newHeight = Math.max(bioMirror.scrollHeight + 2, minHeight);
-
-  bioInput.style.height = newHeight + "px";
+  bioInput.style.height = Math.max(newHeight + 1, minHeight) + "px";
 };
 
 bioInput.addEventListener("input", () => {
