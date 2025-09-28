@@ -600,43 +600,44 @@ function enterEditMode() {
   oldBio = (userBioEl.textContent || "").trim();
 
   document.querySelector(".avatar-wrapper").classList.add("editing");
-
+ 
   nameInput.value = oldName;
-  nameInput.style.display = "block";
-  userNameEl.style.display = "none";
-
   bioInput.value = oldBio === "Расскажите немного о себе..." ? "" : oldBio;
-  bioInput.style.display = "block";
-  userBioEl.style.display = "none";
+
+  userNameEl.innerHTML = "";
+  userNameEl.appendChild(nameInput);
+
+  userBioEl.innerHTML = "";
+  userBioEl.appendChild(bioInput);
+
   bioInput.style.height = 'auto';
   bioInput.style.height = bioInput.scrollHeight + 'px';
 
   editProfileBtn.textContent = "Сохранить профиль";
   editProfileBtn.dataset.mode = "edit";
+
   cancelEditBtn.style.display = "inline-block";
 }
 
+
 function exitEditMode() {
-  userNameEl.textContent = nameInput.value || oldName;
-  userNameEl.style.display = "block";
-  nameInput.style.display = "none";
-
-  userBioEl.textContent = bioInput.value || "Расскажите немного о себе...";
-  userBioEl.style.display = "block";
-  bioInput.style.display = "none";
-
-  document.querySelector(".avatar-wrapper").classList.remove("editing");
-
   editProfileBtn.textContent = "Редактировать профиль";
   editProfileBtn.dataset.mode = "view";
+
+   document.querySelector(".avatar-wrapper").classList.remove("editing");
+
+  userNameEl.textContent = currentUser.displayName || oldName;
+  userBioEl.textContent = oldBio && oldBio.trim() !== "" ? oldBio : "Расскажите немного о себе...";
+
   cancelEditBtn.style.display = "none";
 
   nameInput.classList.remove("input-error");
   nameErrorEl.classList.remove("show");
+
   bioInput.classList.remove("input-error");
   bioErrorEl.classList.remove("show");
 }
- 
+
 editProfileBtn.addEventListener("click", async () => {
 
 if (!currentUser) {
