@@ -625,14 +625,10 @@ function enterEditMode() {
   userNameEl.appendChild(nameInput);
 
  if (window.innerWidth <= 600) {
-  bioInput.addEventListener("input", () => {
-    bioInput.style.height = "auto";
-    bioInput.style.height = bioInput.scrollHeight + "px";
     setTimeout(() => {
       bioInput.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, 50);
-  });
- }
+  }
 
   userBioEl.innerHTML = "";
   userBioEl.appendChild(bioInput);
