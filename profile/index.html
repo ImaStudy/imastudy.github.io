@@ -598,9 +598,12 @@ if (window.innerWidth <= 600) {
     if (e.key === "Enter") {
       requestAnimationFrame(() => {
         const { selectionStart, value, scrollTop, clientHeight } = bioInput;
-        const lineHeight = parseFloat(getComputedStyle(bioInput).lineHeight);
+        const styles = getComputedStyle(bioInput);
+        const lineHeight = parseFloat(styles.lineHeight);
+        const paddingTop = parseFloat(styles.paddingTop);
+
         const linesBefore = value.substring(0, selectionStart).split("\n").length;
-        const cursorY = (linesBefore - 1) * lineHeight;
+        const cursorY = Math.round((linesBefore - 1) * lineHeight + paddingTop);
 
         const isCursorBelowView = cursorY >= scrollTop + clientHeight - lineHeight;
 
