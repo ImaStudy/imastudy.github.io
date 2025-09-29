@@ -594,51 +594,51 @@ bioInput.addEventListener("input", () => {
   const minHeight = lineHeight * 6;
 
 if (window.innerWidth <= 600) {
-  bioInput.addEventListener("keydown", (e) => {
+  const handleKeydown = (e) => {
+    const styles = getComputedStyle(bioInput);
+    const lineHeight = parseFloat(styles.lineHeight) || 20;
+    const paddingTop = parseFloat(styles.paddingTop) || 0;
+
     if (e.key === "Enter") {
       requestAnimationFrame(() => {
         const { selectionStart, value, scrollTop, clientHeight } = bioInput;
-        const styles = getComputedStyle(bioInput);
-        const lineHeight = parseFloat(styles.lineHeight);
-        const paddingTop = parseFloat(styles.paddingTop);
-
         const linesBefore = value.substring(0, selectionStart).split("\n").length;
         const cursorY = Math.round((linesBefore - 1) * lineHeight + paddingTop);
 
         const isCursorBelowView = cursorY > scrollTop + clientHeight - lineHeight;
-
         if (isCursorBelowView) {
-          bioInput.scrollTop = bioInput.scrollHeight;
+          const maxScroll = Math.max(0, bioInput.scrollHeight - bioInput.clientHeight);
+          bioInput.scrollTop = maxScroll;
         }
       });
+      return;
     }
 
     if (e.key === "Backspace" || e.key === "Delete") {
       const { selectionStart, value, scrollTop } = bioInput;
-      const styles = getComputedStyle(bioInput);
-      const lineHeight = parseFloat(styles.lineHeight);
-      const paddingTop = parseFloat(styles.paddingTop);
-
       const linesBefore = value.substring(0, selectionStart).split("\n").length;
       const cursorYBefore = Math.round((linesBefore - 1) * lineHeight + paddingTop);
       const offsetOnScreen = cursorYBefore - scrollTop;
 
-      const prevScrollHeight = bioInput.scrollHeight;
-
-      requestAnimationFrame(() => {
-        const newScrollHeight = bioInput.scrollHeight;
-        const diff = prevScrollHeight - newScrollHeight;
-
-        bioInput.scrollTop = bioInput.scrollTop - diff;
-
-        const linesNow = bioInput.value
-          .substring(0, bioInput.selectionStart)
-          .split("\n").length;
+      const onInputOnce = () => {
+        const linesNow = bioInput.value.substring(0, bioInput.selectionStart).split("\n").length;
         const cursorYAfter = Math.round((linesNow - 1) * lineHeight + paddingTop);
-        bioInput.scrollTop = cursorYAfter - offsetOnScreen;
-      });
+
+        const maxScroll = Math.max(0, bioInput.scrollHeight - bioInput.clientHeight);
+        let targetTop = cursorYAfter - offsetOnScreen;
+
+        if (!Number.isFinite(targetTop) || isNaN(targetTop)) targetTop = 0;
+        if (targetTop < 0) targetTop = 0;
+        if (targetTop > maxScroll) targetTop = maxScroll;
+
+        bioInput.scrollTop = targetTop;
+      };
+
+      bioInput.addEventListener("input", onInputOnce, { once: true });
     }
-  });
+  };
+
+  bioInput.addEventListener("keydown", handleKeydown);
 }
 
  
