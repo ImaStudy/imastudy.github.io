@@ -588,7 +588,7 @@ bioInput.addEventListener("input", () => {
   const lineHeight = parseFloat(getComputedStyle(bioInput).lineHeight);
   const minHeight = lineHeight * 6;
 
-if (window.innerWidth <= 600) {
+if (window.innerWidth <= 600 || (window.innerHeight <= 500 && window.innerWidth > window.innerHeight)) {
   const handleKeydown = (e) => {
     const styles = getComputedStyle(bioInput);
     const lineHeight = parseFloat(styles.lineHeight) || 20;
