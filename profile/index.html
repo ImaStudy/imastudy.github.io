@@ -595,23 +595,17 @@ bioInput.addEventListener("input", () => {
 
 if (window.innerWidth <= 600) {
   bioInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === "Backspace" || e.key === "Delete") {
+    if (e.key === "Backspace" || e.key === "Delete" || e.key === "Enter") {
       requestAnimationFrame(() => {
-        const { selectionStart, value, scrollTop, clientHeight } = bioInput;
+        const { selectionStart, value, clientHeight } = bioInput;
         const styles = getComputedStyle(bioInput);
         const lineHeight = parseFloat(styles.lineHeight);
         const paddingTop = parseFloat(styles.paddingTop);
 
         const linesBefore = value.substring(0, selectionStart).split("\n").length;
         const cursorY = Math.round((linesBefore - 1) * lineHeight + paddingTop);
-        const viewTop = scrollTop;
-        const viewBottom = scrollTop + clientHeight - lineHeight;
 
-        if (cursorY < viewTop) {
-          bioInput.scrollTop = cursorY;
-        } else if (cursorY > viewBottom) {
-          bioInput.scrollTop = cursorY - clientHeight + lineHeight;
-        }
+        bioInput.scrollTop = cursorY - clientHeight / 2 + lineHeight;
       });
     }
   });
