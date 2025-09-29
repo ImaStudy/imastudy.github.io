@@ -595,22 +595,25 @@ bioInput.addEventListener("input", () => {
 
 if (window.innerWidth <= 600) {
   bioInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      requestAnimationFrame(() => {
-        const { selectionStart, value, scrollTop, clientHeight } = bioInput;
-        const styles = getComputedStyle(bioInput);
-        const lineHeight = parseFloat(styles.lineHeight);
-        const paddingTop = parseFloat(styles.paddingTop);
+    const keys = ["Enter", "Backspace", "Delete"];
+    if (!keys.includes(e.key)) return;
 
-        const linesBefore = value.substring(0, selectionStart).split("\n").length;
-        const cursorY = Math.round((linesBefore - 1) * lineHeight + paddingTop);
-        const isCursorBelowView = cursorY > scrollTop + clientHeight - lineHeight;
+    requestAnimationFrame(() => {
+      const { selectionStart, value, scrollTop, clientHeight } = bioInput;
+      const styles = getComputedStyle(bioInput);
+      const lineHeight = parseFloat(styles.lineHeight);
+      const paddingTop = parseFloat(styles.paddingTop);
 
-        if (isCursorBelowView) {
-          bioInput.scrollTop = bioInput.scrollHeight;
-        }
-      });
-    }
+      const linesBefore = value.substring(0, selectionStart).split("\n").length;
+      const cursorY = Math.round((linesBefore - 1) * lineHeight + paddingTop);
+
+      if (cursorY < scrollTop) {
+        bioInput.scrollTop = cursorY;
+      }
+      else if (cursorY > scrollTop + clientHeight - lineHeight) {
+        bioInput.scrollTop = cursorY - clientHeight + lineHeight;
+      }
+    });
   });
 }
  
