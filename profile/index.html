@@ -623,12 +623,18 @@ if (window.innerWidth <= 600) {
       const cursorYBefore = Math.round((linesBefore - 1) * lineHeight + paddingTop);
       const offsetOnScreen = cursorYBefore - scrollTop;
 
+      const prevScrollHeight = bioInput.scrollHeight;
+
       requestAnimationFrame(() => {
+        const newScrollHeight = bioInput.scrollHeight;
+        const diff = prevScrollHeight - newScrollHeight;
+
+        bioInput.scrollTop = bioInput.scrollTop - diff;
+
         const linesNow = bioInput.value
           .substring(0, bioInput.selectionStart)
           .split("\n").length;
         const cursorYAfter = Math.round((linesNow - 1) * lineHeight + paddingTop);
-
         bioInput.scrollTop = cursorYAfter - offsetOnScreen;
       });
     }
