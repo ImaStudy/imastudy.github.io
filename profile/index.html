@@ -54,6 +54,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  border-bottom: 2px solid transparent;
 }
 
 #user-email {
@@ -253,6 +254,17 @@
   background: transparent;
   outline: none;
   transition: border-color 0.3s;
+}
+
+  .inline-input {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .inline-input:focus, .inline-textarea:focus {
