@@ -252,6 +252,14 @@
   background: transparent;
   outline: none;
   transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+  .inline-input {
+  display: inline-block;
+  min-height: 28px;
+  line-height: 1.4;
+  vertical-align: middle;
 }
 
 .inline-input:focus, .inline-textarea:focus {
@@ -259,6 +267,7 @@
 }
 
 .inline-textarea {
+  display: block;
   padding: 0 2px;
   line-height: 1.5em;
   height: calc(1.5em * 6 + 4px);
