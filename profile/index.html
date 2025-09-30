@@ -225,23 +225,6 @@
   opacity: 1;
 }
 
-#user-name {
-  border-bottom: 2px solid transparent;
-  display: inline-block;
-  line-height: 1.4;
-  min-height: 28px;
-  box-sizing: border-box;
-}
-
-#user-bio {
-  border-bottom: 2px solid transparent;
-  display: block;
-  min-height: calc(1.5em * 6 + 4px);
-  line-height: 1.5em;
-  box-sizing: border-box;
-}
-
-  
 .inline-input.input-error,
 .inline-textarea.input-error {
   border-color: #e74c3c;
@@ -265,18 +248,10 @@
   max-width: 100%;
   padding: 2px 0;
   border: none;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid transparent #ccc;
   background: transparent;
   outline: none;
   transition: border-color 0.3s;
-  box-sizing: border-box;
-}
-
-  .inline-input {
-  display: inline-block;
-  min-height: 28px;
-  line-height: 1.4;
-  vertical-align: middle;
 }
 
 .inline-input:focus, .inline-textarea:focus {
@@ -284,7 +259,6 @@
 }
 
 .inline-textarea {
-  display: block;
   padding: 0 2px;
   line-height: 1.5em;
   height: calc(1.5em * 6 + 4px);
