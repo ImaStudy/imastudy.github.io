@@ -217,6 +217,7 @@
       getFirestore,
       collection,
       deleteDoc,
+      addDoc,
       doc,
       onSnapshot,
       query,
@@ -280,30 +281,47 @@ if (cachedName || cachedPhoto) {
       }
     }
 
+async function addResponse(taskId) {
+  if (!auth.currentUser) {
+    alert("Войдите, чтобы откликнуться на задание");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "responses"), {
+      taskId,
+      executorId: auth.currentUser.uid,
+      executorName: auth.currentUser.displayName || auth.currentUser.email,
+      createdAt: new Date(),
+      status: "pending"
+    });
+    alert("Вы откликнулись на задание. Ждите ответа заказчика.");
+  } catch (error) {
+    console.error("Ошибка отклика:", error);
+  }
+}
+
+    
 function renderTasks(tasks) {
   tasksContainer.innerHTML = "";
-  tasks.forEach((doc) => {
-    const data = doc.data();
+  tasks.forEach((docSnap) => {
+    const data = docSnap.data();
     const div = document.createElement("div");
     div.className = "task-item";
-
-    let contactHTML = data.contact;
-    if (data.contact.includes("@")) {
-      const tgLink = `https://t.me/${data.contact.replace("@", "")}`;
-      contactHTML = `<a href="${tgLink}" target="_blank">${data.contact}</a>`;
-    }
 
     let dateText = "";
     if (data.createdAt && data.createdAt.toDate) {
       const dateObj = data.createdAt.toDate();
-      const options = { day: "numeric", month: "long", year: "numeric" };
-      dateText = dateObj.toLocaleDateString("ru-RU", options);
+      dateText = dateObj.toLocaleDateString("ru-RU", {
+        day: "numeric", month: "long", year: "numeric"
+      });
     }
 
     div.innerHTML = `
       <strong>${data.title}</strong>
       <p>${data.description}</p>
-      <p><strong>Связь:</strong> ${contactHTML}</p>
+      <!-- Контакты скрываем, пока исполнитель не выбран -->
+      <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
       <p><strong>Цена:</strong> ${data.price}</p>
       <p class="task-date">Добавлено: ${dateText}</p>
     `;
@@ -311,24 +329,29 @@ function renderTasks(tasks) {
     if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
       const delBtn = document.createElement("button");
       delBtn.textContent = "Удалить";
-      delBtn.onclick = () => deleteTask(doc.id);
+      delBtn.onclick = () => deleteTask(docSnap.id);
       div.appendChild(delBtn);
+    }
+
+    if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
+      const respBtn = document.createElement("button");
+      respBtn.textContent = "Откликнуться";
+      respBtn.onclick = () => addResponse(docSnap.id);
+      div.appendChild(respBtn);
     }
 
     tasksContainer.appendChild(div);
   });
 
- const taskCount = tasks.length;
-let countEl = document.getElementById("task-count");
-if (!countEl) {
-  countEl = document.createElement("div");
-  countEl.id = "task-count";
-  const taskListDiv = document.getElementById("taskList");
-  taskListDiv.insertBefore(countEl, tasksContainer);
-}
-
-countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
-
+  const taskCount = tasks.length;
+  let countEl = document.getElementById("task-count");
+  if (!countEl) {
+    countEl = document.createElement("div");
+    countEl.id = "task-count";
+    const taskListDiv = document.getElementById("taskList");
+    taskListDiv.insertBefore(countEl, tasksContainer);
+  }
+  countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
 }
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
