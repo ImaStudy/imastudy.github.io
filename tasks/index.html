@@ -343,37 +343,30 @@ function renderTasks(tasks) {
 div.innerHTML = `
   <strong>${data.title}</strong>
   <p>${data.description}</p>
+  <!-- Контакты скрываем, пока исполнитель не выбран -->
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
   <p><strong>Цена:</strong> ${data.price}</p>
+  <p class="task-date">
+    Добавлено: ${dateText}
+  </p>
 `;
 
-const footerDiv = document.createElement("div");
-footerDiv.classList.add("task-footer");
-
-const dateP = document.createElement("p");
-dateP.className = "task-date";
-dateP.textContent = `Добавлено: ${dateText}`;
-
-const actionsDiv = document.createElement("div");
-actionsDiv.classList.add("task-actions");
+const dateEl = div.querySelector('.task-date');
 
 if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
   const respBtn = document.createElement("button");
   respBtn.textContent = "Откликнуться";
   respBtn.onclick = () => addResponse(docSnap.id);
-  actionsDiv.appendChild(respBtn);
+  dateEl.appendChild(respBtn);
 }
 
 if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Удалить";
   deleteBtn.onclick = () => deleteTask(docSnap.id);
-  actionsDiv.appendChild(deleteBtn);
+  dateEl.appendChild(deleteBtn);
 }
-
-footerDiv.appendChild(dateP);
-footerDiv.appendChild(actionsDiv);
-div.appendChild(footerDiv);
+    tasksContainer.appendChild(div);
   });
 
   const taskCount = tasks.length;
