@@ -305,7 +305,7 @@ function renderTasks(tasks) {
       <p>${data.description}</p>
       <p><strong>Связь:</strong> ${contactHTML}</p>
       <p><strong>Цена:</strong> ${data.price}</p>
-      <p class="task-date">🗓 Добавлено: ${dateText}</p>
+      <p class="task-date">Добавлено: ${dateText}</p>
     `;
 
     if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
