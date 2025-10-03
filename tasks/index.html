@@ -144,7 +144,28 @@
   background-color: transparent;
 }
 
-    
+    .task-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.task-actions button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.task-actions button:hover {
+  background-color: #2980b9;
+}
+
     
     footer {
       text-align: center;
@@ -326,21 +347,25 @@ function renderTasks(tasks) {
       <p class="task-date">Добавлено: ${dateText}</p>
     `;
 
-    if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "Удалить";
-      delBtn.onclick = () => deleteTask(docSnap.id);
-      div.appendChild(delBtn);
-    }
+const actionsDiv = document.createElement("div");
+actionsDiv.classList.add("task-actions");
 
-    if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
-      const respBtn = document.createElement("button");
-      respBtn.textContent = "Откликнуться";
-      respBtn.onclick = () => addResponse(docSnap.id);
-      div.appendChild(respBtn);
-    }
+if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
+  const respBtn = document.createElement("button");
+  respBtn.textContent = "Откликнуться";
+  respBtn.onclick = () => addResponse(docSnap.id);
+  actionsDiv.appendChild(respBtn);
+}
 
-    tasksContainer.appendChild(div);
+if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Удалить";
+  deleteBtn.onclick = () => deleteTask(docSnap.id);
+  actionsDiv.appendChild(deleteBtn);
+}
+
+div.appendChild(actionsDiv);
+tasksContainer.appendChild(div);
   });
 
   const taskCount = tasks.length;
