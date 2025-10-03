@@ -153,6 +153,7 @@
 }
 
 .task-actions button {
+  width: 100px;
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
@@ -339,14 +340,19 @@ function renderTasks(tasks) {
       });
     }
 
-    div.innerHTML = `
-      <strong>${data.title}</strong>
-      <p>${data.description}</p>
-      <!-- Контакты скрываем, пока исполнитель не выбран -->
-      <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
-      <p><strong>Цена:</strong> ${data.price}</p>
-      <p class="task-date">Добавлено: ${dateText}</p>
-    `;
+div.innerHTML = `
+  <strong>${data.title}</strong>
+  <p>${data.description}</p>
+  <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
+  <p><strong>Цена:</strong> ${data.price}</p>
+`;
+
+const footerDiv = document.createElement("div");
+footerDiv.classList.add("task-footer");
+
+const dateP = document.createElement("p");
+dateP.className = "task-date";
+dateP.textContent = `Добавлено: ${dateText}`;
 
 const actionsDiv = document.createElement("div");
 actionsDiv.classList.add("task-actions");
@@ -365,8 +371,9 @@ if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
   actionsDiv.appendChild(deleteBtn);
 }
 
-div.appendChild(actionsDiv);
-tasksContainer.appendChild(div);
+footerDiv.appendChild(dateP);
+footerDiv.appendChild(actionsDiv);
+div.appendChild(footerDiv);
   });
 
   const taskCount = tasks.length;
