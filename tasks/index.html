@@ -167,24 +167,37 @@
 .task-actions button:hover {
   background-color: #2980b9;
 }
+    
+    
+.task-item {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 12px;
+  align-items: start;
+  background: white;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
 
 .task-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  grid-column: 1 / 2;
+  display: block;
 }
 
 .task-title {
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 6px 0;
-  flex: 1 1 auto;
-  word-break: break-word;
-  padding-right: 8px;
+  overflow-wrap: break-word;
 }
 
 .task-price {
+  grid-column: 2 / 3;
+  grid-row: 1;
+  justify-self: end;
+  align-self: start;
   color: #3498db;
   font-weight: 600;
   font-size: 15px;
@@ -192,6 +205,7 @@
 }
 
 .task-desc {
+  grid-column: 1 / 2;
   font-size: 14px;
   color: #555;
   margin: 6px 0;
@@ -206,12 +220,35 @@
 }
 
 .show-more {
-  display: inline;
-  margin-left: 6px;
   color: #3498db;
   cursor: pointer;
   font-size: 14px;
+  margin-left: 6px;
 }
+
+.task-bottom {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.task-date {
+  grid-column: 1 / 2;
+  font-style: italic;
+  color: #777;
+  font-size: 13px;
+}
+
+.task-actions {
+  grid-column: 2 / 3;
+  justify-self: end;
+  display: flex;
+  gap: 8px;
+}
+
 
 
     
@@ -226,6 +263,24 @@
 .task-item {
   position: relative;
 }
+
+ @media (max-width: 600px) {
+  .task-item {
+    grid-template-columns: 1fr;
+  }
+  .task-price {
+    grid-column: 1;
+    justify-self: start;
+    margin-top: 6px;
+  }
+  .task-bottom {
+    grid-template-columns: 1fr;
+  }
+  .task-actions {
+    grid-column: 1;
+    justify-self: start;
+  }
+}   
     
     footer {
       text-align: center;
@@ -383,12 +438,40 @@ async function addResponse(taskId) {
 }
 
     
+function escapeHtml(text) {
+  return String(text || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 function renderTasks(tasks) {
   tasksContainer.innerHTML = "";
   tasks.forEach((docSnap) => {
     const data = docSnap.data() || {};
     const div = document.createElement("div");
     div.className = "task-item";
+
+    const titleText = data.title || "";
+    const descText = data.description || "";
+    const priceText = (data.price !== undefined && data.price !== null) ? `${data.price} сом` : "";
+
+    div.innerHTML = `
+      <div class="task-header">
+        <div class="task-title">${escapeHtml(titleText)}</div>
+      </div>
+
+      <div class="task-price">${escapeHtml(priceText)}</div>
+
+      <div class="task-desc">${escapeHtml(descText)} <span class="show-more" style="display:none;">ещё</span></div>
+
+      <div class="task-bottom">
+        <div class="task-date"></div>
+        <div class="task-actions"></div>
+      </div>
+    `;
+
+    tasksContainer.appendChild(div);
 
     let dateText = "";
     if (data.createdAt && data.createdAt.toDate) {
@@ -397,54 +480,16 @@ function renderTasks(tasks) {
         day: "numeric", month: "long", year: "numeric"
       });
     }
-
-    const titleText = data.title || "";
-    const descText = data.description || "";
-    const priceText = (data.price !== undefined && data.price !== null) ? `${data.price} сом` : "";
-
-    div.innerHTML = `
-      <div class="task-header">
-        <div class="task-title">${titleText}</div>
-        <div class="task-price">${priceText}</div>
-      </div>
-
-      <div class="task-desc">${descText} <span class="show-more">ещё</span></div>
-    `;
-
-    const descEl = div.querySelector(".task-desc");
-    const showMoreBtn = div.querySelector(".show-more");
-
-    if (showMoreBtn) {
-      if ((descText || "").length < 120) {
-        showMoreBtn.style.display = "none";
-      }
-      showMoreBtn.addEventListener("click", () => {
-        descEl.classList.toggle("expanded");
-        showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
-      });
-    }
-
-    const bottomDiv = document.createElement("div");
-    bottomDiv.style.display = "flex";
-    bottomDiv.style.justifyContent = "space-between";
-    bottomDiv.style.alignItems = "center";
-
-    const dateEl = document.createElement("span");
-    dateEl.className = "task-date";
+    const dateEl = div.querySelector(".task-date");
     dateEl.textContent = dateText ? "Добавлено: " + dateText : "";
-    bottomDiv.appendChild(dateEl);
 
-    const actionsDiv = document.createElement("div");
-    actionsDiv.style.display = "flex";
-    actionsDiv.style.gap = "8px";
-
+    const actionsDiv = div.querySelector(".task-actions");
     if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
       const respBtn = document.createElement("button");
       respBtn.textContent = "Откликнуться";
       respBtn.onclick = () => addResponse(docSnap.id);
       actionsDiv.appendChild(respBtn);
     }
-
     if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "Удалить";
@@ -452,9 +497,22 @@ function renderTasks(tasks) {
       actionsDiv.appendChild(deleteBtn);
     }
 
-    bottomDiv.appendChild(actionsDiv);
-    div.appendChild(bottomDiv);
-    tasksContainer.appendChild(div);
+    const descEl = div.querySelector(".task-desc");
+    const showMoreBtn = div.querySelector(".show-more");
+    if (descEl && showMoreBtn) {
+      requestAnimationFrame(() => {
+        const isOverflowing = descEl.scrollHeight > descEl.clientHeight + 1;
+        if (isOverflowing) {
+          showMoreBtn.style.display = "inline";
+          showMoreBtn.addEventListener("click", () => {
+            descEl.classList.toggle("expanded");
+            showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
+          });
+        } else {
+          showMoreBtn.style.display = "none";
+        }
+      });
+    }
   });
 
   const taskCount = tasks.length;
@@ -467,6 +525,7 @@ function renderTasks(tasks) {
   }
   countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
 }
+
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
