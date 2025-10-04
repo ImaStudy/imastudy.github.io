@@ -168,6 +168,21 @@
   background-color: #2980b9;
 }
 
+    .task-price {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #2ecc71;
+  color: white;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.task-item {
+  position: relative;
+}
     
     footer {
       text-align: center;
@@ -341,10 +356,10 @@ function renderTasks(tasks) {
     }
 
 div.innerHTML = `
+  <div class="task-price">${data.price} сом</div>
   <strong>${data.title}</strong>
   <p>${data.description}</p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
-  <p><strong>Цена:</strong> ${data.price}</p>
 `;
 
 const bottomDiv = document.createElement("div");
