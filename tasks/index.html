@@ -191,6 +191,8 @@
 
 .task-desc.expanded {
   -webkit-line-clamp: unset;
+  display: block;
+  overflow: visible;
 }
 
 .show-more {
@@ -411,11 +413,13 @@ if (data.description.length < 120) {
 }
 
 showMoreBtn.addEventListener("click", () => {
-  if (moreText.style.display === "none") {
+  if (!descEl.classList.contains("expanded")) {
+    descEl.classList.add("expanded");
     moreText.style.display = "inline";
     dots.style.display = "none";
     showMoreBtn.textContent = "скрыть";
   } else {
+    descEl.classList.remove("expanded");
     moreText.style.display = "none";
     dots.style.display = "inline";
     showMoreBtn.textContent = "ещё";
