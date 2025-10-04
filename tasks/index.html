@@ -170,23 +170,21 @@
 
     
 .task-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: bold;
   margin-bottom: 6px;
-  color: #2c3e50;
-  word-wrap: break-word;
-  padding-right: 80px;
+  max-width: calc(100% - 120px);
+  white-space: normal;
+  word-break: break-word;
 }
 
 .task-desc {
   font-size: 14px;
-  color: #444;
-  margin: 0 0 5px 0;
+  color: #555;
+  overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .task-desc.expanded {
@@ -194,13 +192,11 @@
 }
 
 .show-more {
-  background: none;
-  border: none;
+  display: inline;
+  margin-left: 5px;
   color: #3498db;
-  font-size: 13px;
   cursor: pointer;
-  padding: 0;
-  margin-bottom: 8px;
+  font-size: 14px;
 }
 
 
@@ -389,11 +385,12 @@ function renderTasks(tasks) {
     }
 
 div.innerHTML = `
-  <div class="task-price">${data.price} с</div>
-  <div class="task-title">${data.title}</div>
-  <p class="task-desc">${data.description}</p>
-  <button class="show-more">ещё</button>
-  <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
+  <div class="task-header">
+    <div class="task-title">${data.title}</div>
+    <div class="task-price">${data.price}₽</div>
+  </div>
+  <div class="task-desc">${data.description} <span class="show-more">ещё</span></div>
+  <button class="respond-btn">Откликнуться</button>
 `;
 
 const descEl = div.querySelector(".task-desc");
