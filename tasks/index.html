@@ -418,8 +418,10 @@ div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">
-    ${data.description}
-    <span class="show-more" style="display:none;">ещё</span>
+    ${data.description.slice(0, 120)}
+    <span class="dots">...</span>
+    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
+    <span class="show-more">ещё</span>
   </p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
