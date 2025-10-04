@@ -194,12 +194,9 @@
 }
 
 .show-more {
-  background: none;
-  border: none;
   color: #3498db;
   font-size: 13px;
   cursor: pointer;
-  padding: 0;
   margin-left: 4px;
 }
 .show-more:hover {
@@ -398,7 +395,7 @@ div.innerHTML = `
     ${data.description.slice(0, 120)}
     <span class="dots">...</span>
     <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
-    <button class="show-more">ещё</button>
+    <span class="show-more">ещё</span>
   </p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
