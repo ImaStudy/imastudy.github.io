@@ -392,7 +392,9 @@ div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">
-    ${data.description}
+    ${data.description.slice(0, 120)}
+    <span class="dots">...</span>
+    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
     <span class="show-more">ещё</span>
   </p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
@@ -409,15 +411,16 @@ if (data.description.length < 120) {
 }
 
 showMoreBtn.addEventListener("click", () => {
-  if (descEl.classList.contains("expanded")) {
-    descEl.classList.remove("expanded");
-    showMoreBtn.textContent = "ещё";
-  } else {
-    descEl.classList.add("expanded");
+  if (moreText.style.display === "none") {
+    moreText.style.display = "inline";
+    dots.style.display = "none";
     showMoreBtn.textContent = "скрыть";
+  } else {
+    moreText.style.display = "none";
+    dots.style.display = "inline";
+    showMoreBtn.textContent = "ещё";
   }
 });
-
 
     
 const bottomDiv = document.createElement("div");
