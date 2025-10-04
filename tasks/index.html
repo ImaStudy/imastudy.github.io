@@ -168,6 +168,43 @@
   background-color: #2980b9;
 }
 
+    
+.task-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #2c3e50;
+  word-wrap: break-word;
+  padding-right: 80px;
+}
+
+.task-desc {
+  font-size: 14px;
+  color: #444;
+  margin: 0 0 5px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-desc.expanded {
+  -webkit-line-clamp: unset;
+}
+
+.show-more {
+  background: none;
+  border: none;
+  color: #3498db;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+
+    
 .task-price {
   position: absolute;
   top: 12px;
@@ -352,12 +389,26 @@ function renderTasks(tasks) {
     }
 
 div.innerHTML = `
-  <div class="task-price">${data.price} сом</div>
-  <strong>${data.title}</strong>
-  <p>${data.description}</p>
+  <div class="task-price">${data.price} с</div>
+  <div class="task-title">${data.title}</div>
+  <p class="task-desc">${data.description}</p>
+  <button class="show-more">ещё</button>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
 
+const descEl = div.querySelector(".task-desc");
+const showMoreBtn = div.querySelector(".show-more");
+
+if (data.description.length < 120) {
+  showMoreBtn.style.display = "none";
+}
+
+showMoreBtn.addEventListener("click", () => {
+  descEl.classList.toggle("expanded");
+  showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
+});
+
+    
 const bottomDiv = document.createElement("div");
 bottomDiv.style.display = "flex";
 bottomDiv.style.justifyContent = "space-between";
