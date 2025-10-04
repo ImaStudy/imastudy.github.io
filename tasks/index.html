@@ -415,62 +415,75 @@ function renderTasks(tasks) {
       });
     }
 
-    div.innerHTML = `
-      <div class="task-price">${data.price} с</div>
-      <div class="task-title">${data.title}</div>
-      <p class="task-desc">${data.description}</p>
-      <span class="show-more" style="display:none;">ещё</span>
-      <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
-    `;
+div.innerHTML = `
+  <div class="task-price">${data.price} с</div>
+  <div class="task-title">${data.title}</div>
+  <p class="task-desc">
+    ${data.description.slice(0, 120)}
+    <span class="dots">...</span>
+    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
+    <span class="show-more">ещё</span>
+  </p>
+  <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
+`;
 
-    const descEl = div.querySelector(".task-desc");
-    const showMoreBtn = div.querySelector(".show-more");
+const descEl = div.querySelector(".task-desc");
+const dots = descEl.querySelector(".dots");
+const moreText = descEl.querySelector(".more-text");
+const showMoreBtn = descEl.querySelector(".show-more");
 
-    if (descEl.scrollHeight > descEl.clientHeight) {
-      showMoreBtn.style.display = "inline";
-    }
+if (data.description.length < 120) {
+  dots.style.display = "none";
+  showMoreBtn.style.display = "none";
+}
 
-    showMoreBtn.addEventListener("click", () => {
-      if (!descEl.classList.contains("expanded")) {
-        descEl.classList.add("expanded");
-        showMoreBtn.textContent = "скрыть";
-      } else {
-        descEl.classList.remove("expanded");
-        showMoreBtn.textContent = "ещё";
-      }
-    });
+showMoreBtn.addEventListener("click", () => {
+  if (!descEl.classList.contains("expanded")) {
+    descEl.classList.add("expanded");
+    moreText.style.display = "inline";
+    dots.style.display = "none";
+    showMoreBtn.textContent = "скрыть";
+  } else {
+    descEl.classList.remove("expanded");
+    moreText.style.display = "none";
+    dots.style.display = "inline";
+    showMoreBtn.textContent = "ещё";
+  }
+});
 
-    const bottomDiv = document.createElement("div");
-    bottomDiv.style.display = "flex";
-    bottomDiv.style.justifyContent = "space-between";
-    bottomDiv.style.alignItems = "center";
+    
+const bottomDiv = document.createElement("div");
+bottomDiv.style.display = "flex";
+bottomDiv.style.justifyContent = "space-between";
+bottomDiv.style.alignItems = "center";
 
-    const dateEl = document.createElement("span");
-    dateEl.className = "task-date";
-    dateEl.textContent = "Добавлено: " + dateText;
-    bottomDiv.appendChild(dateEl);
+const dateEl = document.createElement("span");
+dateEl.className = "task-date";
+dateEl.textContent = "Добавлено: " + dateText;
+bottomDiv.appendChild(dateEl);
 
-    const actionsDiv = document.createElement("div");
-    actionsDiv.style.display = "flex";
-    actionsDiv.style.gap = "8px";
+const actionsDiv = document.createElement("div");
+actionsDiv.style.display = "flex";
+actionsDiv.style.gap = "8px";
 
-    if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
-      const respBtn = document.createElement("button");
-      respBtn.textContent = "Откликнуться";
-      respBtn.onclick = () => addResponse(docSnap.id);
-      actionsDiv.appendChild(respBtn);
-    }
+if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
+  const respBtn = document.createElement("button");
+  respBtn.textContent = "Откликнуться";
+  respBtn.onclick = () => addResponse(docSnap.id);
+  actionsDiv.appendChild(respBtn);
+}
 
-    if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Удалить";
-      deleteBtn.onclick = () => deleteTask(docSnap.id);
-      actionsDiv.appendChild(deleteBtn);
-    }
+if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Удалить";
+  deleteBtn.onclick = () => deleteTask(docSnap.id);
+  actionsDiv.appendChild(deleteBtn);
+}
 
-    bottomDiv.appendChild(actionsDiv);
-    div.appendChild(bottomDiv);
-    tasksContainer.appendChild(div);
+bottomDiv.appendChild(actionsDiv);
+div.appendChild(bottomDiv);
+tasksContainer.appendChild(div);
+
   });
 
   const taskCount = tasks.length;
@@ -483,7 +496,6 @@ function renderTasks(tasks) {
   }
   countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
 }
-
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
