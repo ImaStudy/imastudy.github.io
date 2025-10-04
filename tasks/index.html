@@ -167,52 +167,26 @@
 .task-actions button:hover {
   background-color: #2980b9;
 }
-    
-    
-.task-item {
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  gap: 12px;
-  align-items: start;
-  background: white;
-  border-radius: 10px;
-  padding: 15px 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
 
-.task-header {
-  grid-column: 1 / 2;
-  display: block;
-}
-
+    
 .task-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
-  margin: 0 0 6px 0;
-  overflow-wrap: break-word;
-}
-
-.task-price {
-  grid-column: 2 / 3;
-  grid-row: 1;
-  justify-self: end;
-  align-self: start;
-  color: #3498db;
-  font-weight: 600;
-  font-size: 15px;
-  white-space: nowrap;
+  margin-bottom: 6px;
+  color: #2c3e50;
+  word-wrap: break-word;
+  padding-right: 80px;
 }
 
 .task-desc {
-  grid-column: 1 / 2;
   font-size: 14px;
-  color: #555;
-  margin: 6px 0;
-  overflow: hidden;
+  color: #444;
+  margin: 0 0 5px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-desc.expanded {
@@ -220,39 +194,14 @@
 }
 
 .show-more {
+  background: none;
+  border: none;
   color: #3498db;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 6px;
-}
-
-.task-bottom {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 1fr 120px;
-  align-items: center;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.task-date {
-  grid-column: 1 / 2;
-  font-style: italic;
-  color: #777;
   font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
 }
-
-.task-actions {
-  grid-column: 2 / 3;
-  justify-self: end;
-  display: flex;
-  gap: 8px;
-}
-
 
 
     
@@ -267,24 +216,6 @@
 .task-item {
   position: relative;
 }
-
- @media (max-width: 600px) {
-  .task-item {
-    grid-template-columns: 1fr;
-  }
-  .task-price {
-    grid-column: 1;
-    justify-self: start;
-    margin-top: 6px;
-  }
-  .task-bottom {
-    grid-template-columns: 1fr;
-  }
-  .task-actions {
-    grid-column: 1;
-    justify-self: start;
-  }
-}   
     
     footer {
       text-align: center;
@@ -442,40 +373,12 @@ async function addResponse(taskId) {
 }
 
     
-function escapeHtml(text) {
-  return String(text || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-}
-
 function renderTasks(tasks) {
   tasksContainer.innerHTML = "";
   tasks.forEach((docSnap) => {
-    const data = docSnap.data() || {};
+    const data = docSnap.data();
     const div = document.createElement("div");
     div.className = "task-item";
-
-    const titleText = data.title || "";
-    const descText = data.description || "";
-    const priceText = (data.price !== undefined && data.price !== null) ? `${data.price} сом` : "";
-
-    div.innerHTML = `
-      <div class="task-header">
-        <div class="task-title">${escapeHtml(titleText)}</div>
-      </div>
-
-      <div class="task-price">${escapeHtml(priceText)}</div>
-
-      <div class="task-desc">${escapeHtml(descText)} <span class="show-more" style="display:none;">ещё</span></div>
-
-      <div class="task-bottom">
-        <div class="task-date"></div>
-        <div class="task-actions"></div>
-      </div>
-    `;
-
-    tasksContainer.appendChild(div);
 
     let dateText = "";
     if (data.createdAt && data.createdAt.toDate) {
@@ -484,41 +387,60 @@ function renderTasks(tasks) {
         day: "numeric", month: "long", year: "numeric"
       });
     }
-    const dateEl = div.querySelector(".task-date");
-    dateEl.textContent = dateText ? "Добавлено: " + dateText : "";
 
-    const actionsDiv = div.querySelector(".task-actions");
-    if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
-      const respBtn = document.createElement("button");
-      respBtn.textContent = "Откликнуться";
-      respBtn.onclick = () => addResponse(docSnap.id);
-      actionsDiv.appendChild(respBtn);
-    }
-    if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Удалить";
-      deleteBtn.onclick = () => deleteTask(docSnap.id);
-      actionsDiv.appendChild(deleteBtn);
-    }
+div.innerHTML = `
+  <div class="task-price">${data.price} с</div>
+  <div class="task-title">${data.title}</div>
+  <p class="task-desc">${data.description}</p>
+  <button class="show-more">ещё</button>
+  <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
+`;
 
-    const descEl = div.querySelector(".task-desc");
-    const showMoreBtn = div.querySelector(".show-more");
-    if (descEl && showMoreBtn) {
-     requestAnimationFrame(() => {
-  setTimeout(() => {
-    const isOverflowing = descEl.scrollHeight > descEl.clientHeight + 1;
-    if (isOverflowing) {
-      showMoreBtn.style.display = "inline";
-      showMoreBtn.addEventListener("click", () => {
-        descEl.classList.toggle("expanded");
-        showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
-      });
-    } else {
-      showMoreBtn.style.display = "none";
-    }
-  }, 50);
+const descEl = div.querySelector(".task-desc");
+const showMoreBtn = div.querySelector(".show-more");
+
+if (data.description.length < 120) {
+  showMoreBtn.style.display = "none";
+}
+
+showMoreBtn.addEventListener("click", () => {
+  descEl.classList.toggle("expanded");
+  showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
 });
-    }
+
+    
+const bottomDiv = document.createElement("div");
+bottomDiv.style.display = "flex";
+bottomDiv.style.justifyContent = "space-between";
+bottomDiv.style.alignItems = "center";
+
+const dateEl = document.createElement("span");
+dateEl.className = "task-date";
+dateEl.textContent = "Добавлено: " + dateText;
+bottomDiv.appendChild(dateEl);
+
+const actionsDiv = document.createElement("div");
+actionsDiv.style.display = "flex";
+actionsDiv.style.gap = "8px";
+
+if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
+  const respBtn = document.createElement("button");
+  respBtn.textContent = "Откликнуться";
+  respBtn.onclick = () => addResponse(docSnap.id);
+  actionsDiv.appendChild(respBtn);
+}
+
+if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Удалить";
+  deleteBtn.onclick = () => deleteTask(docSnap.id);
+  actionsDiv.appendChild(deleteBtn);
+}
+
+bottomDiv.appendChild(actionsDiv);
+div.appendChild(bottomDiv);
+tasksContainer.appendChild(div);
+
   });
 
   const taskCount = tasks.length;
@@ -531,7 +453,6 @@ function renderTasks(tasks) {
   }
   countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
 }
-
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
