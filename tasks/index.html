@@ -394,9 +394,7 @@ div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">
-    ${data.description.slice(0, 120)}
-    <span class="dots">...</span>
-    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
+    ${data.description}
     <span class="show-more">ещё</span>
   </p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
@@ -407,10 +405,6 @@ const dots = descEl.querySelector(".dots");
 const moreText = descEl.querySelector(".more-text");
 const showMoreBtn = descEl.querySelector(".show-more");
 
-if (data.description.length < 120) {
-  dots.style.display = "none";
-  showMoreBtn.style.display = "none";
-}
 
 showMoreBtn.addEventListener("click", () => {
   if (!descEl.classList.contains("expanded")) {
