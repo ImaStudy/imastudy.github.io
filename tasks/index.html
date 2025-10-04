@@ -200,7 +200,10 @@
   font-size: 13px;
   cursor: pointer;
   padding: 0;
-  margin-bottom: 8px;
+  margin-left: 4px;
+}
+.show-more:hover {
+  text-decoration: underline;
 }
 
 
@@ -391,21 +394,35 @@ function renderTasks(tasks) {
 div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
-  <p class="task-desc">${data.description}</p>
-  <button class="show-more">ещё</button>
+  <p class="task-desc">
+    ${data.description.slice(0, 120)}
+    <span class="dots">...</span>
+    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
+    <button class="show-more">ещё</button>
+  </p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
 
 const descEl = div.querySelector(".task-desc");
-const showMoreBtn = div.querySelector(".show-more");
+const dots = descEl.querySelector(".dots");
+const moreText = descEl.querySelector(".more-text");
+const showMoreBtn = descEl.querySelector(".show-more");
 
 if (data.description.length < 120) {
+  dots.style.display = "none";
   showMoreBtn.style.display = "none";
 }
 
 showMoreBtn.addEventListener("click", () => {
-  descEl.classList.toggle("expanded");
-  showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
+  if (moreText.style.display === "none") {
+    moreText.style.display = "inline";
+    dots.style.display = "none";
+    showMoreBtn.textContent = "скрыть";
+  } else {
+    moreText.style.display = "none";
+    dots.style.display = "inline";
+    showMoreBtn.textContent = "ещё";
+  }
 });
 
     
