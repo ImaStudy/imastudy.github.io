@@ -187,6 +187,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 @media (max-width: 600px) {
@@ -428,16 +429,26 @@ const dots = descEl.querySelector(".dots");
 const moreText = descEl.querySelector(".more-text");
 const showMoreBtn = descEl.querySelector(".show-more");
 
-if (descEl.scrollHeight > descEl.clientHeight) {
-  showMoreBtn.style.display = "inline";
+if (window.innerWidth <= 600) {
+  if (data.description.length > 180) {
+    showMoreBtn.style.display = "inline";
+  }
+} else {
+  if (data.description.length > 120) {
+    showMoreBtn.style.display = "inline";
+  }
 }
 
 showMoreBtn.addEventListener("click", () => {
   if (!descEl.classList.contains("expanded")) {
     descEl.classList.add("expanded");
+    moreText.style.display = "inline";
+    dots.style.display = "none";
     showMoreBtn.textContent = "скрыть";
   } else {
     descEl.classList.remove("expanded");
+    moreText.style.display = "none";
+    dots.style.display = "inline";
     showMoreBtn.textContent = "ещё";
   }
 });
