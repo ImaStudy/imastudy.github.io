@@ -189,6 +189,18 @@
   text-overflow: ellipsis;
 }
 
+@media (max-width: 600px) {
+  .task-desc {
+    -webkit-line-clamp: unset;
+    display: block;
+    overflow: visible;
+  }
+
+  .task-desc .show-more {
+    display: inline !important;
+  }
+}
+    
 .task-desc.expanded {
   -webkit-line-clamp: unset;
   display: block;
