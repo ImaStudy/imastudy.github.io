@@ -417,10 +417,8 @@ div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">
-    ${data.description.slice(0, 120)}
-    <span class="dots">...</span>
-    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
-    <span class="show-more">ещё</span>
+    ${data.description}
+    <span class="show-more" style="display:none;">ещё</span>
   </p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
@@ -430,28 +428,16 @@ const dots = descEl.querySelector(".dots");
 const moreText = descEl.querySelector(".more-text");
 const showMoreBtn = descEl.querySelector(".show-more");
 
-if (window.innerWidth <= 600) {
-  if (descEl.scrollHeight <= descEl.clientHeight) {
-    dots.style.display = "none";
-    showMoreBtn.style.display = "none";
-  }
-} else {
-  if (data.description.length < 120) {
-    dots.style.display = "none";
-    showMoreBtn.style.display = "none";
-  }
+if (descEl.scrollHeight > descEl.clientHeight) {
+  showMoreBtn.style.display = "inline";
 }
 
 showMoreBtn.addEventListener("click", () => {
   if (!descEl.classList.contains("expanded")) {
     descEl.classList.add("expanded");
-    moreText.style.display = "inline";
-    dots.style.display = "none";
     showMoreBtn.textContent = "скрыть";
   } else {
     descEl.classList.remove("expanded");
-    moreText.style.display = "none";
-    dots.style.display = "inline";
     showMoreBtn.textContent = "ещё";
   }
 });
