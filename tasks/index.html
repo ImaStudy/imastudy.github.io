@@ -415,75 +415,75 @@ function renderTasks(tasks) {
       });
     }
 
-    div.innerHTML = `
-      <div class="task-price">${data.price} с</div>
-      <div class="task-title">${data.title}</div>
-      <p class="task-desc">${data.description}</p>
-    `;
+div.innerHTML = `
+  <div class="task-price">${data.price} с</div>
+  <div class="task-title">${data.title}</div>
+  <p class="task-desc">
+    ${data.description.slice(0, 120)}
+    <span class="dots">...</span>
+    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
+    <span class="show-more">ещё</span>
+  </p>
+  <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
+`;
 
-    const descEl = div.querySelector(".task-desc");
+const descEl = div.querySelector(".task-desc");
+const dots = descEl.querySelector(".dots");
+const moreText = descEl.querySelector(".more-text");
+const showMoreBtn = descEl.querySelector(".show-more");
 
-    const isMobile = window.innerWidth <= 600;
-    const lines = isMobile ? 3 : 2;
+if (data.description.length < 120) {
+  dots.style.display = "none";
+  showMoreBtn.style.display = "none";
+}
 
-    const lineHeight = parseInt(window.getComputedStyle(descEl).lineHeight);
-    const maxHeight = lineHeight * lines;
+showMoreBtn.addEventListener("click", () => {
+  if (!descEl.classList.contains("expanded")) {
+    descEl.classList.add("expanded");
+    moreText.style.display = "inline";
+    dots.style.display = "none";
+    showMoreBtn.textContent = "скрыть";
+  } else {
+    descEl.classList.remove("expanded");
+    moreText.style.display = "none";
+    dots.style.display = "inline";
+    showMoreBtn.textContent = "ещё";
+  }
+});
 
-    if (descEl.scrollHeight > maxHeight) {
-      descEl.style.maxHeight = maxHeight + "px";
-      descEl.style.overflow = "hidden";
+    
+const bottomDiv = document.createElement("div");
+bottomDiv.style.display = "flex";
+bottomDiv.style.justifyContent = "space-between";
+bottomDiv.style.alignItems = "center";
 
-      const showMoreBtn = document.createElement("span");
-      showMoreBtn.className = "show-more";
-      showMoreBtn.textContent = "ещё";
-      showMoreBtn.style.marginLeft = "4px";
-      showMoreBtn.style.cursor = "pointer";
-      descEl.after(showMoreBtn);
+const dateEl = document.createElement("span");
+dateEl.className = "task-date";
+dateEl.textContent = "Добавлено: " + dateText;
+bottomDiv.appendChild(dateEl);
 
-      showMoreBtn.addEventListener("click", () => {
-        if (descEl.style.maxHeight) {
-          descEl.style.maxHeight = "";
-          descEl.style.overflow = "";
-          showMoreBtn.textContent = "скрыть";
-        } else {
-          descEl.style.maxHeight = maxHeight + "px";
-          descEl.style.overflow = "hidden";
-          showMoreBtn.textContent = "ещё";
-        }
-      });
-    }
+const actionsDiv = document.createElement("div");
+actionsDiv.style.display = "flex";
+actionsDiv.style.gap = "8px";
 
-    const bottomDiv = document.createElement("div");
-    bottomDiv.style.display = "flex";
-    bottomDiv.style.justifyContent = "space-between";
-    bottomDiv.style.alignItems = "center";
+if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
+  const respBtn = document.createElement("button");
+  respBtn.textContent = "Откликнуться";
+  respBtn.onclick = () => addResponse(docSnap.id);
+  actionsDiv.appendChild(respBtn);
+}
 
-    const dateEl = document.createElement("span");
-    dateEl.className = "task-date";
-    dateEl.textContent = "Добавлено: " + dateText;
-    bottomDiv.appendChild(dateEl);
+if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Удалить";
+  deleteBtn.onclick = () => deleteTask(docSnap.id);
+  actionsDiv.appendChild(deleteBtn);
+}
 
-    const actionsDiv = document.createElement("div");
-    actionsDiv.style.display = "flex";
-    actionsDiv.style.gap = "8px";
+bottomDiv.appendChild(actionsDiv);
+div.appendChild(bottomDiv);
+tasksContainer.appendChild(div);
 
-    if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
-      const respBtn = document.createElement("button");
-      respBtn.textContent = "Откликнуться";
-      respBtn.onclick = () => addResponse(docSnap.id);
-      actionsDiv.appendChild(respBtn);
-    }
-
-    if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Удалить";
-      deleteBtn.onclick = () => deleteTask(docSnap.id);
-      actionsDiv.appendChild(deleteBtn);
-    }
-
-    bottomDiv.appendChild(actionsDiv);
-    div.appendChild(bottomDiv);
-    tasksContainer.appendChild(div);
   });
 
   const taskCount = tasks.length;
