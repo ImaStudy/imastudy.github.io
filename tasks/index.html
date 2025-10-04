@@ -187,7 +187,6 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-word;
 }
 
 @media (max-width: 600px) {
@@ -432,12 +431,14 @@ const moreText = descEl.querySelector(".more-text");
 const showMoreBtn = descEl.querySelector(".show-more");
 
 if (window.innerWidth <= 600) {
-  if (data.description.length > 180) {
-    showMoreBtn.style.display = "inline";
+  if (descEl.scrollHeight <= descEl.clientHeight) {
+    dots.style.display = "none";
+    showMoreBtn.style.display = "none";
   }
 } else {
-  if (data.description.length > 120) {
-    showMoreBtn.style.display = "inline";
+  if (data.description.length < 120) {
+    dots.style.display = "none";
+    showMoreBtn.style.display = "none";
   }
 }
 
