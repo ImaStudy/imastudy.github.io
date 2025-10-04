@@ -191,13 +191,24 @@
 
 @media (max-width: 600px) {
   .task-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .task-desc.expanded {
     -webkit-line-clamp: unset;
     display: block;
     overflow: visible;
   }
 
   .task-desc .show-more {
-    display: inline !important;
+    display: inline;
+    color: #3498db;
+    cursor: pointer;
+    margin-left: 4px;
   }
 }
     
@@ -419,9 +430,16 @@ const dots = descEl.querySelector(".dots");
 const moreText = descEl.querySelector(".more-text");
 const showMoreBtn = descEl.querySelector(".show-more");
 
-if (data.description.length < 120) {
-  dots.style.display = "none";
-  showMoreBtn.style.display = "none";
+if (window.innerWidth <= 600) {
+  if (data.description.length < 180) {
+    dots.style.display = "none";
+    showMoreBtn.style.display = "none";
+  }
+} else {
+  if (data.description.length < 120) {
+    dots.style.display = "none";
+    showMoreBtn.style.display = "none";
+  }
 }
 
 showMoreBtn.addEventListener("click", () => {
