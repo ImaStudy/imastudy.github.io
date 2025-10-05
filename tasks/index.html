@@ -187,50 +187,20 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-  white-space: normal;
 }
 
-@media (max-width: 600px) {
-  .task-desc {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-word;
-    white-space: normal;
-  }
-
-  .task-desc.expanded {
-    -webkit-line-clamp: unset;
-    display: block;
-    overflow: visible;
-  }
-
-  .task-desc .show-more {
-    display: inline;
-    color: #3498db;
-    cursor: pointer;
-    margin-left: 4px;
-  }
-}
-    
 .task-desc.expanded {
   -webkit-line-clamp: unset;
-  display: block;
-  overflow: visible;
 }
 
 .show-more {
+  background: none;
+  border: none;
   color: #3498db;
   font-size: 13px;
   cursor: pointer;
-  margin-left: 4px;
-}
-.show-more:hover {
-  text-decoration: underline;
+  padding: 0;
+  margin-bottom: 8px;
 }
 
 
@@ -421,41 +391,21 @@ function renderTasks(tasks) {
 div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
-  <p class="task-desc">
-    ${data.description.slice(0, 120)}
-    <span class="dots">...</span>
-    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
-    <span class="show-more">ещё</span>
-  </p>
+  <p class="task-desc">${data.description}</p>
+  <button class="show-more">ещё</button>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
 
 const descEl = div.querySelector(".task-desc");
-const dots = descEl.querySelector(".dots");
-const moreText = descEl.querySelector(".more-text");
-const showMoreBtn = descEl.querySelector(".show-more");
+const showMoreBtn = div.querySelector(".show-more");
 
-document.body.appendChild(div);
-const isOverflowing = descEl.scrollHeight > descEl.clientHeight;
-document.body.removeChild(div);
-
-if (!isOverflowing) {
-  dots.style.display = "none";
+if (data.description.length < 120) {
   showMoreBtn.style.display = "none";
 }
 
 showMoreBtn.addEventListener("click", () => {
-  if (!descEl.classList.contains("expanded")) {
-    descEl.classList.add("expanded");
-    moreText.style.display = "inline";
-    dots.style.display = "none";
-    showMoreBtn.textContent = "скрыть";
-  } else {
-    descEl.classList.remove("expanded");
-    moreText.style.display = "none";
-    dots.style.display = "inline";
-    showMoreBtn.textContent = "ещё";
-  }
+  descEl.classList.toggle("expanded");
+  showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
 });
 
     
