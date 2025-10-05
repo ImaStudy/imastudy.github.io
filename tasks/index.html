@@ -188,13 +188,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
-  word-break: keep-all;
+  word-break: break-word;
   overflow-wrap: break-word;
 }
 
 @media (max-width: 600px) {
   .task-desc {
-    
+   -webkit-line-clamp: 3;
   }
 }
 
@@ -411,7 +411,7 @@ const descEl = div.querySelector(".task-desc");
 const fullText = data.description || "";
 
 descEl.classList.remove("expanded");
-descEl.textContent = fullText;
+descEl.innerHTML = fullText.replace(/\n/g, "<br>");а
 
 const maxLines = window.innerWidth <= 600 ? 3 : 2;
 
