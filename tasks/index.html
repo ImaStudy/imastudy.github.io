@@ -471,20 +471,26 @@ requestAnimationFrame(() => {
   btn.className = "show-more";
   btn.textContent = "ещё";
 
-  let expanded = false;
-  btn.addEventListener("click", () => {
-    expanded = !expanded;
-    if (expanded) {
-      descEl.textContent = fullText;
-      btn.textContent = "скрыть";
-    } else {
-      descEl.textContent = truncated;
-      btn.textContent = "ещё";
-    }
-  });
+const btn = document.createElement("span");
+btn.className = "show-more";
+btn.textContent = "ещё";
 
-  descEl.insertAdjacentElement("afterend", btn);
+let expanded = false;
+btn.addEventListener("click", () => {
+  expanded = !expanded;
+  if (expanded) {
+    descEl.classList.add("expanded");
+    descEl.textContent = fullText;
+    btn.textContent = "скрыть";
+  } else {
+    descEl.classList.remove("expanded");
+    descEl.textContent = truncated;
+    btn.textContent = "ещё";
+  }
 });
+
+descEl.insertAdjacentElement("afterend", btn);
+
 
 
     
