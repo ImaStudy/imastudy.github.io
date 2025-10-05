@@ -413,12 +413,11 @@ const fullText = data.description || "";
 requestAnimationFrame(() => {
   const style = getComputedStyle(descEl);
 
-  const fontSize = parseFloat(style.getPropertyValue('font-size')) || 14;
-  let lineHeight = parseFloat(style.getPropertyValue('line-height'));
+  const fontSize = parseFloat(style.fontSize) || 14;
+  let lineHeight = parseFloat(style.lineHeight);
   if (isNaN(lineHeight)) lineHeight = fontSize * 1.4;
 
-  const isMobile = window.matchMedia('(max-width: 600px)').matches;
-  const maxLines = isMobile ? 3 : 2;
+  const maxLines = window.innerWidth <= 600 ? 3 : 2;
   const maxHeight = lineHeight * maxLines;
 
   if (descEl.scrollHeight <= maxHeight + 1) return;
@@ -427,25 +426,21 @@ requestAnimationFrame(() => {
   const rect = descEl.getBoundingClientRect();
   clone.style.position = "absolute";
   clone.style.visibility = "hidden";
-  clone.style.pointerEvents = "none";
   clone.style.left = "-9999px";
   clone.style.top = "0";
   clone.style.width = rect.width + "px";
 
-  const cssProps = [
-    "font-family","font-size","font-weight","font-style","line-height",
-    "letter-spacing","word-spacing","text-transform","white-space",
-    "word-break","overflow-wrap","padding-left","padding-right",
-    "padding-top","padding-bottom","box-sizing"
+  const props = [
+    "font-family","font-size","font-weight","line-height",
+    "letter-spacing","word-spacing","white-space",
+    "text-transform","padding-left","padding-right",
+    "box-sizing"
   ];
-  cssProps.forEach(prop => {
-    const val = style.getPropertyValue(prop);
-    if (val) clone.style.setProperty(prop, val);
-  });
+  for (const p of props) clone.style[p] = style[p];
 
   clone.style.whiteSpace = "normal";
-  clone.style.wordBreak = style.getPropertyValue('word-break') || "break-word";
-  clone.style.overflowWrap = style.getPropertyValue('overflow-wrap') || "break-word";
+  clone.style.overflowWrap = "break-word";
+  clone.style.wordBreak = "break-word";
 
   document.body.appendChild(clone);
 
@@ -462,40 +457,33 @@ requestAnimationFrame(() => {
   }
 
   let truncated = fullText.slice(0, fit);
-  const lastSpace = Math.max(
-    truncated.lastIndexOf(' '),
-    truncated.lastIndexOf('\n'),
-    truncated.lastIndexOf('\t')
-  );
-
-  if (lastSpace > 0) {
-    truncated = truncated.slice(0, lastSpace);
+  const hasSpace = truncated.includes(' ');
+  if (hasSpace) {
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 0) truncated = truncated.slice(0, lastSpace);
   }
-
-  truncated = truncated.replace(/\s+$/,'') + "…";
+  truncated = truncated.trimEnd() + "…";
 
   descEl.textContent = truncated;
   document.body.removeChild(clone);
 
-  const showMoreBtn = document.createElement("span");
-  showMoreBtn.className = "show-more";
-  showMoreBtn.textContent = "ещё";
+  const btn = document.createElement("span");
+  btn.className = "show-more";
+  btn.textContent = "ещё";
 
   let expanded = false;
-  showMoreBtn.addEventListener("click", () => {
+  btn.addEventListener("click", () => {
     expanded = !expanded;
     if (expanded) {
       descEl.textContent = fullText;
-      descEl.classList.add("expanded");
-      showMoreBtn.textContent = "скрыть";
+      btn.textContent = "скрыть";
     } else {
       descEl.textContent = truncated;
-      descEl.classList.remove("expanded");
-      showMoreBtn.textContent = "ещё";
+      btn.textContent = "ещё";
     }
   });
 
-  descEl.insertAdjacentElement("afterend", showMoreBtn);
+  descEl.insertAdjacentElement("afterend", btn);
 });
 
 
