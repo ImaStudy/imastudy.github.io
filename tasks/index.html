@@ -188,7 +188,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
-  word-break: break-word;
   overflow-wrap: break-word;
 }
 
@@ -408,7 +407,10 @@ div.innerHTML = `
 `;
 
 const descEl = div.querySelector(".task-desc");
-const fullText = data.description;
+const fullText = data.description || "";
+
+descEl.classList.remove("expanded");
+descEl.textContent = fullText;
 
 const maxLines = window.innerWidth <= 600 ? 3 : 2;
 
@@ -418,7 +420,10 @@ requestAnimationFrame(() => {
 
   if (descEl.scrollHeight <= maxHeight + 1) return;
 
+  descEl.style.display = "-webkit-box";
+  descEl.style.webkitBoxOrient = "vertical";
   descEl.style.webkitLineClamp = maxLines;
+  descEl.style.overflow = "hidden";
 
   const btn = document.createElement("span");
   btn.className = "show-more";
@@ -429,9 +434,13 @@ requestAnimationFrame(() => {
     expanded = !expanded;
     if (expanded) {
       descEl.classList.add("expanded");
+      descEl.style.webkitLineClamp = "unset";
+      descEl.style.overflow = "visible";
       btn.textContent = "скрыть";
     } else {
       descEl.classList.remove("expanded");
+      descEl.style.webkitLineClamp = maxLines;
+      descEl.style.overflow = "hidden";
       btn.textContent = "ещё";
     }
   });
