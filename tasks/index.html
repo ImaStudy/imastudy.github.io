@@ -187,6 +187,9 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 @media (max-width: 600px) {
@@ -197,7 +200,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: break-word;
-    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .task-desc.expanded {
