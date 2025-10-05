@@ -183,18 +183,21 @@
   color: #444;
   margin: 0 0 5px 0;
   display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: break-all;
-  overflow-wrap: anywhere;
-  position: relative;
 }
 
 @media (max-width: 600px) {
   .task-desc {
+    display: -webkit-box;
     -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .task-desc.expanded {
@@ -202,7 +205,6 @@
     display: block;
     overflow: visible;
   }
-}
 
   .task-desc .show-more {
     display: inline;
@@ -213,19 +215,18 @@
 }
     
 .task-desc.expanded {
-  display: block;
   -webkit-line-clamp: unset;
+  display: block;
   overflow: visible;
 }
 
-.task-desc .show-more {
-  display: inline;
+.show-more {
   color: #3498db;
+  font-size: 13px;
   cursor: pointer;
   margin-left: 4px;
-  font-size: 13px;
 }
-.task-desc .show-more:hover {
+.show-more:hover {
   text-decoration: underline;
 }
 
@@ -418,30 +419,36 @@ div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">
-    ${data.description}
+    ${data.description.slice(0, 120)}
+    <span class="dots">...</span>
+    <span class="more-text" style="display:none;">${data.description.slice(120)}</span>
     <span class="show-more">ещё</span>
   </p>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
 
 const descEl = div.querySelector(".task-desc");
+const dots = descEl.querySelector(".dots");
+const moreText = descEl.querySelector(".more-text");
 const showMoreBtn = descEl.querySelector(".show-more");
 
-showMoreBtn.style.display = "none";
-
-setTimeout(() => {
-  const lineHeight = parseFloat(getComputedStyle(descEl).lineHeight);
-  const maxHeight = lineHeight * 3;
-  const actualHeight = descEl.scrollHeight;
-
-  if (actualHeight > maxHeight + 2) {
-    showMoreBtn.style.display = "inline";
-  }
-}, 100);
+if (data.description.length < 120) {
+  dots.style.display = "none";
+  showMoreBtn.style.display = "none";
+}
 
 showMoreBtn.addEventListener("click", () => {
-  const expanded = descEl.classList.toggle("expanded");
-  showMoreBtn.textContent = expanded ? "скрыть" : "ещё";
+  if (!descEl.classList.contains("expanded")) {
+    descEl.classList.add("expanded");
+    moreText.style.display = "inline";
+    dots.style.display = "none";
+    showMoreBtn.textContent = "скрыть";
+  } else {
+    descEl.classList.remove("expanded");
+    moreText.style.display = "none";
+    dots.style.display = "inline";
+    showMoreBtn.textContent = "ещё";
+  }
 });
 
     
