@@ -187,20 +187,33 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
-.task-desc.expanded {
-  -webkit-line-clamp: unset;
+@media (max-width: 600px) {
+  .task-desc {
+    
+  }
 }
 
 .show-more {
-  background: none;
-  border: none;
+  display: inline-block;
   color: #3498db;
   font-size: 13px;
   cursor: pointer;
-  padding: 0;
-  margin-bottom: 8px;
+  margin-top: 4px;
+}
+.show-more:hover {
+  text-decoration: underline;
+}
+    
+.task-desc.expanded {
+  -webkit-line-clamp: unset;
+  display: block;
+  overflow: visible;
+  word-break: break-word;
 }
 
 
@@ -392,21 +405,18 @@ div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">${data.description}</p>
-  <button class="show-more">ещё</button>
+<span class="show-more">ещё</span>
   <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
 
 const descEl = div.querySelector(".task-desc");
 const showMoreBtn = div.querySelector(".show-more");
 
-if (data.description.length < 120) {
-  showMoreBtn.style.display = "none";
-}
-
 showMoreBtn.addEventListener("click", () => {
   descEl.classList.toggle("expanded");
   showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
 });
+
 
     
 const bottomDiv = document.createElement("div");
