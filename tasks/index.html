@@ -405,16 +405,27 @@ div.innerHTML = `
   <div class="task-price">${data.price} с</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">${data.description}</p>
-<span class="show-more">ещё</span>
-  <p style="display:none;"><strong>Связь:</strong> ${data.contact}</p>
 `;
 
 const descEl = div.querySelector(".task-desc");
-const showMoreBtn = div.querySelector(".show-more");
 
-showMoreBtn.addEventListener("click", () => {
-  descEl.classList.toggle("expanded");
-  showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
+requestAnimationFrame(() => {
+  const lineHeight = parseFloat(getComputedStyle(descEl).lineHeight);
+  const maxLines = window.innerWidth <= 600 ? 3 : 2;
+  const maxHeight = lineHeight * maxLines;
+
+  if (descEl.scrollHeight > maxHeight + 2) {
+    const showMoreBtn = document.createElement("span");
+    showMoreBtn.className = "show-more";
+    showMoreBtn.textContent = "ещё";
+
+    showMoreBtn.addEventListener("click", () => {
+      descEl.classList.toggle("expanded");
+      showMoreBtn.textContent = descEl.classList.contains("expanded") ? "скрыть" : "ещё";
+    });
+
+    descEl.insertAdjacentElement("afterend", showMoreBtn);
+  }
 });
 
 
