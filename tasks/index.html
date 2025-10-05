@@ -411,7 +411,7 @@ const descEl = div.querySelector(".task-desc");
 const fullText = data.description || "";
 
 descEl.classList.remove("expanded");
-descEl.innerHTML = fullText.replace(/\n/g, "<br>");а
+descEl.textContent = fullText.replace(/\n/g, "<br>");а
 
 const maxLines = window.innerWidth <= 600 ? 3 : 2;
 
