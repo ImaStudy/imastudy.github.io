@@ -188,8 +188,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
-  word-break: normal;
-  overflow-wrap: anywhere;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 600px) {
@@ -401,88 +401,85 @@ function renderTasks(tasks) {
       });
     }
 
-div.innerHTML = `
-  <div class="task-price">${data.price} с</div>
-  <div class="task-title">${data.title}</div>
-  <p class="task-desc">${data.description}</p>
-`;
+    div.innerHTML = `
+      <div class="task-price">${data.price} с</div>
+      <div class="task-title">${data.title}</div>
+      <p class="task-desc"></p>
+    `;
 
-const descEl = div.querySelector(".task-desc");
-const fullText = data.description || "";
+    const descEl = div.querySelector(".task-desc");
+    const fullText = data.description || "";
 
-descEl.classList.remove("expanded");
-descEl.textContent = fullText;
+    descEl.textContent = fullText;
 
-const maxLines = window.innerWidth <= 600 ? 3 : 2;
+    const maxLines = window.innerWidth <= 600 ? 3 : 2;
+    const lineHeight = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
+    const maxHeight = lineHeight * maxLines;
 
-requestAnimationFrame(() => {
-  const lineHeight = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
-  const maxHeight = lineHeight * maxLines;
-
-  if (descEl.scrollHeight <= maxHeight + 1) return;
-
-  descEl.style.display = "-webkit-box";
-  descEl.style.webkitBoxOrient = "vertical";
-  descEl.style.webkitLineClamp = maxLines;
-  descEl.style.overflow = "hidden";
-
-  const btn = document.createElement("span");
-  btn.className = "show-more";
-  btn.textContent = "ещё";
-
-  let expanded = false;
-  btn.addEventListener("click", () => {
-    expanded = !expanded;
-    if (expanded) {
-      descEl.classList.add("expanded");
-      descEl.style.webkitLineClamp = "unset";
-      descEl.style.overflow = "visible";
-      btn.textContent = "скрыть";
+    if (descEl.scrollHeight <= maxHeight + 1) {
     } else {
-      descEl.classList.remove("expanded");
-      descEl.style.webkitLineClamp = maxLines;
-      descEl.style.overflow = "hidden";
+      let cutText = fullText;
+      descEl.textContent = fullText;
+
+      while (descEl.scrollHeight > maxHeight + 1) {
+        const lastSpace = cutText.lastIndexOf(" ");
+        if (lastSpace === -1) break;
+        cutText = cutText.slice(0, lastSpace);
+        descEl.textContent = cutText + "…";
+      }
+
+      const btn = document.createElement("span");
+      btn.className = "show-more";
       btn.textContent = "ещё";
+
+      let expanded = false;
+      btn.addEventListener("click", () => {
+        expanded = !expanded;
+        if (expanded) {
+          descEl.textContent = fullText;
+          descEl.classList.add("expanded");
+          btn.textContent = "скрыть";
+        } else {
+          descEl.textContent = cutText + "…";
+          descEl.classList.remove("expanded");
+          btn.textContent = "ещё";
+        }
+      });
+
+      descEl.insertAdjacentElement("afterend", btn);
     }
-  });
 
-  descEl.insertAdjacentElement("afterend", btn);
-});
+    const bottomDiv = document.createElement("div");
+    bottomDiv.style.display = "flex";
+    bottomDiv.style.justifyContent = "space-between";
+    bottomDiv.style.alignItems = "center";
 
+    const dateEl = document.createElement("span");
+    dateEl.className = "task-date";
+    dateEl.textContent = "Добавлено: " + dateText;
+    bottomDiv.appendChild(dateEl);
 
-    
-const bottomDiv = document.createElement("div");
-bottomDiv.style.display = "flex";
-bottomDiv.style.justifyContent = "space-between";
-bottomDiv.style.alignItems = "center";
+    const actionsDiv = document.createElement("div");
+    actionsDiv.style.display = "flex";
+    actionsDiv.style.gap = "8px";
 
-const dateEl = document.createElement("span");
-dateEl.className = "task-date";
-dateEl.textContent = "Добавлено: " + dateText;
-bottomDiv.appendChild(dateEl);
+    if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
+      const respBtn = document.createElement("button");
+      respBtn.textContent = "Откликнуться";
+      respBtn.onclick = () => addResponse(docSnap.id);
+      actionsDiv.appendChild(respBtn);
+    }
 
-const actionsDiv = document.createElement("div");
-actionsDiv.style.display = "flex";
-actionsDiv.style.gap = "8px";
+    if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "Удалить";
+      deleteBtn.onclick = () => deleteTask(docSnap.id);
+      actionsDiv.appendChild(deleteBtn);
+    }
 
-if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
-  const respBtn = document.createElement("button");
-  respBtn.textContent = "Откликнуться";
-  respBtn.onclick = () => addResponse(docSnap.id);
-  actionsDiv.appendChild(respBtn);
-}
-
-if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
-  const deleteBtn = document.createElement("button");
-  deleteBtn.textContent = "Удалить";
-  deleteBtn.onclick = () => deleteTask(docSnap.id);
-  actionsDiv.appendChild(deleteBtn);
-}
-
-bottomDiv.appendChild(actionsDiv);
-div.appendChild(bottomDiv);
-tasksContainer.appendChild(div);
-
+    bottomDiv.appendChild(actionsDiv);
+    div.appendChild(bottomDiv);
+    tasksContainer.appendChild(div);
   });
 
   const taskCount = tasks.length;
