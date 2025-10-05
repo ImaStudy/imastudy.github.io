@@ -408,32 +408,84 @@ div.innerHTML = `
 `;
 
 const descEl = div.querySelector(".task-desc");
+const fullText = data.description || "";
 
 requestAnimationFrame(() => {
   const style = getComputedStyle(descEl);
 
   const fontSize = parseFloat(style.fontSize) || 14;
   let lineHeight = parseFloat(style.lineHeight);
-
-  if (isNaN(lineHeight)) {
-    lineHeight = fontSize * 1.4;
-  }
+  if (isNaN(lineHeight)) lineHeight = fontSize * 1.4;
 
   const maxLines = window.innerWidth <= 600 ? 3 : 2;
   const maxHeight = lineHeight * maxLines;
 
-  if (descEl.scrollHeight > maxHeight + 1) {
-    const showMoreBtn = document.createElement("span");
-    showMoreBtn.className = "show-more";
-    showMoreBtn.textContent = "ещё";
+  if (descEl.scrollHeight <= maxHeight + 1) return;
 
-    showMoreBtn.addEventListener("click", () => {
-      const expanded = descEl.classList.toggle("expanded");
-      showMoreBtn.textContent = expanded ? "скрыть" : "ещё";
-    });
+  const clone = document.createElement("div");
+  clone.style.position = "fixed";
+  clone.style.visibility = "hidden";
+  clone.style.pointerEvents = "none";
+  clone.style.left = "-9999px";
+  clone.style.top = "0";
+  clone.style.width = `${descEl.clientWidth}px`;
 
-    descEl.insertAdjacentElement("afterend", showMoreBtn);
+  clone.style.fontFamily = style.fontFamily;
+  clone.style.fontSize = style.fontSize;
+  clone.style.fontWeight = style.fontWeight;
+  clone.style.lineHeight = style.lineHeight;
+  clone.style.whiteSpace = "normal";
+  clone.style.wordBreak = "break-word";
+  clone.style.boxSizing = "border-box";
+
+  document.body.appendChild(clone);
+
+  let low = 0, high = fullText.length, fit = 0;
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    clone.textContent = fullText.slice(0, mid) + "…";
+    if (clone.scrollHeight <= maxHeight + 1) {
+      fit = mid;
+      low = mid + 1;
+    } else {
+      high = mid - 1;
+    }
   }
+
+  let truncated = fullText.slice(0, fit);
+  const lastSpace = Math.max(
+    truncated.lastIndexOf(' '),
+    truncated.lastIndexOf('\n'),
+    truncated.lastIndexOf('\t')
+  );
+  if (lastSpace > 0) {
+    truncated = truncated.slice(0, lastSpace);
+  }
+  truncated = truncated.replace(/\s+$/,'') + "…";
+
+  descEl.textContent = truncated;
+
+  document.body.removeChild(clone);
+
+  const showMoreBtn = document.createElement("span");
+  showMoreBtn.className = "show-more";
+  showMoreBtn.textContent = "ещё";
+
+  let expanded = false;
+  showMoreBtn.addEventListener("click", () => {
+    expanded = !expanded;
+    if (expanded) {
+      descEl.textContent = fullText;
+      descEl.classList.add("expanded");
+      showMoreBtn.textContent = "скрыть";
+    } else {
+      descEl.textContent = truncated;
+      descEl.classList.remove("expanded");
+      showMoreBtn.textContent = "ещё";
+    }
+  });
+
+  descEl.insertAdjacentElement("afterend", showMoreBtn);
 });
 
 
