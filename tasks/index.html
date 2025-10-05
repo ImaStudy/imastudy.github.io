@@ -427,9 +427,12 @@ const showMoreBtn = descEl.querySelector(".show-more");
 
 const checkOverflow = () => descEl.scrollHeight > descEl.clientHeight + 2;
 
-if (checkOverflow()) {
-  showMoreBtn.style.display = "inline";
-}
+setTimeout(() => {
+  if (checkOverflow()) {
+    showMoreBtn.style.display = "inline";
+  }
+}, 0);
+
 
 showMoreBtn.addEventListener("click", () => {
   const expanded = descEl.classList.toggle("expanded");
