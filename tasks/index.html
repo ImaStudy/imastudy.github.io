@@ -435,7 +435,11 @@ const dots = descEl.querySelector(".dots");
 const moreText = descEl.querySelector(".more-text");
 const showMoreBtn = descEl.querySelector(".show-more");
 
-if (data.description.length < 120) {
+document.body.appendChild(div);
+const isOverflowing = descEl.scrollHeight > descEl.clientHeight;
+document.body.removeChild(div);
+
+if (!isOverflowing) {
   dots.style.display = "none";
   showMoreBtn.style.display = "none";
 }
