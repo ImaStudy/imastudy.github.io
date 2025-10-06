@@ -432,26 +432,6 @@ requestAnimationFrame(() => {
   descEl.style.webkitLineClamp = maxLines;
   descEl.style.overflow = "hidden";
 
-  const btn = document.createElement("span");
-  btn.className = "show-more";
-  btn.textContent = "ещё";
-
-  let expanded = false;
-  btn.addEventListener("click", () => {
-    expanded = !expanded;
-    if (expanded) {
-      descEl.classList.add("expanded");
-      descEl.style.webkitLineClamp = "unset";
-      descEl.style.overflow = "visible";
-      btn.textContent = "скрыть";
-    } else {
-      descEl.classList.remove("expanded");
-      descEl.style.webkitLineClamp = maxLines;
-      descEl.style.overflow = "hidden";
-      btn.textContent = "ещё";
-    }
-  });
-
   descEl.insertAdjacentElement("afterend", btn);
 });
 
