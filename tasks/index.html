@@ -501,7 +501,36 @@ tasksContainer.appendChild(div);
     taskListDiv.insertBefore(countEl, tasksContainer);
   }
   countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
+
+  adjustTaskDescriptions();
 }
+
+    
+    function adjustTaskDescriptions() {
+  document.querySelectorAll('.task-desc').forEach(descEl => {
+    const btn = descEl.nextElementSibling;
+    if (!btn || !btn.classList.contains("show-more")) return;
+
+    const wasExpanded = descEl.classList.contains("expanded");
+    if (wasExpanded) descEl.classList.remove("expanded");
+
+    const maxLines = window.innerWidth <= 600 ? 3 : 2;
+    descEl.style.webkitLineClamp = maxLines;
+
+    const lineHeight = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
+    const maxHeight = lineHeight * maxLines;
+
+    const needsTruncate = descEl.scrollHeight > maxHeight + 1;
+    btn.style.display = needsTruncate ? "inline" : "none";
+
+    if (wasExpanded) descEl.classList.add("expanded");
+  });
+}
+
+window.addEventListener("resize", adjustTaskDescriptions);
+
+
+    
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
