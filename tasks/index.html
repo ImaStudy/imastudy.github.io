@@ -445,8 +445,9 @@ dateEl.textContent = "Добавлено: " + dateText;
 bottomDiv.appendChild(dateEl);
 
 const actionsDiv = document.createElement("div");
-actionsDiv.style.display = "flex";
+actionsDiv.className = "task-actions";
 actionsDiv.style.gap = "8px";
+
 
 if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
   const respBtn = document.createElement("button");
