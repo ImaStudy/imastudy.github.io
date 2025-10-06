@@ -506,10 +506,10 @@ tasksContainer.appendChild(div);
 }
 
     
-    function adjustTaskDescriptions() {
+function adjustTaskDescriptions() {
   document.querySelectorAll('.task-desc').forEach(descEl => {
-    const btn = descEl.nextElementSibling;
-    if (!btn || !btn.classList.contains("show-more")) return;
+    let btn = descEl.nextElementSibling;
+    const fullText = descEl.innerHTML;
 
     const wasExpanded = descEl.classList.contains("expanded");
     if (wasExpanded) descEl.classList.remove("expanded");
@@ -521,7 +521,35 @@ tasksContainer.appendChild(div);
     const maxHeight = lineHeight * maxLines;
 
     const needsTruncate = descEl.scrollHeight > maxHeight + 1;
-    btn.style.display = needsTruncate ? "inline" : "none";
+
+    if (needsTruncate) {
+      if (!btn || !btn.classList.contains("show-more")) {
+        btn = document.createElement("span");
+        btn.className = "show-more";
+        btn.textContent = "ещё";
+        let expanded = false;
+        btn.addEventListener("click", () => {
+          expanded = !expanded;
+          if (expanded) {
+            descEl.classList.add("expanded");
+            descEl.style.webkitLineClamp = "unset";
+            descEl.style.overflow = "visible";
+            btn.textContent = "скрыть";
+          } else {
+            descEl.classList.remove("expanded");
+            descEl.style.webkitLineClamp = maxLines;
+            descEl.style.overflow = "hidden";
+            btn.textContent = "ещё";
+          }
+        });
+        descEl.insertAdjacentElement("afterend", btn);
+      }
+      btn.style.display = "inline";
+    } else {
+      if (btn && btn.classList.contains("show-more")) {
+        btn.style.display = "none";
+      }
+    }
 
     if (wasExpanded) descEl.classList.add("expanded");
   });
