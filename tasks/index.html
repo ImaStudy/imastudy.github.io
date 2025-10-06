@@ -486,50 +486,61 @@ tasksContainer.appendChild(div);
     
 function adjustTaskDescriptions() {
   document.querySelectorAll('.task-desc').forEach(descEl => {
-    let btn = descEl.nextElementSibling;
-    const fullText = descEl.innerHTML;
-
     const wasExpanded = descEl.classList.contains("expanded");
-    if (wasExpanded) descEl.classList.remove("expanded");
+    const nextEl = descEl.nextElementSibling;
+
+    if (nextEl && nextEl.classList.contains("show-more")) {
+      nextEl.remove();
+    }
+
+    if (wasExpanded) {
+      descEl.style.webkitLineClamp = "unset";
+      descEl.style.overflow = "visible";
+      const btn = document.createElement("span");
+      btn.className = "show-more";
+      btn.textContent = "скрыть";
+      btn.addEventListener("click", () => {
+        descEl.classList.remove("expanded");
+        descEl.style.webkitLineClamp = window.innerWidth <= 600 ? 3 : 2;
+        descEl.style.overflow = "hidden";
+        btn.textContent = "ещё";
+        adjustTaskDescriptions();
+      });
+      descEl.insertAdjacentElement("afterend", btn);
+      return;
+    }
 
     const maxLines = window.innerWidth <= 600 ? 3 : 2;
     descEl.style.webkitLineClamp = maxLines;
+    descEl.style.overflow = "hidden";
+    descEl.style.display = "-webkit-box";
+    descEl.style.webkitBoxOrient = "vertical";
 
     const lineHeight = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
     const maxHeight = lineHeight * maxLines;
-
     const needsTruncate = descEl.scrollHeight > maxHeight + 1;
 
     if (needsTruncate) {
-      if (!btn || !btn.classList.contains("show-more")) {
-        btn = document.createElement("span");
-        btn.className = "show-more";
-        btn.textContent = "ещё";
-        let expanded = false;
-        btn.addEventListener("click", () => {
-          expanded = !expanded;
-          if (expanded) {
-            descEl.classList.add("expanded");
-            descEl.style.webkitLineClamp = "unset";
-            descEl.style.overflow = "visible";
-            btn.textContent = "скрыть";
-          } else {
-            descEl.classList.remove("expanded");
-            descEl.style.webkitLineClamp = maxLines;
-            descEl.style.overflow = "hidden";
-            btn.textContent = "ещё";
-          }
-        });
-        descEl.insertAdjacentElement("afterend", btn);
-      }
-      btn.style.display = "inline";
-    } else {
-      if (btn && btn.classList.contains("show-more")) {
-        btn.style.display = "none";
-      }
+      const btn = document.createElement("span");
+      btn.className = "show-more";
+      btn.textContent = "ещё";
+      let expanded = false;
+      btn.addEventListener("click", () => {
+        expanded = !expanded;
+        if (expanded) {
+          descEl.classList.add("expanded");
+          descEl.style.webkitLineClamp = "unset";
+          descEl.style.overflow = "visible";
+          btn.textContent = "скрыть";
+        } else {
+          descEl.classList.remove("expanded");
+          descEl.style.webkitLineClamp = maxLines;
+          descEl.style.overflow = "hidden";
+          btn.textContent = "ещё";
+        }
+      });
+      descEl.insertAdjacentElement("afterend", btn);
     }
-
-    if (wasExpanded) descEl.classList.add("expanded");
   });
 }
 
