@@ -195,8 +195,6 @@
 @media (max-width: 600px) {
   .task-desc {
    -webkit-line-clamp: 3;
-   word-break: normal;
-   overflow-wrap: anywhere;
   }
 }
 
@@ -413,7 +411,7 @@ const descEl = div.querySelector(".task-desc");
 const fullText = data.description || "";
 
 descEl.classList.remove("expanded");
-descEl.textContent = fullText.replace(/\n/g, "<br>");
+descEl.innerHTML = fullText.replace(/\n/g, "<br>");
 
 const maxLines = window.innerWidth <= 600 ? 3 : 2;
 
