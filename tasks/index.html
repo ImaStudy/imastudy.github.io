@@ -216,7 +216,13 @@
   word-break: break-word;
 }
 
+.task-actions button.delete-btn {
+  background-color: #e74c3c;
+}
 
+.task-actions button.delete-btn:hover {
+  background-color: #c0392b;
+}
     
 .task-price {
   position: absolute;
@@ -475,6 +481,7 @@ if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
 if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent = "Удалить";
+  deleteBtn.classList.add("delete-btn");
   deleteBtn.onclick = () => deleteTask(docSnap.id);
   actionsDiv.appendChild(deleteBtn);
 }
