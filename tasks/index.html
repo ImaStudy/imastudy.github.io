@@ -66,6 +66,26 @@
   background-color: #2980b9;
 }
 
+@media (max-width: 600px) {
+  .task-item .task-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .task-item > div:last-child {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .task-item .task-actions button {
+    width: 100%;
+    max-width: 250px;
+  }
+}
+
+    
 #task-count {
   display: flex;
   align-items: center;
