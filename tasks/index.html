@@ -44,6 +44,11 @@
   color: #444;
 }
 
+.task-item .task-date {
+  font-style: italic;
+  color: #777;
+}
+
 .task-item button {
   width: 100px;
   margin-top: 10px;
@@ -61,33 +66,28 @@
   background-color: #2980b9;
 }
 
-.task-item .task-date {
-  flex-grow: 1;
-  text-align: left;
-  font-style: italic;
-  color: #777;
-}
-
-.task-item .task-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 10px;
-}
-
 @media (max-width: 600px) {
+  .task-item > div:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
   .task-item .task-actions {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
+    margin-top: 0;
   }
+
   .task-item .task-actions button {
     width: 100%;
     font-size: 15px;
     padding: 10px 0;
   }
 }
-
 
     
 #task-count {
