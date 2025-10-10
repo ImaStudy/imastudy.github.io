@@ -641,6 +641,37 @@ function adjustTaskDescriptions() {
 window.addEventListener("resize", adjustTaskDescriptions);
 
 
+
+function movePriceForMobile() {
+  document.querySelectorAll('.task-item').forEach(item => {
+    const price = item.querySelector('.task-price');
+    const desc = item.querySelector('.task-desc');
+    if (price && desc) {
+      if (window.innerWidth <= 600) {
+        if (desc.nextElementSibling !== price) {
+          desc.insertAdjacentElement("afterend", price);
+          price.style.position = "static";
+          price.style.marginTop = "6px";
+          price.style.marginBottom = "6px";
+        }
+      } else {
+        if (item.firstElementChild !== price) {
+          item.insertBefore(price, item.firstElementChild);
+          price.style.position = "absolute";
+          price.style.top = "12px";
+          price.style.right = "12px";
+          price.style.margin = "0";
+        }
+      }
+    }
+  });
+}
+
+window.addEventListener('resize', movePriceForMobile);
+window.addEventListener('load', movePriceForMobile);
+
+
+
     
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
