@@ -277,6 +277,63 @@
 .task-item {
   position: relative;
 }
+
+
+
+.skeleton {
+  background: linear-gradient(100deg, #e0e0e0 40%, #f0f0f0 50%, #e0e0e0 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.skeleton-title {
+  width: 60%;
+  height: 18px;
+  margin-bottom: 10px;
+}
+
+.skeleton-desc {
+  width: 100%;
+  height: 14px;
+  margin-bottom: 6px;
+}
+
+.skeleton-desc.short {
+  width: 80%;
+}
+
+.skeleton-price {
+  width: 60px;
+  height: 16px;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.skeleton-date {
+  width: 100px;
+  height: 12px;
+  margin-top: 10px;
+}
+
+
+
+
     
     footer {
       text-align: center;
@@ -672,9 +729,28 @@ window.addEventListener("resize", adjustTaskDescriptions);
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 
-  onSnapshot(q, (snapshot) => {
-  renderTasks(snapshot.docs);    
-  });
+
+function showSkeletons() {
+  tasksContainer.innerHTML = "";
+  for (let i = 0; i < 4; i++) {
+    const skeleton = document.createElement("div");
+    skeleton.className = "task-item skeleton-card";
+    skeleton.innerHTML = `
+      <div class="skeleton skeleton-price"></div>
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-desc"></div>
+      <div class="skeleton skeleton-desc short"></div>
+      <div class="skeleton skeleton-date"></div>
+    `;
+    tasksContainer.appendChild(skeleton);
+  }
+}
+
+    
+showSkeletons();
+onSnapshot(q, (snapshot) => {
+  setTimeout(() => renderTasks(snapshot.docs), 300);
+});
 }
 });
 
