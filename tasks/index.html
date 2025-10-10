@@ -277,6 +277,28 @@
 .task-item {
   position: relative;
 }
+    
+@media (max-width: 600px) {
+  .task-price {
+    position: static;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    align-self: flex-start;
+    order: 3;
+  }
+
+  .task-desc {
+    order: 2;
+  }
+
+  .task-date {
+    order: 4;
+  }
+
+  .task-actions {
+    order: 5;
+  }
+}
 
 
 
