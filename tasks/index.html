@@ -678,6 +678,31 @@ window.addEventListener("resize", adjustTaskDescriptions);
       }
     });
 
+
+function showSkeletons() {
+  tasksContainer.innerHTML = "";
+  for (let i = 0; i < 4; i++) {
+    const skeleton = document.createElement("div");
+    skeleton.className = "task-item skeleton-card";
+    skeleton.innerHTML = `
+      <div class="skeleton skeleton-price"></div>
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-desc"></div>
+      <div class="skeleton skeleton-desc short"></div>
+      <div class="skeleton skeleton-date"></div>
+    `;
+    tasksContainer.appendChild(skeleton);
+  }
+}
+
+    
+showSkeletons();
+onSnapshot(q, (snapshot) => {
+  setTimeout(() => renderTasks(snapshot.docs), 300);
+});
+
+
+    
    onAuthStateChanged(auth, async (user) => {
   const skipped = localStorage.getItem('skippedSetPassword');
 
@@ -728,29 +753,6 @@ window.addEventListener("resize", adjustTaskDescriptions);
     
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
-
-
-function showSkeletons() {
-  tasksContainer.innerHTML = "";
-  for (let i = 0; i < 4; i++) {
-    const skeleton = document.createElement("div");
-    skeleton.className = "task-item skeleton-card";
-    skeleton.innerHTML = `
-      <div class="skeleton skeleton-price"></div>
-      <div class="skeleton skeleton-title"></div>
-      <div class="skeleton skeleton-desc"></div>
-      <div class="skeleton skeleton-desc short"></div>
-      <div class="skeleton skeleton-date"></div>
-    `;
-    tasksContainer.appendChild(skeleton);
-  }
-}
-
-    
-showSkeletons();
-onSnapshot(q, (snapshot) => {
-  setTimeout(() => renderTasks(snapshot.docs), 300);
-});
 }
 });
 
