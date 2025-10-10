@@ -525,8 +525,6 @@ requestAnimationFrame(() => {
   descEl.style.webkitLineClamp = maxLines;
   descEl.style.overflow = "hidden";
 });
-
-
     
 const bottomDiv = document.createElement("div");
 bottomDiv.style.display = "flex";
@@ -540,8 +538,7 @@ bottomDiv.appendChild(dateEl);
 
 const actionsDiv = document.createElement("div");
 actionsDiv.className = "task-actions";
-actionsDiv.style.gap = "8px";
-
+actionsDiv.style.gap = "8px";  
 
 if (auth.currentUser && auth.currentUser.uid !== data.authorUid) {
   const respBtn = document.createElement("button");
@@ -560,6 +557,22 @@ if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
 
 bottomDiv.appendChild(actionsDiv);
 div.appendChild(bottomDiv);
+
+
+const priceEl = div.querySelector('.task-price');
+if (window.innerWidth <= 600) {
+  div.insertBefore(priceEl, bottomDiv);
+  priceEl.style.position = 'static';
+  priceEl.style.margin = '8px 0';
+} else {
+  priceEl.style.position = 'absolute';
+  priceEl.style.top = '12px';
+  priceEl.style.right = '12px';
+  priceEl.style.margin = '0';
+}
+
+
+    
 tasksContainer.appendChild(div);
 
   });
