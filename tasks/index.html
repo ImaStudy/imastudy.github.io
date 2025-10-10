@@ -697,6 +697,7 @@ function showSkeletons() {
 
     
 showSkeletons();
+window.scrollTo(0, 0);
 onSnapshot(q, (snapshot) => {
   setTimeout(() => renderTasks(snapshot.docs), 300);
 });
