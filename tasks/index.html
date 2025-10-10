@@ -278,6 +278,32 @@
   position: relative;
 }
 
+    @media (max-width: 600px) {
+  .task-price {
+    position: static;
+    display: block;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    color: #3498db;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: left;
+  }
+
+  .task-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .task-date {
+    margin-top: 4px;
+  }
+}
+
+
+
+    
+
 .skeleton {
   background: linear-gradient(100deg, #e0e0e0 40%, #f0f0f0 50%, #e0e0e0 60%);
   background-size: 200% 100%;
@@ -575,37 +601,7 @@ tasksContainer.appendChild(div);
   countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
 
   adjustTaskDescriptions();
-}
-
-function movePriceForMobile() {
-  document.querySelectorAll('.task-item').forEach(item => {
-    const price = item.querySelector('.task-price');
-    const desc = item.querySelector('.task-desc');
-    if (price && desc) {
-      if (window.innerWidth <= 600) {
-        if (desc.nextElementSibling !== price) {
-          desc.insertAdjacentElement("afterend", price);
-          price.style.position = "static";
-          price.style.marginTop = "6px";
-          price.style.marginBottom = "6px";
-        }
-      } else {
-        if (item.firstElementChild !== price) {
-          item.insertBefore(price, item.firstElementChild);
-          price.style.position = "absolute";
-          price.style.top = "12px";
-          price.style.right = "12px";
-          price.style.margin = "0";
-        }
-      }
-    }
-  });
-}
-
-window.addEventListener('resize', movePriceForMobile);
-window.addEventListener('load', movePriceForMobile);
-
-    
+}   
     
 function adjustTaskDescriptions() {
   document.querySelectorAll('.task-desc').forEach(descEl => {
