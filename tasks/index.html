@@ -707,18 +707,17 @@ function showSkeletons() {
   }
 }
 
-    
-function scrollToTop() {
-  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
 }
 
-
 showSkeletons();
-requestAnimationFrame(scrollToTop);
+window.scrollTo({ top: 0, behavior: "auto" });
 
 onSnapshot(q, (snapshot) => {
   renderTasks(snapshot.docs);
-  requestAnimationFrame(scrollToTop);
+  window.scrollTo({ top: 0, behavior: "auto" });
 });
 
 
