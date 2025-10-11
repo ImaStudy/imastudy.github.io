@@ -708,12 +708,17 @@ function showSkeletons() {
 }
 
     
+function scrollToTop() {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+}
+
+
 showSkeletons();
-requestAnimationFrame(() => {
-  window.scrollTo(0, 0);
-});
+requestAnimationFrame(scrollToTop);
+
 onSnapshot(q, (snapshot) => {
-  setTimeout(() => renderTasks(snapshot.docs), 300);
+  renderTasks(snapshot.docs);
+  requestAnimationFrame(scrollToTop);
 });
 
 
