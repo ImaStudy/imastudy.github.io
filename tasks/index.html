@@ -556,23 +556,7 @@ if (auth.currentUser && auth.currentUser.uid === data.authorUid) {
 }
 
 bottomDiv.appendChild(actionsDiv);
-div.appendChild(bottomDiv);
-
-
-const priceEl = div.querySelector('.task-price');
-if (window.innerWidth <= 600) {
-  div.insertBefore(priceEl, bottomDiv);
-  priceEl.style.position = 'static';
-  priceEl.style.margin = '8px 0';
-} else {
-  priceEl.style.position = 'absolute';
-  priceEl.style.top = '12px';
-  priceEl.style.right = '12px';
-  priceEl.style.margin = '0';
-}
-
-
-    
+div.appendChild(bottomDiv);    
 tasksContainer.appendChild(div);
 
   });
@@ -588,6 +572,7 @@ tasksContainer.appendChild(div);
   countEl.innerHTML = `Всего заданий: <strong>${taskCount}</strong>`;
 
   adjustTaskDescriptions();
+  adjustTaskPrices();
 }   
     
 function adjustTaskDescriptions() {
@@ -650,7 +635,31 @@ function adjustTaskDescriptions() {
   });
 }
 
-window.addEventListener("resize", adjustTaskDescriptions);   
+function adjustTaskPrices() {
+  document.querySelectorAll('.task-item').forEach(div => {
+    const priceEl = div.querySelector('.task-price');
+    const bottomDiv = div.querySelector('div:last-child');
+    if (!priceEl || !bottomDiv) return;
+
+    if (window.innerWidth <= 600) {
+      div.insertBefore(priceEl, bottomDiv);
+      priceEl.style.position = 'static';
+      priceEl.style.margin = '8px 0';
+    } else {
+      div.insertBefore(priceEl, div.firstChild);
+      priceEl.style.position = 'absolute';
+      priceEl.style.top = '12px';
+      priceEl.style.right = '12px';
+      priceEl.style.margin = '0';
+    }
+  });
+}
+
+    
+window.addEventListener("resize", () => {
+  adjustTaskDescriptions();
+  adjustTaskPrices();
+});  
 
     const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
