@@ -233,7 +233,7 @@
   white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
-  transition: max-height 0.4s ease, opacity 0.3s ease;
+  transition: max-height 0.4s ease;
   opacity: 1;
 }
 
@@ -667,14 +667,14 @@ btn.addEventListener("click", () => {
     };
     descEl.addEventListener("transitionend", onEnd);
 } else {
-  descEl.style.transition = "max-height 0.4s ease, opacity 0.3s ease";
-  descEl.style.opacity = "0";
-
+  descEl.style.transition = "max-height 0.4s ease";
+  
   descEl.style.maxHeight = descEl.scrollHeight + "px";
   descEl.offsetHeight;
 
   const lineH = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
   const collapsedH = lineH * (window.innerWidth <= 600 ? 3 : 2);
+
   descEl.style.maxHeight = collapsedH + "px";
 
   const onCollapseEnd = (e) => {
@@ -683,7 +683,6 @@ btn.addEventListener("click", () => {
       descEl.style.webkitBoxOrient = "vertical";
       descEl.style.webkitLineClamp = (window.innerWidth <= 600 ? 3 : 2);
       descEl.style.overflow = "hidden";
-      descEl.style.opacity = "1";
       descEl.removeEventListener("transitionend", onCollapseEnd);
     }
   };
