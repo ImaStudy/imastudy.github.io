@@ -666,29 +666,25 @@ btn.addEventListener("click", () => {
       }
     };
     descEl.addEventListener("transitionend", onEnd);
-  } else {
-  descEl.style.transition = "max-height 0.4s ease";
+} else {
+  descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
   descEl.style.opacity = "1";
 
-  if (!descEl.style.maxHeight || descEl.style.maxHeight === "none") {
-    descEl.style.maxHeight = descEl.scrollHeight + "px";
-    descEl.offsetHeight;
-  }
+  descEl.style.display = "-webkit-box";
+  descEl.style.webkitBoxOrient = "vertical";
+  descEl.style.webkitLineClamp = (window.innerWidth <= 600 ? 3 : 2);
+  descEl.style.overflow = "hidden";
+
+  descEl.style.maxHeight = descEl.scrollHeight + "px";
+  descEl.offsetHeight;
 
   const newLineH = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
   const newCollapsedH = newLineH * (window.innerWidth <= 600 ? 3 : 2);
-  descEl.style.maxHeight = newCollapsedH + "px";
 
-  const onCollapseEnd = function (e) {
-    if (e.propertyName === "max-height") {
-      descEl.style.display = "-webkit-box";
-      descEl.style.webkitBoxOrient = "vertical";
-      descEl.style.webkitLineClamp = (window.innerWidth <= 600 ? 3 : 2);
-      descEl.style.overflow = "hidden";
-      descEl.removeEventListener("transitionend", onCollapseEnd);
-    }
-  };
-  descEl.addEventListener("transitionend", onCollapseEnd);
+  requestAnimationFrame(() => {
+    descEl.style.maxHeight = newCollapsedH + "px";
+  });
+
   btn.textContent = "ещё";
 }
 });
