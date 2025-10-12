@@ -655,7 +655,7 @@ btn.addEventListener("click", () => {
     requestAnimationFrame(() => {
       descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
       descEl.style.maxHeight = fullHeight + "px";
-      descEl.style.opacity = 1;
+      descEl.style.opacity = 0;
     });
 
     descEl.addEventListener("transitionend", function onExpandEnd(e) {
