@@ -653,9 +653,9 @@ btn.addEventListener("click", () => {
     descEl.style.opacity = 0;
 
     requestAnimationFrame(() => {
-      descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
+      descEl.style.transition = "max-height 0.4s ease;
       descEl.style.maxHeight = fullHeight + "px";
-      descEl.style.opacity = 0;
+      descEl.style.opacity = 1;
     });
 
     descEl.addEventListener("transitionend", function onExpandEnd(e) {
