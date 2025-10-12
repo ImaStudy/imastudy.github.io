@@ -642,11 +642,14 @@ btn.addEventListener("click", () => {
   const isNowExpanded = descEl.classList.toggle("expanded");
 
   if (isNowExpanded) {
-    descEl.style.opacity = "0.7";
+    descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
+    descEl.style.opacity = "0.5";
+
     if (!descEl.style.maxHeight || descEl.style.maxHeight === "none") {
       descEl.style.maxHeight = descEl.scrollHeight + "px";
     }
     descEl.offsetHeight;
+
     descEl.style.display = "block";
     descEl.style.webkitLineClamp = "unset";
     const newFull = descEl.scrollHeight;
@@ -663,14 +666,15 @@ btn.addEventListener("click", () => {
     };
     descEl.addEventListener("transitionend", onEnd);
   } else {
-    descEl.style.opacity = "0.6";
+    descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
+    descEl.style.opacity = "0";
 
     if (!descEl.style.maxHeight || descEl.style.maxHeight === "none") {
       descEl.style.maxHeight = descEl.scrollHeight + "px";
       descEl.offsetHeight;
     }
 
-    const newLineH = parseFloat(getComputedStyle(descEl).lineHeight) || lineHeight || 20;
+    const newLineH = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
     const newCollapsedH = newLineH * (window.innerWidth <= 600 ? 3 : 2);
     descEl.style.maxHeight = newCollapsedH + "px";
 
