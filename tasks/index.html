@@ -656,11 +656,11 @@ btn.addEventListener("click", () => {
       descEl.style.maxHeight = fullHeight + "px";
     });
 
-    descEl.addEventListener("transitionend", function onExpandEnd(e) {
+    descEl.addEventListener("transitionend", function onExpand(e) {
       if (e.propertyName === "max-height") {
         descEl.style.maxHeight = "none";
         descEl.style.overflow = "visible";
-        descEl.removeEventListener("transitionend", onExpandEnd);
+        descEl.removeEventListener("transitionend", onExpand);
       }
     });
 
