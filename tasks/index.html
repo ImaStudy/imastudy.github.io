@@ -650,10 +650,12 @@ btn.addEventListener("click", () => {
     descEl.style.display = "block";
     descEl.style.overflow = "hidden";
     descEl.style.maxHeight = collapsedH + "px";
+    descEl.style.opacity = 0;
 
     requestAnimationFrame(() => {
       descEl.style.transition = "max-height 0.4s ease";
       descEl.style.maxHeight = fullHeight + "px";
+      descEl.style.opacity = 1;
     });
 
     descEl.addEventListener("transitionend", function onExpand(e) {
