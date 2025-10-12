@@ -667,8 +667,8 @@ btn.addEventListener("click", () => {
     };
     descEl.addEventListener("transitionend", onEnd);
 } else {
-  descEl.style.transition = "max-height 0.4s ease";
-  descEl.style.opacity = "1";
+  descEl.style.transition = "max-height 0.4s ease, opacity 0.3s ease";
+  descEl.style.opacity = "0";
 
   descEl.style.maxHeight = descEl.scrollHeight + "px";
   descEl.offsetHeight;
@@ -683,6 +683,7 @@ btn.addEventListener("click", () => {
       descEl.style.webkitBoxOrient = "vertical";
       descEl.style.webkitLineClamp = (window.innerWidth <= 600 ? 3 : 2);
       descEl.style.overflow = "hidden";
+      descEl.style.opacity = "1";
       descEl.removeEventListener("transitionend", onCollapseEnd);
     }
   };
