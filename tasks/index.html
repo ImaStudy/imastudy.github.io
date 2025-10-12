@@ -234,6 +234,7 @@
   word-break: break-word;
   overflow-wrap: break-word;
   transition: max-height 0.4s ease, opacity 0.3s ease;
+  opacity: 1;
 }
 
 @media (max-width: 600px) {
@@ -254,7 +255,7 @@
 }
 
 .task-desc.collapsed {
-  opacity: 0.9;
+  opacity: 0;
 }
 
     
@@ -263,7 +264,7 @@
   display: block;
   overflow: visible;
   word-break: break-word;
-  opacity: 1;
+  opacity: 0;
 }
 
 .task-actions button.delete-btn.delete-btn {
