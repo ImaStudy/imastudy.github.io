@@ -641,55 +641,53 @@ function adjustTaskDescriptions() {
 
 btn.addEventListener("click", () => {
   const isNowExpanded = descEl.classList.toggle("expanded");
+  const maxLines = window.innerWidth <= 600 ? 3 : 2;
+  const lineH = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
+  const collapsedH = lineH * maxLines;
 
   if (isNowExpanded) {
-    descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
-    descEl.style.opacity = "0.5";
-
-    if (!descEl.style.maxHeight || descEl.style.maxHeight === "none") {
-      descEl.style.maxHeight = descEl.scrollHeight + "px";
-    }
-    descEl.offsetHeight;
-
+    const fullHeight = descEl.scrollHeight;
     descEl.style.display = "block";
-    descEl.style.webkitLineClamp = "unset";
-    const newFull = descEl.scrollHeight;
-    descEl.style.maxHeight = newFull + "px";
-    descEl.style.overflow = "visible";
-    btn.textContent = "скрыть";
-    requestAnimationFrame(() => descEl.style.opacity = "1");
-
-    const onEnd = function (e) {
+    descEl.style.overflow = "hidden";
+    descEl.style.maxHeight = collapsedH + "px";
+    descEl.style.opacity = 0;
+    requestAnimationFrame(() => {
+      descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
+      descEl.style.maxHeight = fullHeight + "px";
+      descEl.style.opacity = 1;
+    });
+    descEl.addEventListener("transitionend", function onExpandEnd(e) {
       if (e.propertyName === "max-height") {
         descEl.style.maxHeight = "none";
-        descEl.removeEventListener("transitionend", onEnd);
+        descEl.style.overflow = "visible";
+        descEl.removeEventListener("transitionend", onExpandEnd);
       }
-    };
-    descEl.addEventListener("transitionend", onEnd);
-} else {
-  descEl.style.transition = "max-height 0.4s ease";
-  
-  descEl.style.maxHeight = descEl.scrollHeight + "px";
-  descEl.offsetHeight;
+    });
+    btn.textContent = "скрыть";
+  } else {
+    const fullHeight = descEl.scrollHeight;
+    descEl.style.transition = "max-height 0.4s ease, opacity 0.4s ease";
+    descEl.style.maxHeight = fullHeight + "px";
+    descEl.style.opacity = 1;
 
-  const lineH = parseFloat(getComputedStyle(descEl).lineHeight) || 20;
-  const collapsedH = lineH * (window.innerWidth <= 600 ? 3 : 2);
+    requestAnimationFrame(() => {
+      descEl.style.maxHeight = collapsedH + "px";
+      descEl.style.opacity = 0;
+    });
 
-  descEl.style.maxHeight = collapsedH + "px";
+    descEl.addEventListener("transitionend", function onCollapseEnd(e) {
+      if (e.propertyName === "max-height") {
+        descEl.style.display = "-webkit-box";
+        descEl.style.webkitBoxOrient = "vertical";
+        descEl.style.webkitLineClamp = maxLines;
+        descEl.style.overflow = "hidden";
+        descEl.style.opacity = 1;
+        descEl.removeEventListener("transitionend", onCollapseEnd);
+      }
+    });
 
-  const onCollapseEnd = (e) => {
-    if (e.propertyName === "max-height") {
-      descEl.style.display = "-webkit-box";
-      descEl.style.webkitBoxOrient = "vertical";
-      descEl.style.webkitLineClamp = (window.innerWidth <= 600 ? 3 : 2);
-      descEl.style.overflow = "hidden";
-      descEl.removeEventListener("transitionend", onCollapseEnd);
-    }
-  };
-  descEl.addEventListener("transitionend", onCollapseEnd);
-
-  btn.textContent = "ещё";
-}
+    btn.textContent = "ещё";
+  }
 });
 
     descEl.insertAdjacentElement("afterend", btn);
