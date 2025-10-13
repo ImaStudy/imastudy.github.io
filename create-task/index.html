@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Новое задание — ImaStudy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body {
+      font-family: "Noto Sans", sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: 30px auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #0066ff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #0052cc;
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #0066ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <form id="taskForm">
+    <h2>Разместить задание</h2>
+    <input type="text" id="title" placeholder="Название задания" required />
+    <textarea id="description" rows="4" placeholder="Описание задания" required style="resize: none;"></textarea>
+    <input type="text" id="contact" placeholder="Контакт (Telegram или e-mail)" required />
+    <input type="text" id="price" placeholder="Предложенная цена" required />
+    <button type="submit">Опубликовать</button>
+  </form>
+
+  <a href="/" class="back-link">← На главную</a>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+      authDomain: "imastudy-631ec.firebaseapp.com",
+      projectId: "imastudy-631ec",
+      storageBucket: "imastudy-631ec.firebasestorage.app",
+      messagingSenderId: "301505972939",
+      appId: "1:301505972939:web:061de2a898044090dae94e",
+      measurementId: "G-305V13PQ4Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const taskForm = document.getElementById("taskForm");
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "/login/";
+      }
+    });
+
+    taskForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Вы должны быть авторизованы для публикации задания.");
+        return;
+      }
+
+      const newTask = {
+        title: taskForm.title.value.trim(),
+        description: taskForm.description.value.trim(),
+        contact: taskForm.contact.value.trim(),
+        price: taskForm.price.value.trim(),
+        createdAt: serverTimestamp(),
+        authorUid: user.uid
+      };
+
+      if (!newTask.title || !newTask.description || !newTask.contact || !newTask.price) {
+        alert("Заполните все поля");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "tasks"), newTask);
+        alert("Задание успешно опубликовано!");
+        window.location.href = "/tasks/";
+      } catch (error) {
+        alert("Ошибка при добавлении задания: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
