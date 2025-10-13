@@ -120,26 +120,24 @@
 </head>
 <body>
 
-  <header>
-    <div class="header-left">
-      <h1>ImaStudy</h1>
-      <p>Размести задание — получи помощь</p>
-    </div>
-    <nav class="desktop-nav">
-      <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
-      <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
-     <div id="profile" style="display: none;">
+<header>
+ <div class="header-left">
+   <h1>ImaStudy</h1>
+   <p>Размести задание — получи помощь</p>
+ </div>
+<nav class="desktop-nav">
+ <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
+ <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
+       <div id="profile" style="display: none;">
   <button id="profile-icon"></button>
-   <div id="profile-menu">
+  <div id="profile-menu">
     <button id="profile-btn">Профиль</button>
     <button id="logout-btn">Выйти</button>
   </div>
-</div>
-    </nav>
-    <nav class="mobile-nav">
-      <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
-      <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
- 
+</nav>
+  <nav class="mobile-nav">
+ <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
+ <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
     <div id="profile-mobile" style="display: none;">
   <button id="profile-icon-mobile"></button>
   <div id="profile-menu-mobile">
@@ -147,9 +145,9 @@
     <button id="logout-btn-mobile">Выйти</button>
   </div>
 </div>
-  <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
-    </nav>
-  </header>
+</nav>
+</header>
+<hr />
   
   <form id="taskForm">
     <h2>Разместить задание</h2>
