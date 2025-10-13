@@ -145,7 +145,7 @@
   <hr />
   <div class="container">
     <div class="tab-content active" id="home">
-      <button id="showFormBtn" onclick="window.location.href='/create-task/'">Разместить задание</button>
+      <button id="showFormBtn">Разместить задание</button>
       <div class="site-info">
         <h2>О платформе ImaStudy</h2>
         <p>ImaStudy — это место, где студенты могут публиковать свои задания, а исполнители находить подработку. Мы создаём удобную и безопасную площадку для взаимопомощи в учёбе.</p>
@@ -305,8 +305,17 @@ onAuthStateChanged(auth, async (user) => {
   showFormBtn.style.display = "block";
 }
 });
-    
 
+document.getElementById("showFormBtn").addEventListener("click", () => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    window.location.href = "/login/";
+  } else {
+    window.location.href = "/create-task/";
+  }
+});
+    
 
 const profileIcon = document.getElementById('profile-icon');
 const profileMenu = document.getElementById('profile-menu');
