@@ -12,6 +12,72 @@
       background: #f9f9f9;
       padding: 20px;
     }
+
+
+    #profile,
+#profile-mobile {
+  position: relative;
+}
+
+#profile-icon,
+#profile-icon-mobile {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#profile-menu,
+#profile-menu-mobile {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+  z-index: 1000;
+}
+
+#profile-menu button,
+#profile-menu-mobile button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+#profile-menu button:hover,
+#profile-menu-mobile button:hover {
+  background-color: transparent;
+}
+
+
+    
+     .avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #bbb;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+    
     form {
       background: #fff;
       padding: 20px;
@@ -45,9 +111,46 @@
       color: #0066ff;
       text-decoration: none;
     }
+        footer {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
+
+  <header>
+    <div class="header-left">
+      <h1>ImaStudy</h1>
+      <p>Размести задание — получи помощь</p>
+    </div>
+    <nav class="desktop-nav">
+      <button id="homeTab" class="tab-button active" data-tab="home">Главная</button>
+      <button id="tasksTab" class="tab-button" data-tab="tasks">Активные задания</button>
+     <div id="profile" style="display: none;">
+  <button id="profile-icon"></button>
+   <div id="profile-menu">
+    <button id="profile-btn">Профиль</button>
+    <button id="logout-btn">Выйти</button>
+  </div>
+</div>
+    </nav>
+    <nav class="mobile-nav">
+      <button id="homeTabMobile" class="tab-button active" data-tab="home">Главная</button>
+      <button id="tasksTabMobile" class="tab-button" data-tab="tasks">Активные задания</button>
+ 
+    <div id="profile-mobile" style="display: none;">
+  <button id="profile-icon-mobile"></button>
+  <div id="profile-menu-mobile">
+    <button id="profile-btn-mobile">Профиль</button>
+    <button id="logout-btn-mobile">Выйти</button>
+  </div>
+</div>
+  <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
+    </nav>
+  </header>
+  
   <form id="taskForm">
     <h2>Разместить задание</h2>
     <input type="text" id="title" placeholder="Название задания" required />
