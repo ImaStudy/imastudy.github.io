@@ -143,55 +143,35 @@
   </form>
 
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-  import {
-    getAuth,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
-    authDomain: "imastudy-631ec.firebaseapp.com",
-    projectId: "imastudy-631ec",
-    storageBucket: "imastudy-631ec.firebasestorage.app",
-    messagingSenderId: "301505972939",
-    appId: "1:301505972939:web:061de2a898044090dae94e",
-    measurementId: "G-305V13PQ4Q"
-  };
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+      authDomain: "imastudy-631ec.firebaseapp.com",
+      projectId: "imastudy-631ec",
+      storageBucket: "imastudy-631ec.firebasestorage.app",
+      messagingSenderId: "301505972939",
+      appId: "1:301505972939:web:061de2a898044090dae94e",
+      measurementId: "G-305V13PQ4Q"
+    };
 
-  const taskForm = document.getElementById("taskForm");
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-  const cachedName = localStorage.getItem("profileDisplayName");
-  const cachedPhoto = localStorage.getItem("profilePhotoURL");
-
-  if (cachedName) {
-    const initials = (cachedName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
-    const avatarHTML = cachedPhoto
-      ? `<div class="avatar-circle"><img src="${cachedPhoto}" alt="Аватар"></div>`
-      : `<div class="avatar-circle">${initials}</div>`;
-
-    const profileIcon = document.getElementById("profile-icon");
-    const profileIconMobile = document.getElementById("profile-icon-mobile");
-
-    if (profileIcon) profileIcon.innerHTML = avatarHTML;
-    if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
-
-    document.getElementById("profile").style.display = "inline-block";
-    document.getElementById("profile-mobile").style.display = "inline-block";
-    document.getElementById("login-btn").style.display = "none";
-    document.getElementById("login-btn-mobile").style.display = "none";
-  }
+    const taskForm = document.getElementById("taskForm");
 
   onAuthStateChanged(auth, (user) => {
     if (!user) {
@@ -205,23 +185,26 @@
       ? `<div class="avatar-circle"><img src="${user.photoURL}" alt="Аватар"></div>`
       : `<div class="avatar-circle">${initials}</div>`;
 
-    localStorage.setItem("profileDisplayName", displayName);
-    localStorage.setItem("profilePhotoURL", user.photoURL || "");
-
     const profileIcon = document.getElementById("profile-icon");
     const profileIconMobile = document.getElementById("profile-icon-mobile");
 
     if (profileIcon) profileIcon.innerHTML = avatarHTML;
     if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
 
-    document.getElementById("profile").style.display = "inline-block";
-    document.getElementById("profile-mobile").style.display = "inline-block";
-    document.getElementById("login-btn").style.display = "none";
-    document.getElementById("login-btn-mobile").style.display = "none";
+    const profileEl = document.getElementById("profile");
+    const profileMobileEl = document.getElementById("profile-mobile");
+    const loginBtn = document.getElementById("login-btn");
+    const loginBtnMobile = document.getElementById("login-btn-mobile");
+
+    if (profileEl) profileEl.style.display = "inline-block";
+    if (profileMobileEl) profileMobileEl.style.display = "inline-block";
+    if (loginBtn) loginBtn.style.display = "none";
+    if (loginBtnMobile) loginBtnMobile.style.display = "none";
   });
 
   taskForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const user = auth.currentUser;
     if (!user) {
       alert("Вы должны быть авторизованы для публикации задания.");
@@ -266,19 +249,14 @@
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
     try {
       await signOut(auth);
-      localStorage.removeItem("profileDisplayName");
-      localStorage.removeItem("profilePhotoURL");
       window.location.href = "/";
     } catch (err) {
       alert("Ошибка при выходе: " + err.message);
     }
   });
-
   document.getElementById('logout-btn-mobile')?.addEventListener('click', async () => {
     try {
       await signOut(auth);
-      localStorage.removeItem("profileDisplayName");
-      localStorage.removeItem("profilePhotoURL");
       window.location.href = "/";
     } catch (err) {
       alert("Ошибка при выходе: " + err.message);
