@@ -173,6 +173,34 @@
 
     const taskForm = document.getElementById("taskForm");
 
+
+const cachedName = localStorage.getItem("profileDisplayName");
+const cachedPhoto = localStorage.getItem("profilePhotoURL");
+
+if (cachedName) {
+  const initials = (cachedName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
+  const avatarHTML = cachedPhoto
+    ? `<div class="avatar-circle"><img src="${cachedPhoto}" alt="Аватар"></div>`
+    : `<div class="avatar-circle">${initials}</div>`;
+
+  const profileIcon = document.getElementById("profile-icon");
+  const profileIconMobile = document.getElementById("profile-icon-mobile");
+
+  if (profileIcon) profileIcon.innerHTML = avatarHTML;
+  if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
+
+  const profileEl = document.getElementById("profile");
+  const profileMobileEl = document.getElementById("profile-mobile");
+  const loginBtn = document.getElementById("login-btn");
+  const loginBtnMobile = document.getElementById("login-btn-mobile");
+
+  if (profileEl) profileEl.style.display = "inline-block";
+  if (profileMobileEl) profileMobileEl.style.display = "inline-block";
+  if (loginBtn) loginBtn.style.display = "none";
+  if (loginBtnMobile) loginBtnMobile.style.display = "none";
+}
+
+    
   onAuthStateChanged(auth, (user) => {
     if (!user) {
       window.location.href = "/login/";
