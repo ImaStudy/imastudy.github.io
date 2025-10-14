@@ -153,7 +153,8 @@
 
     import {
       getAuth,
-      onAuthStateChanged
+      onAuthStateChanged,
+      signOut
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -172,42 +173,123 @@
 
     const taskForm = document.getElementById("taskForm");
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "/login/";
-      }
-    });
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.href = "/login/";
+      return;
+    }
 
-    taskForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) {
-        alert("Вы должны быть авторизованы для публикации задания.");
-        return;
-      }
+    const displayName = user.displayName || user.email || "";
+    const initials = (displayName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
+    const avatarHTML = user.photoURL
+      ? `<div class="avatar-circle"><img src="${user.photoURL}" alt="Аватар"></div>`
+      : `<div class="avatar-circle">${initials}</div>`;
 
-      const newTask = {
-        title: taskForm.title.value.trim(),
-        description: taskForm.description.value.trim(),
-        contact: taskForm.contact.value.trim(),
-        price: taskForm.price.value.trim(),
-        createdAt: serverTimestamp(),
-        authorUid: user.uid
-      };
+    const profileIcon = document.getElementById("profile-icon");
+    const profileIconMobile = document.getElementById("profile-icon-mobile");
 
-      if (!newTask.title || !newTask.description || !newTask.contact || !newTask.price) {
-        alert("Заполните все поля");
-        return;
-      }
+    if (profileIcon) profileIcon.innerHTML = avatarHTML;
+    if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
 
-      try {
-        await addDoc(collection(db, "tasks"), newTask);
-        alert("Задание успешно опубликовано!");
-        window.location.href = "/tasks/";
-      } catch (error) {
-        alert("Ошибка при добавлении задания: " + error.message);
-      }
-    });
-  </script>
+    const profileEl = document.getElementById("profile");
+    const profileMobileEl = document.getElementById("profile-mobile");
+    const loginBtn = document.getElementById("login-btn");
+    const loginBtnMobile = document.getElementById("login-btn-mobile");
+
+    if (profileEl) profileEl.style.display = "inline-block";
+    if (profileMobileEl) profileMobileEl.style.display = "inline-block";
+    if (loginBtn) loginBtn.style.display = "none";
+    if (loginBtnMobile) loginBtnMobile.style.display = "none";
+  });
+
+  taskForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Вы должны быть авторизованы для публикации задания.");
+      return;
+    }
+
+    const newTask = {
+      title: taskForm.title.value.trim(),
+      description: taskForm.description.value.trim(),
+      contact: taskForm.contact.value.trim(),
+      price: taskForm.price.value.trim(),
+      createdAt: serverTimestamp(),
+      authorUid: user.uid
+    };
+
+    if (!newTask.title || !newTask.description || !newTask.contact || !newTask.price) {
+      alert("Заполните все поля");
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, "tasks"), newTask);
+      alert("Задание успешно опубликовано!");
+      window.location.href = "/tasks/";
+    } catch (error) {
+      alert("Ошибка при добавлении задания: " + error.message);
+    }
+  });
+
+  function viewTasksWithoutLogin() {
+    window.location.href = "/tasks/";
+  }
+  window.viewTasksWithoutLogin = viewTasksWithoutLogin;
+
+  document.getElementById('profile-btn')?.addEventListener('click', () => {
+    window.location.href = "/profile/";
+  });
+  document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
+    window.location.href = "/profile/";
+  });
+
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    try {
+      await signOut(auth);
+      window.location.href = "/";
+    } catch (err) {
+      alert("Ошибка при выходе: " + err.message);
+    }
+  });
+  document.getElementById('logout-btn-mobile')?.addEventListener('click', async () => {
+    try {
+      await signOut(auth);
+      window.location.href = "/";
+    } catch (err) {
+      alert("Ошибка при выходе: " + err.message);
+    }
+  });
+
+  const profileIcon = document.getElementById('profile-icon');
+  const profileMenu = document.getElementById('profile-menu');
+  profileIcon?.addEventListener('click', () => {
+    profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  const profileIconMobile = document.getElementById('profile-icon-mobile');
+  const profileMenuMobile = document.getElementById('profile-menu-mobile');
+  profileIconMobile?.addEventListener('click', () => {
+    profileMenuMobile.style.display = profileMenuMobile.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!profileIcon?.contains(e.target) && !profileMenu?.contains(e.target)) {
+      if (profileMenu) profileMenu.style.display = 'none';
+    }
+    if (!profileIconMobile?.contains(e.target) && !profileMenuMobile?.contains(e.target)) {
+      if (profileMenuMobile) profileMenuMobile.style.display = 'none';
+    }
+  });
+
+  document.getElementById('login-btn')?.addEventListener('click', () => {
+    window.location.href = "/login/";
+  });
+  document.getElementById('login-btn-mobile')?.addEventListener('click', () => {
+    window.location.href = "/login/";
+  });
+</script>
 </body>
 </html>
