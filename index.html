@@ -253,11 +253,22 @@ if (cachedName) {
   document.getElementById("login-btn-mobile").style.display = "none";
 }
 
+
+const isLoggedInCached = localStorage.getItem("isLoggedIn") === "true";
+
+if (isLoggedInCached) {
+  document.getElementById("profile").style.display = "inline-block";
+  document.getElementById("profile-mobile").style.display = "inline-block";
+  document.getElementById("login-btn").style.display = "none";
+  document.getElementById("login-btn-mobile").style.display = "none";
+}
+    
     
 onAuthStateChanged(auth, async (user) => {
   const skipped = localStorage.getItem('skippedSetPassword');
 
   if (user) {
+  localStorage.setItem("isLoggedIn", "true");
   try {
     const methods = await fetchSignInMethodsForEmail(auth, user.email);
     const hasPasswordProvider = methods.includes("password");
@@ -295,6 +306,7 @@ onAuthStateChanged(auth, async (user) => {
     console.error("Ошибка при проверке методов входа:", error);
   }
 } else {
+  localStorage.removeItem("isLoggedIn");
   document.getElementById("profile").style.display = "none";
   document.getElementById("profile-mobile").style.display = "none";
 
@@ -308,8 +320,9 @@ onAuthStateChanged(auth, async (user) => {
 
 document.getElementById("showFormBtn").addEventListener("click", () => {
   const user = auth.currentUser;
+  const isLoggedIn = user || localStorage.getItem("isLoggedIn") === "true";
 
-  if (!user) {
+  if (!isLoggedIn) {
     window.location.href = "/login/";
   } else {
     window.location.href = "/create-task/";
