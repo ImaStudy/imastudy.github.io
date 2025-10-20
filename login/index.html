@@ -293,6 +293,30 @@ if (cachedName) {
     }
   });
 
+    
+function validateInputs() {
+  const titleValid = titleInput.value.trim().length > 0 && titleInput.value.length <= 50;
+  const descValid = descInput.value.length >= 100 && descInput.value.length <= 1000;
+  const contactValid = taskForm.contact.value.trim() !== "";
+  const priceValid = taskForm.price.value.trim() !== "";
+
+  titleInput.style.borderColor = titleValid ? "#ccc" : "red";
+  descInput.style.borderColor = descValid ? "#ccc" : "red";
+  taskForm.contact.style.borderColor = contactValid ? "#ccc" : "red";
+  taskForm.price.style.borderColor = priceValid ? "#ccc" : "red";
+
+  submitBtn.disabled = !(titleValid && descValid && contactValid && priceValid);
+}
+
+titleInput.addEventListener("input", validateInputs);
+descInput.addEventListener("input", validateInputs);
+taskForm.contact.addEventListener("input", validateInputs);
+taskForm.price.addEventListener("input", validateInputs);
+
+validateInputs();
+
+
+    
   function viewTasksWithoutLogin() {
     window.location.href = "/tasks/";
   }
