@@ -87,12 +87,12 @@
       box-sizing: border-box;
     }
 
-      .char-counter {
-    font-size: 13px;
-    color: #777;
-    text-align: right;
-    margin-top: 4px;
-  }
+.char-counter {
+  font-size: 12px;
+  color: #888888;
+  margin-top: 3px;
+  text-align: right;
+}
     
         footer {
       text-align: center;
@@ -143,19 +143,19 @@
   
   <form id="taskForm">
     <h2>Разместить задание</h2>
-     <label>
-    Название задания (до 50 символов)
-    <input type="text" id="title" maxlength="50" placeholder="Название задания" required />
+  <label>
+    Название задания
+    <input type="text" id="title" placeholder="Название задания" required />
     <div class="char-counter" id="titleCounter">0 / 50</div>
   </label>
      <label>
-    Описание (от 100 до 1000 символов)
-    <textarea id="description" rows="6" minlength="100" maxlength="1000" placeholder="Описание задания" required style="resize: none;"></textarea>
+    Описание
+    <textarea id="description" rows="4" placeholder="Описание задания" required style="resize: none;"></textarea>
     <div class="char-counter" id="descCounter">0 / 1000</div>
   </label>
     <input type="text" id="contact" placeholder="Контакт (Telegram или e-mail)" required />
     <input type="text" id="price" placeholder="Предложенная цена" required />
-    <button type="submit" id="submitBtn">Опубликовать</button>
+    <button type="submit">Опубликовать</button>
   </form>
 
   <script type="module">
