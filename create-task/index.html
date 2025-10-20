@@ -206,46 +206,47 @@ function updateCounters() {
   descInput.addEventListener("input", updateCounters);
   updateCounters();
 
-taskForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+  taskForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  if (!currentUser) {
-    alert("Вы должны быть авторизованы для публикации задания.");
-    return;
-  }
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Вы должны быть авторизованы для публикации задания.");
+      return;
+    }
 
-  const title = titleInput.value.trim();
-  const description = descInput.value.trim();
-  const contact = document.getElementById("contact").value.trim();
-  const price = document.getElementById("price").value.trim();
+    const title = titleInput.value.trim();
+    const description = descInput.value.trim();
+    const contact = taskForm.contact.value.trim();
+    const price = taskForm.price.value.trim();
 
-  if (!title || !description || !contact || !price) {
-    alert("Заполните все поля");
-    return;
-  }
+    if (title.length === 0 || description.length < 100 || description.length > 1000) {
+      alert("Проверьте лимиты текста: название ≤ 50 символов, описание 100–1000 символов.");
+      return;
+    }
+    
+    const newTask = {
+      title: taskForm.title.value.trim(),
+      description: taskForm.description.value.trim(),
+      contact: taskForm.contact.value.trim(),
+      price: taskForm.price.value.trim(),
+      createdAt: serverTimestamp(),
+      authorUid: user.uid
+    };
 
-  if (title.length > 50 || description.length < 100 || description.length > 1000) {
-    alert("Проверьте лимиты текста: название ≤ 50 символов, описание 100–1000 символов.");
-    return;
-  }
+    if (!newTask.title || !newTask.description || !newTask.contact || !newTask.price) {
+      alert("Заполните все поля");
+      return;
+    }
 
-  const newTask = {
-    title,
-    description,
-    contact,
-    price,
-    createdAt: serverTimestamp(),
-    authorUid: currentUser.uid
-  };
-
-  try {
-    await addDoc(collection(db, "tasks"), newTask);
-    alert("Задание успешно опубликовано!");
-    window.location.href = "/tasks/";
-  } catch (error) {
-    alert("Ошибка при добавлении задания: " + error.message);
-  }
-});
+    try {
+      await addDoc(collection(db, "tasks"), newTask);
+      alert("Задание успешно опубликовано!");
+      window.location.href = "/tasks/";
+    } catch (error) {
+      alert("Ошибка при добавлении задания: " + error.message);
+    }
+  });
 
     
 const cachedName = localStorage.getItem("profileDisplayName");
@@ -273,16 +274,12 @@ if (cachedName) {
   if (loginBtn) loginBtn.style.display = "none";
   if (loginBtnMobile) loginBtnMobile.style.display = "none";
 }
-
-    let currentUser = null;
     
   onAuthStateChanged(auth, (user) => {
     if (!user) {
-      currentUser = user;
-    } else {
-    currentUser = null;
-    window.location.href = "/login/";
-  }
+      window.location.href = "/login/";
+      return;
+    }
 
     const displayName = user.displayName || user.email || "";
     const initials = (displayName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
