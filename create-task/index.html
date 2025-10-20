@@ -144,15 +144,15 @@
  <form id="taskForm">
   <h2>Разместить задание</h2>
   <label>
-    <input type="text" id="title" placeholder="Название задания" required />
+    <input type="text" id="title" name="title" placeholder="Название задания" required maxlength="50" />
     <div class="char-counter" id="titleCounter">0 / 50</div>
   </label>
   <label>
-    <textarea id="description" rows="4" placeholder="Описание задания" required style="resize: none;"></textarea>
+    <textarea id="description" name="description" rows="4" placeholder="Описание задания" required maxlength="1000"></textarea>
     <div class="char-counter" id="descCounter">0 / 1000</div>
   </label>
-  <input type="text" id="contact" placeholder="Контакт (Telegram или e-mail)" required />
-  <input type="text" id="price" placeholder="Предложенная цена" required />
+<input type="text" id="contact" name="contact" placeholder="Контакт (Telegram или e-mail)" required />
+<input type="text" id="price" name="price" placeholder="Предложенная цена" required />
   <button type="submit" id="submitBtn">Опубликовать</button>
 </form>
 
