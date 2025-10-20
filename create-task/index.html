@@ -209,8 +209,7 @@ function updateCounters() {
 taskForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const user = auth.currentUser;
-  if (!user) {
+  if (!currentUser) {
     alert("Вы должны быть авторизованы для публикации задания.");
     return;
   }
@@ -236,7 +235,7 @@ taskForm.addEventListener("submit", async (e) => {
     contact,
     price,
     createdAt: serverTimestamp(),
-    authorUid: user.uid
+    authorUid: currentUser.uid
   };
 
   try {
@@ -274,6 +273,8 @@ if (cachedName) {
   if (loginBtn) loginBtn.style.display = "none";
   if (loginBtnMobile) loginBtnMobile.style.display = "none";
 }
+
+    let currentUser = null;
     
   onAuthStateChanged(auth, (user) => {
     if (!user) {
