@@ -71,10 +71,10 @@
     
     form {
       background: #fff;
-      padding: 15px;
-      border-radius: 10px;
+      padding: 25px;
+      border-radius: 12px;
       max-width: 600px;
-      margin: 30px auto;
+      margin: 40px auto;
       box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
     }
     input, textarea, button {
@@ -86,6 +86,12 @@
       font-size: 14px;
       box-sizing: border-box;
     }
+    .char-counter {
+  font-size: 12px;
+  color: #888888;
+  margin-top: 3px;
+  text-align: right;
+   }
         footer {
       text-align: center;
       font-size: 14px;
@@ -135,8 +141,14 @@
   
   <form id="taskForm">
     <h2>Разместить задание</h2>
-    <input type="text" id="title" placeholder="Название задания" required />
-    <textarea id="description" rows="4" placeholder="Описание задания" required style="resize: none;"></textarea>
+      <label>
+    <input type="text" id="title" name="title" placeholder="Название задания" required maxlength="50" />
+    <div class="char-counter" id="titleCounter">0 / 50</div>
+  </label>
+      <label>
+    <textarea id="description" name="description" rows="4" placeholder="Описание задания" required style="resize: none;" maxlength="1000"></textarea>
+    <div class="char-counter" id="descCounter">0 / 1000</div>
+  </label>
     <input type="text" id="contact" placeholder="Контакт (Telegram или e-mail)" required />
     <input type="text" id="price" placeholder="Предложенная цена" required />
     <button type="submit">Опубликовать</button>
@@ -172,6 +184,11 @@
     const auth = getAuth(app);
 
     const taskForm = document.getElementById("taskForm");
+  const titleInput = document.getElementById("title");
+  const descInput = document.getElementById("description");
+  const titleCounter = document.getElementById("titleCounter");
+  const descCounter = document.getElementById("descCounter");
+  const submitBtn = document.getElementById("submitBtn");
 
 
 const cachedName = localStorage.getItem("profileDisplayName");
@@ -230,6 +247,20 @@ if (cachedName) {
     if (loginBtnMobile) loginBtnMobile.style.display = "none";
   });
 
+    function updateCounters() {
+    titleCounter.textContent = `${titleInput.value.length} / 50`;
+    descCounter.textContent = `${descInput.value.length} / 1000`;
+
+    const titleValid = titleInput.value.trim().length > 0 && titleInput.value.length <= 50;
+    const descValid = descInput.value.length >= 100 && descInput.value.length <= 1000;
+
+    submitBtn.disabled = !(titleValid && descValid);
+  }
+
+  titleInput.addEventListener("input", updateCounters);
+  descInput.addEventListener("input", updateCounters);
+  updateCounters();
+    
   taskForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
