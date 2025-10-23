@@ -218,22 +218,22 @@ function validateFields() {
   let isValid = true;
 
   document.querySelectorAll('#taskForm input[required], #taskForm textarea[required]').forEach((field) => {
-    const errorLabel = field.parentElement.querySelector('.error-label');
+    if (field.nextElementSibling && field.nextElementSibling.classList.contains('error-label')) {
+      field.nextElementSibling.remove();
+    }
+
     if (!field.value.trim()) {
       field.style.borderColor = '#e74c3c';
-      if (!errorLabel) {
-        const err = document.createElement('div');
-        err.className = 'error-label';
-        err.textContent = 'Заполните это поле';
-        err.style.color = '#e74c3c';
-        err.style.fontSize = '12px';
-        err.style.marginTop = '4px';
-        field.parentElement.appendChild(err);
-      }
+      const err = document.createElement('div');
+      err.className = 'error-label';
+      err.textContent = 'Заполните это поле';
+      err.style.color = '#e74c3c';
+      err.style.fontSize = '12px';
+      err.style.marginTop = '4px';
+      field.insertAdjacentElement('afterend', err);
       isValid = false;
     } else {
       field.style.borderColor = '#ccc';
-      if (errorLabel) errorLabel.remove();
     }
   });
 
