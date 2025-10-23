@@ -197,7 +197,7 @@ function updateCounters() {
     descCounter.textContent = `${descInput.value.length} / 1000`;
 
     const titleValid = titleInput.value.trim().length > 0 && titleInput.value.length <= 50;
-    const descValid = descInput.value.length >= 100 && descInput.value.length <= 1000;
+    const descValid = descInput.value.length > 0 && descInput.value.length <= 1000;
 
     submitBtn.disabled = !(titleValid && descValid);
   }
@@ -225,10 +225,10 @@ taskForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  if (title.length > 50 || description.length < 100 || description.length > 1000) {
-    alert("Проверьте лимиты текста: название ≤ 50 символов, описание 100–1000 символов.");
-    return;
-  }
+if (title.length > 50 || description.length > 1000) {
+  alert("Проверьте лимиты текста: название ≤ 50 символов, описание ≤ 1000 символов.");
+  return;
+}
 
   const newTask = {
     title,
