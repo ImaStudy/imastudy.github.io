@@ -214,12 +214,42 @@ function updateCounters() {
   descInput.addEventListener("input", updateCounters);
   updateCounters();
 
+function validateFields() {
+  let isValid = true;
+
+  document.querySelectorAll('#taskForm input[required], #taskForm textarea[required]').forEach((field) => {
+    const errorLabel = field.parentElement.querySelector('.error-label');
+    if (!field.value.trim()) {
+      field.style.borderColor = '#e74c3c';
+      if (!errorLabel) {
+        const err = document.createElement('div');
+        err.className = 'error-label';
+        err.textContent = 'Заполните это поле';
+        err.style.color = '#e74c3c';
+        err.style.fontSize = '12px';
+        err.style.marginTop = '4px';
+        field.parentElement.appendChild(err);
+      }
+      isValid = false;
+    } else {
+      field.style.borderColor = '#ccc';
+      if (errorLabel) errorLabel.remove();
+    }
+  });
+
+  return isValid;
+}
+
 taskForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const user = auth.currentUser;
   if (!user) {
     alert("Вы должны быть авторизованы для публикации задания.");
+    return;
+  }
+
+  if (!validateFields()) {
     return;
   }
 
