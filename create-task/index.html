@@ -314,12 +314,10 @@ if (cachedName) {
 }
     
   onAuthStateChanged(auth, (user) => {
-  if (!user && !auth.currentUser) {
-    setTimeout(() => {
-      if (!auth.currentUser) window.location.href = "/login/";
-    }, 800);
-    return;
-  }
+    if (!user) {
+      window.location.href = "/login/";
+      return;
+    }
 
     const displayName = user.displayName || user.email || "";
     const initials = (displayName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
