@@ -313,18 +313,19 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 
-  const showFormBtn = document.getElementById("showFormBtn");
-  if (showFormBtn) showFormBtn.style.display = "block";
+  taskForm.style.display = "none";
+  showFormBtn.style.display = "block";
 }
 });
 
 document.getElementById("showFormBtn").addEventListener("click", () => {
   const user = auth.currentUser;
+  const isLoggedIn = user || localStorage.getItem("isLoggedIn") === "true";
 
-  if (user) {
-    window.location.href = "/create-task/";
-  } else {
+  if (!isLoggedIn) {
     window.location.href = "/login/";
+  } else {
+    window.location.href = "/create-task/";
   }
 });
     
