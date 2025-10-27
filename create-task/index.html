@@ -346,10 +346,12 @@ const negotiableCheckbox = document.getElementById("negotiable");
 negotiableCheckbox.addEventListener("change", () => {
   if (negotiableCheckbox.checked) {
     priceInput.disabled = true;
+    priceInput.removeAttribute("required");
     priceInput.placeholder = "Договорная цена";
     priceInput.value = "";
   } else {
     priceInput.disabled = false;
+    priceInput.setAttribute("required", "");
     priceInput.placeholder = "Предложенная цена";
   }
 });
