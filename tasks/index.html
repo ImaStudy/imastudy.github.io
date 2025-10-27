@@ -508,8 +508,12 @@ function renderTasks(tasks) {
       });
     }
 
+const priceText = data.negotiable
+  ? "Договорная цена"
+  : (data.price ? data.price + " с" : "Без указания");
+
 div.innerHTML = `
-  <div class="task-price">${data.price} с</div>
+  <div class="task-price">${priceText}</div>
   <div class="task-title">${data.title}</div>
   <p class="task-desc">${data.description}</p>
 `;
