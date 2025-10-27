@@ -289,11 +289,6 @@ if (title.length > 50 || description.length > 1000) {
   return;
 }
 
-const priceInput = document.getElementById("price");
-priceInput.addEventListener("input", () => {
-  priceInput.value = priceInput.value.replace(/\D/g, "");
-});
-
   
   const newTask = {
     title,
@@ -313,6 +308,10 @@ priceInput.addEventListener("input", () => {
   }
 });
 
+const priceInput = document.getElementById("price");
+priceInput.addEventListener("input", () => {
+  priceInput.value = priceInput.value.replace(/\D/g, "");
+});
     
 const cachedName = localStorage.getItem("profileDisplayName");
 const cachedPhoto = localStorage.getItem("profilePhotoURL");
