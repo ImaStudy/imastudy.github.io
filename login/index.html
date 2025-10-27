@@ -3,169 +3,200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Новое задание — ImaStudy</title>
+  <title>Авторизация - ImaStudy</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../style.css" />
-  <style>
-    #profile,
-#profile-mobile {
-  position: relative;
+  <link rel="stylesheet" href="/style.css" />
+  <style>   
+  .auth-box {
+    background: white;
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+.auth-box input,
+.auth-box button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  button {
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+
+  .google-btn {
+    background-color: #db4437;
+  }
+
+  .google-btn:hover {
+    background-color: #c23321;
+  }
+
+  .error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 5px;
 }
 
-#profile-icon,
-#profile-icon-mobile {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
+input.error {
+  border: 1px solid red;
+  outline: none;
 }
-
-#profile-menu,
-#profile-menu-mobile {
+    
+#modalOverlay {
   display: none;
-  position: absolute;
-  right: 0;
-  top: 100%;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#setPasswordBox {
   background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  min-width: 140px;
+  padding: 20px;
+  max-width: 400px;
+  margin: 100px auto;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  position: relative;
   z-index: 1000;
 }
 
-#profile-menu button,
-#profile-menu-mobile button {
+#setPasswordBox input {
   width: 100%;
   padding: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#setPasswordBox button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  font-size: 16px;
   border: none;
-  background: none;
-  text-align: left;
+  background-color: #3498db;
+  color: white;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-#profile-menu button:hover,
-#profile-menu-mobile button:hover {
-  background-color: transparent;
+#setPasswordBox button:hover {
+  background-color: #2980b9;
 }
-
-     .avatar-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #bbb;
-  color: #fff;
-  font-weight: bold;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.avatar-circle img {
+.cancel-btn {
+  background-color: #ccc;
+  color: #333;
+  margin-top: 10px;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
-    
-    form {
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      max-width: 600px;
-      margin: 40px auto;
-      box-shadow: 0 0px 10px rgba(0, 0, 0, 0.1);
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-    .char-counter {
-  font-size: 12px;
-  color: #888888;
-  margin-top: 3px;
-  text-align: right;
-   }
-        footer {
-      text-align: center;
-      font-size: 14px;
-      color: #666;
-    }
-  </style>
+
+.cancel-btn:hover {
+  background-color: #bbb;
+}
+
+  footer {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 40px;
+  }
+
+  .auth-box h2 {
+    text-align: center;
+  }
+</style>
 </head>
 <body>
-
-<header>
+  
+ <header>
   <div class="header-left">
     <h1>ImaStudy</h1>
     <p>Размести задание — получи помощь</p>
   </div>
-
-  <nav class="desktop-nav">
-    <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
-    <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
-
-    <div id="profile" style="display: none;">
-      <button id="profile-icon"></button>
-      <div id="profile-menu">
-        <button id="profile-btn">Профиль</button>
-        <button id="logout-btn">Выйти</button>
-      </div>
-    </div>
-
-    <button id="login-btn">Войти</button>
-  </nav>
-
-  <nav class="mobile-nav">
-    <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
-    <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
-
-    <div id="profile-mobile" style="display: none;">
-      <button id="profile-icon-mobile"></button>
-      <div id="profile-menu-mobile">
-        <button id="profile-btn-mobile">Профиль</button>
-        <button id="logout-btn-mobile">Выйти</button>
-      </div>
-    </div>
-
-    <button id="login-btn-mobile">Войти</button>
-  </nav>
+ <nav class="desktop-nav">
+  <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
+  <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
+</nav>
+   <nav class="mobile-nav">
+  <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
+  <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
+</nav>
 </header>
 <hr />
-  
-  <form id="taskForm">
-    <h2>Разместить задание</h2>
-      <label>
-    <input type="text" id="title" name="title" placeholder="Название задания" required maxlength="50" />
-    <div class="char-counter" id="titleCounter">0 / 50</div>
-  </label>
-      <label>
-    <textarea id="description" name="description" rows="4" placeholder="Описание задания" required style="resize: none;" maxlength="1000"></textarea>
-    <div class="char-counter" id="descCounter">0 / 1000</div>
-  </label>
-    <input type="text" id="contact" placeholder="Контакт (Telegram или e-mail)" required />
-    <input type="text" id="price" placeholder="Предложенная цена" required />
-    <button type="submit" id="submitBtn">Опубликовать</button>
-  </form>
 
+  <div class="auth-box">
+    <h2>Вход в аккаунт</h2>
+    <form id="loginForm">
+    <div style="position: relative;">
+  <input type="email" id="email" placeholder="Email" required />
+  <div id="emailError" class="error-message" style="display: none;"></div>
+</div>
+    <div style="position: relative;">
+  <input type="password" id="password" placeholder="Пароль" required />
+  <div id="passwordError" class="error-message" style="display: none;"></div>
+</div>
+    <button type="submit" id="loginBtn">Войти</button>
+    <button type="button" id="signupBtn">Зарегистрироваться</button>
+      </form>
+    <hr>
+    <button id="googleBtn" class="google-btn">Войти через Google</button>
+  </div>
+
+  <div id="modalOverlay">
+  <div id="setPasswordBox">
+    <h3>Установите пароль для входа через Email</h3>
+    <div style="position: relative;">
+  <input type="password" id="newPassword" placeholder="Новый пароль" />
+  <div id="newPasswordError" class="error-message" style="display: none;"></div>
+</div>
+
+<div style="position: relative;">
+  <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" />
+  <div id="confirmPasswordError" class="error-message" style="display: none;"></div>
+</div>
+    <button id="setPasswordBtn">Установить пароль</button>
+    <button id="cancelSetPassword" class="cancel-btn">Отмена</button>
+  </div>
+</div>
+
+  <footer>
+  &copy; 2025 ImaStudy. Все права защищены.
+</footer>
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import {
-      getFirestore,
-      collection,
-      addDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-    import {
       getAuth,
-      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
+      updatePassword,
+      fetchSignInMethodsForEmail,
       signOut
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
@@ -173,182 +204,237 @@
       apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
       authDomain: "imastudy-631ec.firebaseapp.com",
       projectId: "imastudy-631ec",
-      storageBucket: "imastudy-631ec.firebasestorage.app",
+      storageBucket: "imastudy-631ec.appspot.com",
       messagingSenderId: "301505972939",
-      appId: "1:301505972939:web:061de2a898044090dae94e",
-      measurementId: "G-305V13PQ4Q"
+      appId: "1:301505972939:web:061de2a898044090dae94e"
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-    const taskForm = document.getElementById("taskForm");
-  const titleInput = document.getElementById("title");
-  const descInput = document.getElementById("description");
-  const titleCounter = document.getElementById("titleCounter");
-  const descCounter = document.getElementById("descCounter");
-  const submitBtn = document.getElementById("submitBtn");
+    const loginForm = document.getElementById('loginForm');
 
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
-const cachedName = localStorage.getItem("profileDisplayName");
-const cachedPhoto = localStorage.getItem("profilePhotoURL");
+  const emailInput = document.getElementById('email');
+  const passInput = document.getElementById('password');
+  const passwordError = document.getElementById('passwordError');
 
-if (cachedName) {
-  const initials = (cachedName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
-  const avatarHTML = cachedPhoto
-    ? `<div class="avatar-circle"><img src="${cachedPhoto}" alt="Аватар"></div>`
-    : `<div class="avatar-circle">${initials}</div>`;
+  // Сброс ошибок
+  passwordError.style.display = 'none';
+  passwordError.textContent = '';
 
-  const profileIcon = document.getElementById("profile-icon");
-  const profileIconMobile = document.getElementById("profile-icon-mobile");
+  const email = emailInput.value.trim();
+  const pass = passInput.value.trim();
 
-  if (profileIcon) profileIcon.innerHTML = avatarHTML;
-  if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    window.location.href = "/";
+  } catch (error) {
+    passInput.value = "";
 
-  const profileEl = document.getElementById("profile");
-  const profileMobileEl = document.getElementById("profile-mobile");
-  const loginBtn = document.getElementById("login-btn");
-  const loginBtnMobile = document.getElementById("login-btn-mobile");
+    const errorCode = error.code;
 
-  if (profileEl) profileEl.style.display = "inline-block";
-  if (profileMobileEl) profileMobileEl.style.display = "inline-block";
-  if (loginBtn) loginBtn.style.display = "none";
-  if (loginBtnMobile) loginBtnMobile.style.display = "none";
-}
-
-    
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "/login/";
-      return;
+    if (
+      errorCode === 'auth/invalid-credential' ||
+      errorCode === 'auth/user-not-found' ||
+      errorCode === 'auth/wrong-password' ||
+      errorCode === 'auth/invalid-login-credentials' // для новых версий Firebase
+    ) {
+      passwordError.textContent = "Неверный логин/пароль. Попробуйте ещё раз или восстановите пароль.";
+      passwordError.style.display = 'block';
+    } else if (error.code === 'auth/network-request-failed') {
+  passwordError.textContent = "Ошибка сети. Проверьте подключение к интернету и попробуйте снова.";
+  passwordError.style.display = 'block';
+    } else {
+  passwordError.textContent = "Ошибка входа: " + error.message;
+  passwordError.style.display = 'block';
     }
+  }
+});
 
-    const displayName = user.displayName || user.email || "";
-    const initials = (displayName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
-    const avatarHTML = user.photoURL
-      ? `<div class="avatar-circle"><img src="${user.photoURL}" alt="Аватар"></div>`
-      : `<div class="avatar-circle">${initials}</div>`;
+document.getElementById('signupBtn').onclick = async () => {
+  const emailInput = document.getElementById('email');
+  const passInput = document.getElementById('password');
+  const emailError = document.getElementById('emailError');
 
-    const profileIcon = document.getElementById("profile-icon");
-    const profileIconMobile = document.getElementById("profile-icon-mobile");
+  const email = emailInput.value.trim();
+  const pass = passInput.value.trim();
 
-    if (profileIcon) profileIcon.innerHTML = avatarHTML;
-    if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
+  // Очистка прошлых ошибок
+  emailInput.classList.remove('error');
+  emailError.style.display = 'none';
+  emailError.textContent = '';
 
-    const profileEl = document.getElementById("profile");
-    const profileMobileEl = document.getElementById("profile-mobile");
-    const loginBtn = document.getElementById("login-btn");
-    const loginBtnMobile = document.getElementById("login-btn-mobile");
-
-    if (profileEl) profileEl.style.display = "inline-block";
-    if (profileMobileEl) profileMobileEl.style.display = "inline-block";
-    if (loginBtn) loginBtn.style.display = "none";
-    if (loginBtnMobile) loginBtnMobile.style.display = "none";
-  });
-
-    function updateCounters() {
-    titleCounter.textContent = `${titleInput.value.length} / 50`;
-    descCounter.textContent = `${descInput.value.length} / 1000`;
-
-    const titleValid = titleInput.value.trim().length > 0 && titleInput.value.length <= 50;
-    const descValid = descInput.value.length >= 100 && descInput.value.length <= 1000;
-
-    submitBtn.disabled = !(titleValid && descValid);
+  if (!email) {
+    emailInput.focus();
+    emailInput.reportValidity();
+    return;
+  }
+  if (!pass) {
+    passInput.focus();
+    passInput.reportValidity();
+    return;
   }
 
-  titleInput.addEventListener("input", updateCounters);
-  descInput.addEventListener("input", updateCounters);
-  updateCounters();
-    
-  taskForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  try {
+    await createUserWithEmailAndPassword(auth, email, pass);
+    alert("Аккаунт создан. Можете войти.");
+  } catch (error) {
+    if (error.code === 'auth/email-already-in-use') {
+      emailInput.classList.add('error');
+      emailError.textContent = "Пользователь с таким e-mail уже существует";
+      emailError.style.display = 'block';
+      emailInput.focus();
+    } else if (error.code === 'auth/invalid-email') {
+      emailInput.classList.add('error');
+      emailError.textContent = "Некорректный формат email.";
+      emailError.style.display = 'block';
+      emailInput.focus();
+    } else if (error.code === 'auth/weak-password') {
+  alert("Пароль должен быть минимум 6 символов.");
+  passInput.focus();
+    } else if (error.code === 'auth/network-request-failed') {
+  alert("Ошибка сети. Проверьте подключение к интернету и попробуйте снова.");
+    } else {
+  alert("Ошибка регистрации: " + error.message);
+    }
+  }
+};
 
+document.getElementById('email').addEventListener('input', () => {
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('emailError');
+  emailInput.classList.remove('error');
+  emailError.style.display = 'none';
+  emailError.textContent = '';
+});
+document.getElementById('password').addEventListener('input', () => {
+  const passwordError = document.getElementById('passwordError');
+  passwordError.style.display = 'none';
+  passwordError.textContent = '';
+});
+
+
+document.getElementById('googleBtn').onclick = async () => {
+  try {
+    localStorage.removeItem('skippedSetPassword');
+
+    const result = await signInWithPopup(auth, provider);
+    
+    await auth.currentUser.reload();
+    const refreshedUser = auth.currentUser;
+
+    const skipped = localStorage.getItem('skippedSetPassword');
+
+    const hasPasswordProvider = refreshedUser.providerData.some(
+      (p) => p.providerId === 'password'
+    );
+    const isGoogleOnly = 
+      refreshedUser.providerData.length === 1 &&
+      refreshedUser.providerData[0].providerId === "google.com";
+
+    if (!hasPasswordProvider && isGoogleOnly && !skipped) {
+      document.getElementById('modalOverlay').style.display = 'block';
+    } else {
+      window.location.href = "/";
+    }
+  } catch (error) {
+    alert("Ошибка Google-входа: " + error.message);
+  }
+};
+
+    
+document.getElementById('setPasswordBtn').onclick = async () => {
+  const newPassInput = document.getElementById('newPassword');
+  const confirmPassInput = document.getElementById('confirmPassword');
+  const newPassError = document.getElementById('newPasswordError');
+  const confirmPassError = document.getElementById('confirmPasswordError');
+
+  const newPass = newPassInput.value.trim();
+  const confirmPass = confirmPassInput.value.trim();
+
+  // Сброс предыдущих ошибок
+  newPassInput.classList.remove('error');
+  confirmPassInput.classList.remove('error');
+  newPassError.style.display = 'none';
+  confirmPassError.style.display = 'none';
+  newPassError.textContent = '';
+  confirmPassError.textContent = '';
+
+  let hasError = false;
+
+  if (newPass.length < 6) {
+    newPassError.textContent = 'Пароль должен быть минимум 6 символов';
+    newPassError.style.display = 'block';
+    newPassInput.classList.add('error');
+    hasError = true;
+  }
+
+  if (newPass !== confirmPass) {
+    confirmPassError.textContent = 'Пароли не совпадают';
+    confirmPassError.style.display = 'block';
+    confirmPassInput.classList.add('error');
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  try {
     const user = auth.currentUser;
-    if (!user) {
-      alert("Вы должны быть авторизованы для публикации задания.");
-      return;
-    }
-
-    const newTask = {
-      title: taskForm.title.value.trim(),
-      description: taskForm.description.value.trim(),
-      contact: taskForm.contact.value.trim(),
-      price: taskForm.price.value.trim(),
-      createdAt: serverTimestamp(),
-      authorUid: user.uid
-    };
-
-    if (!newTask.title || !newTask.description || !newTask.contact || !newTask.price) {
-      alert("Заполните все поля");
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, "tasks"), newTask);
-      alert("Задание успешно опубликовано!");
-      window.location.href = "/tasks/";
-    } catch (error) {
-      alert("Ошибка при добавлении задания: " + error.message);
-    }
-  });
-    
-  function viewTasksWithoutLogin() {
-    window.location.href = "/tasks/";
+    await updatePassword(user, newPass);
+    document.getElementById('modalOverlay').style.display = 'none';
+    newPassInput.value = '';
+    confirmPassInput.value = '';
+    alert('Пароль успешно установлен! Теперь можно входить по Email и паролю.');
+    window.location.href = "/";
+  } catch (error) {
+    alert('Ошибка при установке пароля: ' + error.message);
   }
-  window.viewTasksWithoutLogin = viewTasksWithoutLogin;
+};
 
-  document.getElementById('profile-btn')?.addEventListener('click', () => {
-    window.location.href = "/profile/";
-  });
-  document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
-    window.location.href = "/profile/";
-  });
+document.getElementById('cancelSetPassword').onclick = async () => {
+  const newPassInput = document.getElementById('newPassword');
+  const confirmPassInput = document.getElementById('confirmPassword');
+  const newPassError = document.getElementById('newPasswordError');
+  const confirmPassError = document.getElementById('confirmPasswordError');
 
-  document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    try {
-      await signOut(auth);
-      window.location.href = "/";
-    } catch (err) {
-      alert("Ошибка при выходе: " + err.message);
-    }
-  });
-  document.getElementById('logout-btn-mobile')?.addEventListener('click', async () => {
-    try {
-      await signOut(auth);
-      window.location.href = "/";
-    } catch (err) {
-      alert("Ошибка при выходе: " + err.message);
-    }
-  });
+  newPassInput.value = '';
+  confirmPassInput.value = '';
 
-  const profileIcon = document.getElementById('profile-icon');
-  const profileMenu = document.getElementById('profile-menu');
-  profileIcon?.addEventListener('click', () => {
-    profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
-  });
+  newPassInput.classList.remove('error');
+  confirmPassInput.classList.remove('error');
+  newPassError.style.display = 'none';
+  confirmPassError.style.display = 'none';
 
-  const profileIconMobile = document.getElementById('profile-icon-mobile');
-  const profileMenuMobile = document.getElementById('profile-menu-mobile');
-  profileIconMobile?.addEventListener('click', () => {
-    profileMenuMobile.style.display = profileMenuMobile.style.display === 'block' ? 'none' : 'block';
-  });
+  localStorage.setItem('skippedSetPassword', 'true');
 
-  document.addEventListener('click', (e) => {
-    if (!profileIcon?.contains(e.target) && !profileMenu?.contains(e.target)) {
-      if (profileMenu) profileMenu.style.display = 'none';
-    }
-    if (!profileIconMobile?.contains(e.target) && !profileMenuMobile?.contains(e.target)) {
-      if (profileMenuMobile) profileMenuMobile.style.display = 'none';
-    }
-  });
+  document.getElementById('modalOverlay').style.display = 'none';
 
-  document.getElementById('login-btn')?.addEventListener('click', () => {
-    window.location.href = "/login/";
-  });
-  document.getElementById('login-btn-mobile')?.addEventListener('click', () => {
-    window.location.href = "/login/";
-  });
-</script>
+  await signOut(auth);
+};
+
+window.viewTasksWithoutLogin = function() {
+window.location.href = "/tasks/";
+};
+
+document.getElementById('newPassword').addEventListener('input', () => {
+  const input = document.getElementById('newPassword');
+  const error = document.getElementById('newPasswordError');
+  input.classList.remove('error');
+  error.style.display = 'none';
+  error.textContent = '';
+});
+
+document.getElementById('confirmPassword').addEventListener('input', () => {
+  const input = document.getElementById('confirmPassword');
+  const error = document.getElementById('confirmPasswordError');
+  input.classList.remove('error');
+  error.style.display = 'none';
+  error.textContent = '';
+});
+  </script>
 </body>
 </html>
