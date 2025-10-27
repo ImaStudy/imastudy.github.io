@@ -319,13 +319,13 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 document.getElementById("showFormBtn").addEventListener("click", () => {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      window.location.href = "/create-task/";
-    } else {
-      window.location.href = "/login/";
-    }
-  });
+  const user = auth.currentUser;
+
+  if (user) {
+    window.location.href = "/create-task/";
+  } else {
+    window.location.href = "/login/";
+  }
 });
     
 
