@@ -313,14 +313,17 @@ if (title.length > 50 || description.length > 1000) {
 }
 
   
-  const newTask = {
-    title,
-    description,
-    contact,
-    price,
-    createdAt: serverTimestamp(),
-    authorUid: user.uid
-  };
+const negotiable = document.getElementById("negotiable").checked;
+
+const newTask = {
+  title,
+  description,
+  contact,
+  price: negotiable ? "Договорная цена" : price,
+  negotiable,
+  createdAt: serverTimestamp(),
+  authorUid: user.uid
+};
 
   try {
     await addDoc(collection(db, "tasks"), newTask);
