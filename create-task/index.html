@@ -307,11 +307,6 @@ taskForm.addEventListener("submit", async (e) => {
   const contact = document.getElementById("contact").value.trim();
   const price = document.getElementById("price").value.trim();
 
-  if (!title || !description || !contact || !price) {
-    alert("Заполните все поля");
-    return;
-  }
-
 if (title.length > 50 || description.length > 1000) {
   alert("Проверьте лимиты текста: название ≤ 50 символов, описание ≤ 1000 символов.");
   return;
