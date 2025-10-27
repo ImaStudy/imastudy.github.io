@@ -95,24 +95,45 @@
       box-sizing: border-box;
     }
 
-.small-fields {
+.form-fields {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
   margin-top: 10px;
 }
 
-.small-fields .half-width {
+.short-input {
   width: 50%;
+  min-width: 250px;
 }
 
-@media (max-width: 600px) {
-  .small-fields {
-    flex-direction: column;
-  }
-  .small-fields .half-width {
-    width: 100%;
-  }
+.price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: #444;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #007bff;
+}
+
+input:disabled {
+  background-color: #f0f0f0;
+  color: #666;
+  opacity: 0.8;
+}
+
     
 .char-counter {
   font-size: 12px;
@@ -178,9 +199,16 @@
     <textarea id="description" name="description" rows="4" placeholder="Описание задания" required maxlength="1000"></textarea>
     <div class="char-counter" id="descCounter">0 / 1000</div>
   </label>
-<div class="small-fields">
-  <input type="text" id="contact" name="contact" placeholder="Контакт (Telegram или e-mail)" required class="half-width" />
-  <input type="text" id="price" name="price" placeholder="Предложенная цена" required class="half-width" />
+<div class="form-fields">
+  <input type="text" id="contact" name="contact" placeholder="Контакт (Telegram или e-mail)" required class="short-input" />
+
+  <div class="price-block">
+    <input type="text" id="price" name="price" placeholder="Предложенная цена" required class="short-input" />
+    <label class="checkbox-label">
+      <input type="checkbox" id="negotiable" name="negotiable" />
+      <span>Договорная цена</span>
+    </label>
+  </div>
 </div>
   <button type="submit" id="submitBtn">Опубликовать</button>
 </form>
@@ -311,6 +339,19 @@ if (title.length > 50 || description.length > 1000) {
 const priceInput = document.getElementById("price");
 priceInput.addEventListener("input", () => {
   priceInput.value = priceInput.value.replace(/\D/g, "");
+});
+
+const negotiableCheckbox = document.getElementById("negotiable");
+
+negotiableCheckbox.addEventListener("change", () => {
+  if (negotiableCheckbox.checked) {
+    priceInput.disabled = true;
+    priceInput.placeholder = "Договорная цена";
+    priceInput.value = "";
+  } else {
+    priceInput.disabled = false;
+    priceInput.placeholder = "Предложенная цена";
+  }
 });
     
 const cachedName = localStorage.getItem("profileDisplayName");
