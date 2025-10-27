@@ -313,8 +313,8 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("login-btn").style.display = "inline-block";
   document.getElementById("login-btn-mobile").style.display = "inline-block";
 
-  taskForm.style.display = "none";
-  showFormBtn.style.display = "block";
+  const showFormBtn = document.getElementById("showFormBtn");
+  if (showFormBtn) showFormBtn.style.display = "block";
 }
 });
 
