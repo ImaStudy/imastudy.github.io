@@ -777,17 +777,23 @@ if ("scrollRestoration" in history) {
 }
 
 showSkeletons();
+
 let lastScrollY = window.scrollY;
 
 onSnapshot(q, (snapshot) => {
-  const isInitialLoad = tasksContainer.querySelector(".skeleton-card");
+  const currentScroll = window.scrollY;
+
+  const hadSkeletons = tasksContainer.querySelector(".skeleton-card");
+
   renderTasks(snapshot.docs);
 
-  if (isInitialLoad) {
-    window.scrollTo({ top: lastScrollY, behavior: "auto" });
+  if (hadSkeletons) {
+    window.scrollTo({ top: currentScroll, behavior: "auto" });
+  } else {
+    window.scrollTo({ top: currentScroll, behavior: "auto" });
   }
 
-  lastScrollY = window.scrollY;
+  lastScrollY = currentScroll;
 });
 
 
