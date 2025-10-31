@@ -266,23 +266,23 @@ function updateCounters() {
 function validateFields() {
   let isValid = true;
 
-  document.querySelectorAll('#taskForm input[required], #taskForm textarea[required]').forEach((field) => {
-    const existingError = field.parentElement.querySelector('.error-label');
-    if (existingError) existingError.remove();
+  document.querySelectorAll('.error-label').forEach(e => e.remove());
 
+  document.querySelectorAll('#taskForm input[required], #taskForm textarea[required]').forEach((field) => {
     if (!field.value.trim()) {
       field.style.borderColor = '#e74c3c';
+
       const err = document.createElement('div');
       err.className = 'error-label';
       err.textContent = 'Заполните это поле';
       err.style.color = '#e74c3c';
       err.style.fontSize = '12px';
       err.style.marginTop = '4px';
-      const charCounter = field.parentElement.querySelector('.char-counter');
-      if (charCounter) {
-        field.parentElement.insertBefore(err, charCounter);
+
+      if (field.parentElement.tagName.toLowerCase() === 'label') {
+        field.parentElement.insertAdjacentElement('afterend', err);
       } else {
-        field.parentElement.appendChild(err);
+        field.insertAdjacentElement('afterend', err);
       }
 
       isValid = false;
