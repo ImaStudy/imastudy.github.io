@@ -267,9 +267,8 @@ function validateFields() {
   let isValid = true;
 
   document.querySelectorAll('#taskForm input[required], #taskForm textarea[required]').forEach((field) => {
-    if (field.nextElementSibling && field.nextElementSibling.classList.contains('error-label')) {
-      field.nextElementSibling.remove();
-    }
+    const existingError = field.parentElement.querySelector('.error-label');
+    if (existingError) existingError.remove();
 
     if (!field.value.trim()) {
       field.style.borderColor = '#e74c3c';
@@ -279,7 +278,8 @@ function validateFields() {
       err.style.color = '#e74c3c';
       err.style.fontSize = '12px';
       err.style.marginTop = '4px';
-      field.insertAdjacentElement('afterend', err);
+
+      field.parentElement.appendChild(err);
       isValid = false;
     } else {
       field.style.borderColor = '#ccc';
