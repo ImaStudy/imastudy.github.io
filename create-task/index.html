@@ -255,8 +255,6 @@ function updateCounters() {
 
     const titleValid = titleInput.value.trim().length > 0 && titleInput.value.length <= 50;
     const descValid = descInput.value.length > 0 && descInput.value.length <= 1000;
-
-    submitBtn.disabled = !(titleValid && descValid);
   }
 
   titleInput.addEventListener("input", updateCounters);
