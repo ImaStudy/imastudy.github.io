@@ -294,13 +294,12 @@ function validateFields() {
       err.style.marginTop = '4px';
       err.style.marginBottom = '4px';
 
-      // ✅ ВАЖНО: теперь точно вставляем ошибку после счетчика
-      const counter = field.parentElement.querySelector('.char-counter');
-      if (counter) {
-        counter.insertAdjacentElement('afterend', err);
-      } else {
-        field.insertAdjacentElement('afterend', err);
-      }
+      const nextEl = field.nextElementSibling;
+if (nextEl && nextEl.classList.contains("char-counter")) {
+  nextEl.insertAdjacentElement("afterend", err);
+} else {
+  field.insertAdjacentElement("afterend", err);
+}
 
       isValid = false;
     } else {
