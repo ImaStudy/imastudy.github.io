@@ -294,7 +294,7 @@ function validateFields() {
       err.style.marginTop = '4px';
       err.style.marginBottom = '4px';
 
-      const counter = field.parentElement.querySelector('.char-counter');
+      const counter = field.closest('label')?.querySelector('.char-counter');
       if (counter) {
         counter.insertAdjacentElement('afterend', err);
       } else {
