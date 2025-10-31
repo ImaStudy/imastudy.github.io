@@ -278,9 +278,11 @@ function validateFields() {
       err.style.color = '#e74c3c';
       err.style.fontSize = '12px';
       err.style.marginTop = '4px';
+      err.style.marginBottom = '4px';
 
-      if (field.parentElement.tagName.toLowerCase() === 'label') {
-        field.insertAdjacentElement('afterend', err);
+      const counter = field.parentElement.querySelector('.char-counter');
+      if (counter) {
+        counter.insertAdjacentElement('afterend', err);
       } else {
         field.insertAdjacentElement('afterend', err);
       }
