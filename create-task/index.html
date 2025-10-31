@@ -325,10 +325,20 @@ const newTask = {
   authorUid: user.uid
 };
 
-  try {
+   try {
     await addDoc(collection(db, "tasks"), newTask);
-    alert("Задание успешно опубликовано!");
-    window.location.href = "/tasks/";
+
+    taskForm.reset();
+    updateCounters();
+
+    const successMsg = document.createElement("div");
+    successMsg.textContent = "Задание опубликовано!";
+    successMsg.style.color = "green";
+    successMsg.style.marginTop = "10px";
+    successMsg.style.fontSize = "14px";
+    taskForm.appendChild(successMsg);
+
+    setTimeout(() => successMsg.remove(), 3000);
   } catch (error) {
     alert("Ошибка при добавлении задания: " + error.message);
   }
