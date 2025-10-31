@@ -278,8 +278,13 @@ function validateFields() {
       err.style.color = '#e74c3c';
       err.style.fontSize = '12px';
       err.style.marginTop = '4px';
+      const charCounter = field.parentElement.querySelector('.char-counter');
+      if (charCounter) {
+        field.parentElement.insertBefore(err, charCounter);
+      } else {
+        field.parentElement.appendChild(err);
+      }
 
-      field.parentElement.appendChild(err);
       isValid = false;
     } else {
       field.style.borderColor = '#ccc';
