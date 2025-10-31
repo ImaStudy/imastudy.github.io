@@ -280,7 +280,7 @@ function validateFields() {
       err.style.marginTop = '4px';
 
       if (field.parentElement.tagName.toLowerCase() === 'label') {
-        field.parentElement.insertAdjacentElement('afterend', err);
+        field.insertAdjacentElement('afterend', err);
       } else {
         field.insertAdjacentElement('afterend', err);
       }
