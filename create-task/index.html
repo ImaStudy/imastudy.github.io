@@ -269,12 +269,26 @@ function validateFields() {
   document.querySelectorAll('.error-label').forEach(e => e.remove());
 
   document.querySelectorAll('#taskForm input[required], #taskForm textarea[required]').forEach((field) => {
-    if (!field.value.trim()) {
+    const value = field.value.trim();
+    let errorText = '';
+
+    if (!value) {
+      errorText = 'Заполните это поле';
+    }
+
+    if (field.id === 'title' && value.length > 50) {
+      errorText = 'Название не должно превышать 50 символов';
+    }
+    if (field.id === 'description' && value.length > 1000) {
+      errorText = 'Описание не должно превышать 1000 символов';
+    }
+
+    if (errorText) {
       field.style.borderColor = '#e74c3c';
 
       const err = document.createElement('div');
       err.className = 'error-label';
-      err.textContent = 'Заполните это поле';
+      err.textContent = errorText;
       err.style.color = '#e74c3c';
       err.style.fontSize = '12px';
       err.style.marginTop = '4px';
