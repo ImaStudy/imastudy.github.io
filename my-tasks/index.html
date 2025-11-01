@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Мои задания — ImaStudy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+    }
+
+    header {
+      background-color: white;
+      padding: 15px 20px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .tasks-container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .task-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .task-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #222;
+    }
+
+    .task-card p {
+      margin: 4px 0;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .task-price {
+      font-weight: 500;
+      color: #007bff;
+      margin-top: 10px;
+    }
+
+    .no-tasks {
+      text-align: center;
+      color: #777;
+      margin-top: 40px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Мои задания</h1>
+  </header>
+
+  <div class="tasks-container" id="tasksContainer">
+    <p class="no-tasks" id="noTasksMsg">Загрузка ваших заданий...</p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      getDocs,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import {
+      getAuth,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA_ahS1_vqjYA6fpzM0tTBZx-oBkL3X2Jo",
+      authDomain: "imastudy-631ec.firebaseapp.com",
+      projectId: "imastudy-631ec",
+      storageBucket: "imastudy-631ec.firebasestorage.app",
+      messagingSenderId: "301505972939",
+      appId: "1:301505972939:web:061de2a898044090dae94e",
+      measurementId: "G-305V13PQ4Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const tasksContainer = document.getElementById("tasksContainer");
+    const noTasksMsg = document.getElementById("noTasksMsg");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/login/";
+        return;
+      }
+
+      const q = query(
+        collection(db, "tasks"),
+        where("authorUid", "==", user.uid),
+        orderBy("createdAt", "desc")
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      tasksContainer.innerHTML = "";
+
+      if (querySnapshot.empty) {
+        noTasksMsg.textContent = "У вас пока нет опубликованных заданий.";
+        noTasksMsg.style.display = "block";
+        return;
+      }
+
+      querySnapshot.forEach((doc) => {
+        const task = doc.data();
+        const taskEl = document.createElement("div");
+        taskEl.className = "task-card";
+        taskEl.innerHTML = `
+          <h3>${task.title}</h3>
+          <p>${task.description}</p>
+          <p><strong>Контакт:</strong> ${task.contact}</p>
+          <p class="task-price">${task.price}</p>
+        `;
+        tasksContainer.appendChild(taskEl);
+      });
+    });
+  </script>
+</body>
+</html>
