@@ -7,22 +7,67 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../style.css" />
   <style>
-    body {
-      font-family: 'Noto Sans', sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-    }
+    #profile,
+  #profile-mobile {
+    position: relative;
+   }
 
-    header {
-      background-color: white;
-      padding: 15px 20px;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
-    }
+    #profile-icon,
+  #profile-icon-mobile {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+   }
 
-    h1 {
-      margin: 0;
-      font-size: 22px;
-    }
+    #profile-menu,
+#profile-menu-mobile {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+  z-index: 1000;
+}
+
+#profile-menu button,
+#profile-menu-mobile button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+#profile-menu button:hover,
+#profile-menu-mobile button:hover {
+  background-color: transparent;
+}
+
+     .avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #bbb;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
     .tasks-container {
       max-width: 900px;
@@ -78,14 +123,51 @@
 </head>
 <body>
 
-  <header>
-    <h1>Мои задания</h1>
-  </header>
-
-  <div class="tasks-container" id="tasksContainer">
-    <p class="no-tasks" id="noTasksMsg">Загрузка ваших заданий...</p>
+<header>
+  <div class="header-left">
+    <h1>ImaStudy</h1>
+    <p>Размести задание — получи помощь</p>
   </div>
 
+  <nav class="desktop-nav">
+    <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
+    <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
+
+    <div id="profile" style="display: none;">
+      <button id="profile-icon"></button>
+      <div id="profile-menu">
+        <button id="profile-btn">Профиль</button>
+        <button id="logout-btn">Выйти</button>
+      </div>
+    </div>
+
+    <button id="login-btn">Войти</button>
+  </nav>
+
+  <nav class="mobile-nav">
+    <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
+    <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
+
+    <div id="profile-mobile" style="display: none;">
+      <button id="profile-icon-mobile"></button>
+      <div id="profile-menu-mobile">
+        <button id="profile-btn-mobile">Профиль</button>
+        <button id="logout-btn-mobile">Выйти</button>
+      </div>
+    </div>
+
+    <button id="login-btn-mobile">Войти</button>
+  </nav>
+</header>
+<hr />
+
+  <div class="tasks-container" id="tasksContainer">
+    <h2>Разместить задание</h2>
+    <p class="no-tasks" id="noTasksMsg">Загрузка ваших заданий...</p>
+  </div>
+  
+ <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
+  
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import {
