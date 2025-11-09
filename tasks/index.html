@@ -373,6 +373,7 @@
   <button id="profile-icon"></button>
   <div id="profile-menu">
     <button id="profile-btn">Профиль</button>
+    <button id="mytasks-btn">Мои задания</button>
     <button id="logout-btn">Выйти</button>
   </div>
 </div>
@@ -387,6 +388,7 @@
   <button id="profile-icon-mobile"></button>
   <div id="profile-menu-mobile">
     <button id="profile-btn-mobile">Профиль</button>
+    <button id="mytasks-btn-mobile">Мои задания</button>
     <button id="logout-btn-mobile">Выйти</button>
   </div>
 </div>
@@ -870,12 +872,19 @@ profileIconMobile?.addEventListener('click', () => {
       window.location.href = "/profile/";
     });
 
-    document.getElementById('logout-btn')?.addEventListener('click', () => {
-  signOut(auth);
-});
-document.getElementById('logout-btn-mobile')?.addEventListener('click', () => {
-  signOut(auth);
-});
+    document.getElementById('mytasks-btn')?.addEventListener('click', () => {
+      window.location.href = "/my-tasks/";
+    });
+   document.getElementById('mytasks-btn-mobile')?.addEventListener('click', () => {
+      window.location.href = "/my-tasks/";
+    });
+    
+   document.getElementById('logout-btn')?.addEventListener('click', () => {
+      signOut(auth);
+    });
+   document.getElementById('logout-btn-mobile')?.addEventListener('click', () => {
+      signOut(auth);
+    });
 
     homeTabMobile?.addEventListener("click", () => {
       window.location.href = "/";
