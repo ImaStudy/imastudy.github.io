@@ -38,6 +38,7 @@
       border-radius: 10px;
       padding: 18px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      position: relative;
     }
 
     .task-card h3 {
@@ -53,9 +54,18 @@
     }
 
     .task-price {
-      font-weight: 500;
+      position: absolute;
+      top: 16px;
+      right: 18px;
       color: #007bff;
-      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    .task-date {
+      font-size: 13px;
+      color: #888;
+      margin-top: 8px;
+      font-style: italic;
     }
 
     .no-tasks {
@@ -83,8 +93,8 @@
       collection,
       query,
       where,
-      getDocs,
-      orderBy
+      orderBy,
+      onSnapshot
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
     import {
       getAuth,
@@ -108,7 +118,7 @@
     const tasksContainer = document.getElementById("tasksContainer");
     const noTasksMsg = document.getElementById("noTasksMsg");
 
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (!user) {
         window.location.href = "/login/";
         return;
@@ -120,27 +130,39 @@
         orderBy("createdAt", "desc")
       );
 
-      const querySnapshot = await getDocs(q);
+      onSnapshot(q, (snapshot) => {
+        tasksContainer.innerHTML = "";
 
-      tasksContainer.innerHTML = "";
+        if (snapshot.empty) {
+          noTasksMsg.textContent = "Вы ещё не опубликовали ни одного задания.";
+          noTasksMsg.style.display = "block";
+          return;
+        }
 
-      if (querySnapshot.empty) {
-        noTasksMsg.textContent = "У вас пока нет опубликованных заданий.";
-        noTasksMsg.style.display = "block";
-        return;
-      }
+        noTasksMsg.style.display = "none";
 
-      querySnapshot.forEach((doc) => {
-        const task = doc.data();
-        const taskEl = document.createElement("div");
-        taskEl.className = "task-card";
-        taskEl.innerHTML = `
-          <h3>${task.title}</h3>
-          <p>${task.description}</p>
-          <p><strong>Контакт:</strong> ${task.contact}</p>
-          <p class="task-price">${task.price}</p>
-        `;
-        tasksContainer.appendChild(taskEl);
+        snapshot.forEach((doc) => {
+          const task = doc.data();
+
+          const dateText = task.createdAt?.toDate
+            ? task.createdAt.toDate().toLocaleDateString("ru-RU", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+              })
+            : "";
+
+          const taskEl = document.createElement("div");
+          taskEl.className = "task-card";
+          taskEl.innerHTML = `
+            <h3>${task.title}</h3>
+            <p>${task.description}</p>
+            <p><strong>Контакт:</strong> ${task.contact}</p>
+            <div class="task-price">${task.price || "Договорная цена"}</div>
+            <p class="task-date">Добавлено: ${dateText}</p>
+          `;
+          tasksContainer.appendChild(taskEl);
+        });
       });
     });
   </script>
