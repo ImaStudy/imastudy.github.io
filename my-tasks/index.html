@@ -350,6 +350,7 @@ onAuthStateChanged(auth, (user) => {
 
         const taskEl = document.createElement("div");
 
+taskEl.classList.add("task-item");
 taskEl.innerHTML = `
   <div class="task-title">${task.title}</div>
   <p class="task-desc">${task.description}</p>
@@ -359,6 +360,8 @@ taskEl.innerHTML = `
   </div>
   <span class="task-date">${dateText}</span>
 `;
+tasksContainer.appendChild(taskEl);
+
         
         tasksContainer.appendChild(taskEl);
       });
