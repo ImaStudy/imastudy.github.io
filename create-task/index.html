@@ -165,6 +165,7 @@ input:disabled {
       <button id="profile-icon"></button>
       <div id="profile-menu">
         <button id="profile-btn">Профиль</button>
+        <button id="mytasks-btn">Мои задания</button>
         <button id="logout-btn">Выйти</button>
       </div>
     </div>
@@ -180,6 +181,7 @@ input:disabled {
       <button id="profile-icon-mobile"></button>
       <div id="profile-menu-mobile">
         <button id="profile-btn-mobile">Профиль</button>
+        <button id="mytasks-btn-mobile">Мои задания</button>
         <button id="logout-btn-mobile">Выйти</button>
       </div>
     </div>
@@ -439,6 +441,13 @@ if (cachedName) {
   });
   document.getElementById('profile-btn-mobile')?.addEventListener('click', () => {
     window.location.href = "/profile/";
+  });
+
+  document.getElementById('mytasks-btn')?.addEventListener('click', () => {
+     window.location.href = "/my-tasks/";
+  });
+  document.getElementById('mytasks-btn-mobile')?.addEventListener('click', () => {
+     window.location.href = "/my-tasks/";
   });
 
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
