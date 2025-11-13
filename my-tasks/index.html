@@ -131,7 +131,7 @@
 
   <nav class="desktop-nav">
     <button class="tab-button" id="homeTab" onclick="window.location.href='/'">Главная</button>
-    <button class="tab-button" id="tasksTab" onclick="viewTasksWithoutLogin()">Активные задания</button>
+    <button class="tab-button" id="tasksTab" onclick="window.location.href='/tasks/'">Активные задания</button>
 
     <div id="profile" style="display: none;">
       <button id="profile-icon"></button>
@@ -146,7 +146,7 @@
 
   <nav class="mobile-nav">
     <button class="tab-button" id="homeTabMobile" onclick="window.location.href='/'">Главная</button>
-    <button class="tab-button" id="tasksTabMobile" onclick="viewTasksWithoutLogin()">Активные задания</button>
+    <button class="tab-button" id="tasksTabMobile" onclick="window.location.href='/tasks/'">Активные задания</button>
 
     <div id="profile-mobile" style="display: none;">
       <button id="profile-icon-mobile"></button>
@@ -204,53 +204,108 @@
     const tasksContainer = document.getElementById("tasksContainer");
     const noTasksMsg = document.getElementById("noTasksMsg");
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        window.location.href = "/login/";
+    const loginBtn = document.getElementById("login-btn");
+    const profileDiv = document.getElementById("profile");
+    const profileIcon = document.getElementById("profile-icon");
+    const profileMenu = document.getElementById("profile-menu");
+
+    const loginBtnMobile = document.getElementById("login-btn-mobile");
+    const profileDivMobile = document.getElementById("profile-mobile");
+    const profileIconMobile = document.getElementById("profile-icon-mobile");
+    const profileMenuMobile = document.getElementById("profile-menu-mobile");
+
+profileIcon.addEventListener("click", () => {
+  profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
+});
+document.addEventListener("click", (e) => {
+  if (!profileDiv.contains(e.target)) profileMenu.style.display = "none";
+});
+
+profileIconMobile.addEventListener("click", () => {
+  profileMenuMobile.style.display = profileMenuMobile.style.display === "block" ? "none" : "block";
+});
+document.addEventListener("click", (e) => {
+  if (!profileDivMobile.contains(e.target)) profileMenuMobile.style.display = "none";
+});
+
+document.getElementById("profile-btn").onclick = () => window.location.href = "/profile/";
+document.getElementById("logout-btn").onclick = () => signOut(auth);
+document.getElementById("profile-btn-mobile").onclick = () => window.location.href = "/profile/";
+document.getElementById("logout-btn-mobile").onclick = () => signOut(auth);
+    
+onAuthStateChanged(auth, (user) => {
+  const loginBtn = document.getElementById("login-btn");
+  const profileDiv = document.getElementById("profile");
+  const profileIcon = document.getElementById("profile-icon");
+  const loginBtnMobile = document.getElementById("login-btn-mobile");
+  const profileDivMobile = document.getElementById("profile-mobile");
+  const profileIconMobile = document.getElementById("profile-icon-mobile");
+
+  if (user) {
+    const name = user.displayName || "Пользователь";
+    const photo = user.photoURL;
+
+    const avatar = photo
+      ? `<img src="${photo}" alt="avatar" style="width:32px;height:32px;border-radius:50%;">`
+      : `<div class="avatar-circle">${name.slice(0, 2).toUpperCase()}</div>`;
+
+    profileDiv.style.display = "block";
+    profileDivMobile.style.display = "block";
+    loginBtn.style.display = "none";
+    loginBtnMobile.style.display = "none";
+    profileIcon.innerHTML = avatar;
+    profileIconMobile.innerHTML = avatar;
+
+    const q = query(
+      collection(db, "tasks"),
+      where("authorUid", "==", user.uid),
+      orderBy("createdAt", "desc")
+    );
+
+    onSnapshot(q, (snapshot) => {
+      tasksContainer.innerHTML = "";
+
+      if (snapshot.empty) {
+        noTasksMsg.textContent = "Вы ещё не опубликовали ни одного задания.";
+        noTasksMsg.style.display = "block";
         return;
       }
 
-      const q = query(
-        collection(db, "tasks"),
-        where("authorUid", "==", user.uid),
-        orderBy("createdAt", "desc")
-      );
+      noTasksMsg.style.display = "none";
 
-      onSnapshot(q, (snapshot) => {
-        tasksContainer.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const task = doc.data();
 
-        if (snapshot.empty) {
-          noTasksMsg.textContent = "Вы ещё не опубликовали ни одного задания.";
-          noTasksMsg.style.display = "block";
-          return;
-        }
+        const dateText = task.createdAt?.toDate
+          ? task.createdAt.toDate().toLocaleDateString("ru-RU", {
+              day: "numeric",
+              month: "long",
+              year: "numeric"
+            })
+          : "";
 
-        noTasksMsg.style.display = "none";
-
-        snapshot.forEach((doc) => {
-          const task = doc.data();
-
-          const dateText = task.createdAt?.toDate
-            ? task.createdAt.toDate().toLocaleDateString("ru-RU", {
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-              })
-            : "";
-
-          const taskEl = document.createElement("div");
-          taskEl.className = "task-card";
-          taskEl.innerHTML = `
-            <h3>${task.title}</h3>
-            <p>${task.description}</p>
-            <p><strong>Контакт:</strong> ${task.contact}</p>
-            <div class="task-price">${task.price || "Договорная цена"}</div>
-            <p class="task-date">Добавлено: ${dateText}</p>
-          `;
-          tasksContainer.appendChild(taskEl);
-        });
+        const taskEl = document.createElement("div");
+        taskEl.className = "task-card";
+        taskEl.innerHTML = `
+          <h3>${task.title}</h3>
+          <p>${task.description}</p>
+          <p><strong>Контакт:</strong> ${task.contact}</p>
+          <div class="task-price">${task.price || "Договорная цена"}</div>
+          <p class="task-date">Добавлено: ${dateText}</p>
+        `;
+        tasksContainer.appendChild(taskEl);
       });
     });
+  } else {
+    profileDiv.style.display = "none";
+    profileDivMobile.style.display = "none";
+    loginBtn.style.display = "inline-block";
+    loginBtnMobile.style.display = "inline-block";
+
+    loginBtn.onclick = () => (window.location.href = "/login/");
+    loginBtnMobile.onclick = () => (window.location.href = "/login/");
+  }
+});
   </script>
 </body>
 </html>
