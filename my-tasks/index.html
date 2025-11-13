@@ -232,6 +232,33 @@ document.getElementById("profile-btn").onclick = () => window.location.href = "/
 document.getElementById("logout-btn").onclick = () => signOut(auth);
 document.getElementById("profile-btn-mobile").onclick = () => window.location.href = "/profile/";
 document.getElementById("logout-btn-mobile").onclick = () => signOut(auth);
+
+
+    
+const cachedName = localStorage.getItem("profileDisplayName");
+const cachedPhoto = localStorage.getItem("profilePhotoURL");
+
+if (cachedName || cachedPhoto) {
+  const initials = (cachedName.match(/\b\w/g) || []).join("").slice(0, 2).toUpperCase();
+
+  const avatarHTML = cachedPhoto
+    ? `<div class="avatar-circle"><img src="${cachedPhoto}" alt="Аватар"></div>`
+    : `<div class="avatar-circle">${initials}</div>`;
+
+  const profileIcon = document.getElementById("profile-icon");
+  const profileIconMobile = document.getElementById("profile-icon-mobile");
+
+  if (profileIcon) profileIcon.innerHTML = avatarHTML;
+  if (profileIconMobile) profileIconMobile.innerHTML = avatarHTML;
+
+  document.getElementById("profile").style.display = "inline-block";
+  document.getElementById("profile-mobile").style.display = "inline-block";
+
+  document.getElementById("login-btn").style.display = "none";
+  document.getElementById("login-btn-mobile").style.display = "none";
+}
+
+
     
 onAuthStateChanged(auth, (user) => {
   const loginBtn = document.getElementById("login-btn");
