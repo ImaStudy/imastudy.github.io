@@ -69,64 +69,71 @@
   object-fit: cover;
 }
 
-    .tasks-container {
-  max-width: 900px;
+
+.tasks-table-wrapper {
+  max-width: 1000px;
   margin: 40px auto;
   padding: 0 15px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
 }
 
-.task-card {
+.tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
   background: #fff;
-  border-radius: 12px;
-  padding: 20px 22px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  position: relative;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
   border: 1px solid #e3e6ea;
 }
 
-.task-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-}
-
-.task-card h3 {
-  margin: 0 0 10px;
-  font-size: 19px;
-  color: #222;
+.tasks-table th {
+  background: #f8f9fa;
+  padding: 12px 10px;
+  text-align: left;
   font-weight: 600;
-}
-
-.task-card p {
-  margin: 5px 0;
-  color: #555;
-  line-height: 1.5;
-}
-
-.task-price {
-  position: absolute;
-  top: 18px;
-  right: 20px;
-  color: #007bff;
-  font-weight: 500;
   font-size: 15px;
+  border-bottom: 1px solid #ddd;
 }
 
-.task-date {
+.tasks-table td {
+  padding: 12px 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.tasks-table tr:hover {
+  background: #f5f7ff;
+}
+
+.task-actions button {
+  margin-right: 8px;
+  padding: 6px 10px;
   font-size: 13px;
-  color: #888;
-  margin-top: 10px;
-  font-style: italic;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #007bff;
+  color: white;
+}
+
+.btn-pause {
+  background: #ffc107;
+  color: #333;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
 }
 
 .no-tasks {
   text-align: center;
-  color: #777;
-  margin-top: 40px;
-  font-size: 16px;
+  margin: 20px 0;
+  color: #666;
+  font-size: 15px;
 }
   </style>
 </head>
@@ -176,9 +183,24 @@
       <h2>Мои задания</h2>
   </div>
   
-  <div class="tasks-container" id="tasksContainer">
-    <p class="no-tasks" id="noTasksMsg">Загрузка ваших заданий...</p>
-  </div>
+  <div class="tasks-table-wrapper">
+
+  <table class="tasks-table">
+    <thead>
+      <tr>
+        <th>Название</th>
+        <th>Цена</th>
+        <th>Отклики</th>
+        <th>Статус</th>
+        <th>Управлять</th>
+      </tr>
+    </thead>
+    <tbody id="tasksTableBody">
+      <tr><td colspan="5" class="no-tasks">Загрузка ваших заданий...</td></tr>
+    </tbody>
+  </table>
+
+</div>
   
  <footer>&copy; 2025 ImaStudy. Все права защищены.</footer>
   
@@ -211,9 +233,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
-
-    const tasksContainer = document.getElementById("tasksContainer");
-    const noTasksMsg = document.getElementById("noTasksMsg");
 
     const loginBtn = document.getElementById("login-btn");
     const profileDiv = document.getElementById("profile");
@@ -302,40 +321,39 @@ onAuthStateChanged(auth, (user) => {
       orderBy("createdAt", "desc")
     );
 
-    onSnapshot(q, (snapshot) => {
-      tasksContainer.innerHTML = "";
+ onSnapshot(q, (snapshot) => {
+  const tableBody = document.getElementById("tasksTableBody");
+  tableBody.innerHTML = "";
 
-      if (snapshot.empty) {
-        noTasksMsg.textContent = "Вы ещё не опубликовали ни одного задания.";
-        noTasksMsg.style.display = "block";
-        return;
-      }
+  if (snapshot.empty) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="5" class="no-tasks">Вы ещё не опубликовали ни одного задания.</td>
+      </tr>
+    `;
+    return;
+  }
 
-      noTasksMsg.style.display = "none";
+  snapshot.forEach((doc) => {
+    const task = doc.data();
 
-      snapshot.forEach((doc) => {
-        const task = doc.data();
+    const tr = document.createElement("tr");
 
-        const dateText = task.createdAt?.toDate
-          ? task.createdAt.toDate().toLocaleDateString("ru-RU", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            })
-          : "";
+    tr.innerHTML = `
+      <td>${task.title}</td>
+      <td>${task.price || "Договорная"}</td>
+      <td>${task.responses || 0}</td>
+      <td>${task.active ? "Активно" : "Неактивно"}</td>
+      <td class="task-actions">
+        <button class="btn-edit">Изменить</button>
+        <button class="btn-pause">Пауза</button>
+        <button class="btn-delete">Удалить</button>
+      </td>
+    `;
 
-        const taskEl = document.createElement("div");
-        taskEl.className = "task-card";
-       taskEl.innerHTML = `
-  <h3 class="task-title">${task.title}</h3>
-  <p class="task-desc">${task.description}</p>
-  <p><strong>Контакт:</strong> ${task.contact}</p>
-  <div class="task-price">${task.price || "Договорная цена"}</div>
-  <p class="task-date">Добавлено: ${dateText}</p>
-`;
-        tasksContainer.appendChild(taskEl);
-      });
-    });
+    tableBody.appendChild(tr);
+  });
+});
   } else {
     profileDiv.style.display = "none";
     profileDivMobile.style.display = "none";
